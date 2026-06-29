@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Project;
 
 class KaryaController extends Controller
 {
     public function index()
     {
-        return view('karya');
+        $karyas = Project::all();
+        return view('admin.karya', compact('karyas'));
     }
 
     public function show($id)

@@ -35,3 +35,16 @@ Route::get('/admin/kategori', function () {
 Route::get('/admin/siswa', function () {
     return view('admin.siswa');
 });
+Route::get('/siswa/dashboard', function () {
+    return view('siswa.dashboard');
+});
+Route::get('/siswa/karya', function () {
+    return view('siswa.karya');
+});
+Route::get('/siswa/karya/detail', function () {
+    return view('siswa.detail');
+});
+Route::get('/siswa/upload', function () {
+    return view('siswa.upload');
+});
+;

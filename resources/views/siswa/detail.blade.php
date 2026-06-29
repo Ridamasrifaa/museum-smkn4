@@ -3,19 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <title>Detail Karya - Student Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
   <body class="bg-gray-100 p-8">
-    
     <div class="max-w-3xl mx-auto">
+      
       <div class="mb-4">
-        <a href="karya_siswa.html" class="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition">
-          ← Kembali ke Daftar Karya
+        <a href="{{ url('/siswa/karya')}}" class="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition"> 
+          ← Kembali ke Daftar Karya 
         </a>
       </div>
 
-      <div class="bg-white rounded-lg shadow overflow-hidden">
+      <div class="bg-white rounded-lg shadow overflow-hidden relative min-h-[300px]">
+        
+        <div id="loading-content" class="absolute inset-0 bg-white z-40 flex flex-col items-center justify-center transition-opacity duration-300 ease-out">
+          <div class="flex items-center gap-3 bg-gray-50 px-6 py-3 rounded-full border border-gray-200 shadow-xs">
+            <div class="w-5 h-5 border-3 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <p class="text-gray-700 font-medium text-sm tracking-wide">Memuat detail karya...</p>
+          </div>
+        </div>
         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
           <h2 class="text-xl font-bold text-gray-900">Detail Informasi Karya</h2>
           <p class="text-sm text-gray-500 mt-0.5">Berikut rincian data project beserta umpan balik dari admin.</p>
@@ -42,20 +50,16 @@
                 <tr>
                   <td class="px-6 py-4 font-semibold text-gray-900">URL Project</td>
                   <td class="px-6 py-4">
-                    <a href="https://github.com" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium underline inline-flex items-center gap-1 break-all">
-                      https://github.com/oktavia/tebak-kata-android ↗
+                    <a href="https://github.com/oktavia/tebak-kata-android" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium underline inline-flex items-center gap-1 break-all"> 
+                      https://github.com/oktavia/tebak-kata-android ↗ 
                     </a>
                   </td>
                 </tr>
                 <tr class="bg-amber-50/40">
                   <td class="px-6 py-4 font-semibold text-amber-900">Catatan / Alasan Admin</td>
                   <td class="px-6 py-4">
-                    <p class="text-amber-800 italic font-medium">
-                      "Project sudah bagus, namun mohon pastikan link repositori GitHub tidak di-private agar admin bisa memeriksa source code lebih lanjut."
-                    </p>
-                    <span class="inline-block mt-2 text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-semibold">
-                      Dikirim oleh: Admin PPLG
-                    </span>
+                    <p class="text-amber-800 italic font-medium">"Project sudah bagus, namun mohon pastikan link repositori GitHub tidak di-private agar admin bisa memeriksa source code lebih lanjut."</p>
+                    <span class="inline-block mt-2 text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-semibold"> Dikirim oleh: Admin PPLG </span>
                   </td>
                 </tr>
               </tbody>
@@ -65,5 +69,19 @@
       </div>
     </div>
 
+    <script>
+      window.addEventListener("load", function () {
+        const loadingContent = document.getElementById("loading-content");
+
+        // Jeda 1 detik agar animasi loading terasa halus sebelum data detail muncul
+        setTimeout(() => {
+          loadingContent.classList.add("opacity-0");
+
+          setTimeout(() => {
+            loadingContent.classList.add("hidden");
+          }, 300); // Sinkron dengan durasi efek fade-out Tailwind (duration-300)
+        }, 1000);
+      });
+    </script>
   </body>
 </html>

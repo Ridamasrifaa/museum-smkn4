@@ -3,18 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <title>Admin Dashboard - Karya PPLG</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/admin/style.css')}}">
   </head>
   <body class="bg-gray-100">
     <div class="flex h-screen bg-gray-100">
-      
       <div class="w-64 custom-nav-bg text-white shadow-lg flex flex-col justify-between">
         <div>
           <div class="p-6 border-b border-gray-700">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-lg">A <img src="" alt=""></div>
+              <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-lg">A <img src="" alt="" /></div>
               <div>
                 <p class="font-bold">Admin</p>
                 <p class="text-xs text-gray-400">PPLG</p>
@@ -22,16 +22,16 @@
             </div>
           </div>
           <nav class="mt-6 space-y-1">
-            <a href="dashboard.html" class="flex items-center gap-3 px-6 py-3  nav-link-idle nav-link-active">
+            <a href="{{ url('/admin/dashboard')}}" class="flex items-center gap-3 px-6 py-3 nav-link-idle nav-link-active">
               <span>Dashboard</span>
             </a>
-            <a href="karya.html" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
+            <a href="{{ url('/admin/karya')}}" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
               <span>Data Karya</span>
             </a>
-            <a href="siswa.html" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
+            <a href="{{ url('/admin/siswa')}}" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
               <span>Data Siswa</span>
             </a>
-            <a href="kategori.html" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
+            <a href="{{ url('/admin/kategori')}}" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
               <span>Kategori</span>
             </a>
           </nav>
@@ -54,7 +54,13 @@
           </div>
         </header>
 
-        <div class="p-8 flex-1 overflow-auto">
+        <div class="p-8 flex-1 overflow-auto relative">
+          <div id="loading-content" class="absolute inset-0 bg-gray-100 z-50 flex flex-col items-center justify-center transition-opacity duration-300 ease-out">
+            <div class="flex items-center gap-3 bg-white px-6 py-3 rounded-full shadow-sm border border-gray-200">
+              <div class="w-5 h-5 border-3 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+              <p class="text-gray-700 font-medium text-sm tracking-wide">Memuat data...</p>
+            </div>
+          </div>
           <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="bg-white rounded-lg shadow p-6">
               <div class="flex items-center justify-between">
@@ -95,7 +101,21 @@
           </div>
         </div>
       </div>
-
     </div>
+
+    <script>
+      window.addEventListener("load", function () {
+        const loadingContent = document.getElementById("loading-content");
+
+        // Memberikan jeda minimal 1.5 detik (1500 milidetik) agar animasi tidak berkedip terlalu cepat
+        setTimeout(() => {
+          loadingContent.classList.add("opacity-0");
+
+          setTimeout(() => {
+            loadingContent.classList.add("hidden");
+          }, 300); // durasi fade-out
+        }, 1500);
+      });
+    </script>
   </body>
 </html>

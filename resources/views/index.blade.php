@@ -1,27 +1,12 @@
 <!doctype html>
 <html lang="id">
-
 <head>
-  
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Museum Karya</title>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
-    <style>
-        .my-bg {
-            background-color: #046d9793;
-        }
-
-        body {
-            background-color: #9e9a9ab6;
-        }
-
-        .navbar {
-            background-color: #ffffff;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 
 <body>
@@ -41,7 +26,7 @@
                 <!-- <a href="#" class="text-sm font-semibold text-gray-600 hover:text-gray-900">Artikel</a> -->
                 <a href="#" class="text-sm font-semibold text-gray-600 hover:text-gray-900">Karya</a>
                 <div class="hidden lg:flex lg:justify-end">
-                    <a href="login.html" class="text-sm font-semibold text-gray-600 hover:text-gray-900">Login</a>
+                    <a href="{{ route('login')}}" class="text-sm font-semibold text-gray-600 hover:text-gray-900">Login</a>
                 </div>
             </div>
         </nav>
