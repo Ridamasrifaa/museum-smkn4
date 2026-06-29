@@ -1,0 +1,31 @@
+/* Definisikan variabel warna custom agar mudah diubah */
+:root {
+  --nav-bg: #0b0f17;          /* Warna background utama navbar */
+  --nav-link-idle: #9ca3af;    /* Warna teks saat tidak aktif (gray-400) */
+  --nav-link-hover: #161f30;   /* Warna background saat di-hover */
+  --nav-link-active: #1e293b;  /* Warna background saat aktif */
+  --nav-accent: #38bdf8;       /* Warna aksen border & teks aktif (sky-400) */
+}
+
+/* Class Custom untuk Navbar */
+.custom-nav-bg {
+  background-color: var(--nav-bg);
+}
+
+/* Class Custom untuk Link Aktif */
+.nav-link-active {
+  background-color: var(--nav-link-active) !important;
+  color: var(--nav-accent) !important;
+  border-left: 4px solid var(--nav-accent) !important;
+}
+
+/* Class Custom untuk Link Biasa (Hover Effect) */
+.nav-link-idle {
+  color: var(--nav-link-idle);
+  transition: all 0.2s ease-in-out;
+}
+
+.nav-link-idle:hover {
+  background-color: var(--nav-link-hover);
+  color: #ffffff;
+}

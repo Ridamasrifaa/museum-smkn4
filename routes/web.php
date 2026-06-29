@@ -1,16 +1,36 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
-Route::get('/', [HomeController::class,'index']);
 
-Route::get('/karya',[KaryaController::class,'index']);
-Route::get('/karya/{id}',[KaryaController::class,'show']);
+// Route::middleware('guest')->group(function () {
+//     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+//     Route::post('/login', [AuthController::class, 'login']);
+// });
 
-Route::get('/artikel',[ArtikelController::class,'index']);
-Route::get('/artikel/{id}',[ArtikelController::class,'show']);
+// // Route ini hanya bisa diakses oleh user yang SUDAH login (auth)
+// Route::middleware('auth')->group(function () {
+//     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    
+//     Route::get('/admin', function () {
+//         return view('admin.dashboard');
+//     })->name('admin.dashboard');
+// });
 
-Route::get('/login',[LoginController::class,'index']);
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+});
+Route::get('/admin/karya', function () {
+    return view('admin.karya');
+});
+Route::get('/admin/kategori', function () {
+    return view('admin.kategori');
+});
+Route::get('/admin/siswa', function () {
+    return view('admin.siswa');
+});
