@@ -30,7 +30,7 @@ return new class extends Migration
                 ->onDelete('restrict');
             
             // File information
-            $table->string('file_path', 255);
+            $table->string('file_path')->nullable();
             $table->string('file_type', 50)->nullable();
             $table->bigInteger('file_size')->nullable();
             

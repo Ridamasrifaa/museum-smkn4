@@ -39,9 +39,16 @@
             </a>
           </nav>
         </div>
-        <div class="p-6 border-t border-gray-700">
-          <button class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold">Logout</button>
-        </div>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+    @csrf
+</form>
+
+<button
+    type="button"
+    onclick="handleLogout()"
+    class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold">
+    Logout
+</button>
       </div>
 
       <div class="flex-1 flex flex-col overflow-hidden">
@@ -67,10 +74,25 @@
 
           <div class="bg-white mb-6 rounded-lg shadow p-6">
             <h2 class="text-xl font-bold text-gray-900 mb-4">Cari Karya</h2>
-            <div class="flex flex-col sm:flex-row gap-3">
-              <input type="text" placeholder="Cari judul, deskripsi, atau kata kunci..." class="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm" />
-              <button class="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-sm whitespace-nowrap">Cari</button>
-            </div>
+            
+          <form action="{{ url('/admin/karya') }}" method="GET" class="flex flex-col sm:flex-row gap-3">
+
+    <input
+        type="text"
+        name="search"
+        value="{{ request('search') }}"
+        placeholder="Cari judul, nama siswa, atau kategori..."
+        class="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm">
+
+    <button
+        type="submit"
+        class="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700">
+
+        Cari
+
+    </button>
+
+</form>
           </div>
 
           <div class="bg-white rounded-lg shadow overflow-hidden">
@@ -89,35 +111,116 @@
                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase">Aksi</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200">
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 text-sm font-semibold text-gray-900">Game Android</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">Oktavia Ayu W</td>
-                    <td class="px-6 py-4"><span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">Game</span></td>
-                    <td class="px-6 py-4">
-                      <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold"><a href="https://github.com" target="_blank">https://github.com</a></span>
-                    </td>
-                    <td class="px-6 py-4"><span id="status-1" class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold">Menunggu</span></td>
-                    <td id="action-1" class="px-6 py-4 text-center">
-                      <button type="button" onclick="openActionModal('approve', this)" data-id="1" data-nama="Oktavia Ayu W" class="px-3 py-1 bg-green-100 text-green-700 hover:bg-green-200 rounded text-xs font-semibold mr-1 transition cursor-pointer">Approve</button>
-                      <button type="button" onclick="openActionModal('reject', this)" data-id="1" data-nama="Oktavia Ayu W" class="px-3 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded text-xs font-semibold transition cursor-pointer">Reject</button>
-                    </td>
-                  </tr>
+             <tbody class="divide-y divide-gray-200">
 
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 text-sm font-semibold text-gray-900">Web E-Commerce Resto</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">Ahmad Fauzi</td>
-                    <td class="px-6 py-4"><span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">Website</span></td>
-                    <td class="px-6 py-4">
-                      <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold"><a href="https://github.com" target="_blank">https://github.com</a></span>
-                    </td>
-                    <td class="px-6 py-4"><span id="status-2" class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold">Menunggu</span></td>
-                    <td id="action-2" class="px-6 py-4 text-center">
-                      <button type="button" onclick="openActionModal('approve', this)" data-id="2" data-nama="Ahmad Fauzi" class="px-3 py-1 bg-green-100 text-green-700 hover:bg-green-200 rounded text-xs font-semibold mr-1 transition cursor-pointer">Approve</button>
-                      <button type="button" onclick="openActionModal('reject', this)" data-id="2" data-nama="Ahmad Fauzi" class="px-3 py-1 bg-red-100 text-red-700 hover:bg-red-200 rounded text-xs font-semibold transition cursor-pointer">Reject</button>
-                    </td>
-                  </tr>
-                </tbody>
+@if($projects->count())
+
+    @foreach($projects as $project)
+
+    <tr class="hover:bg-gray-50">
+
+        <td class="px-6 py-4">
+            <div class="font-semibold text-gray-900">
+                {{ $project->title }}
+            </div>
+            <div class="text-sm text-gray-500">
+                {{ Str::limit($project->description, 50) }}
+            </div>
+        </td>
+
+        <td class="px-6 py-4">
+            {{ $project->user->name }}
+        </td>
+
+        <td class="px-6 py-4">
+            {{ $project->category->name }}
+        </td>
+
+        <td class="px-6 py-4">
+
+            @if($project->status == 'pending')
+
+                <span class="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-xs font-semibold">
+                    Menunggu
+                </span>
+
+            @elseif($project->status == 'approved')
+
+                <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-xs font-semibold">
+                    Disetujui
+                </span>
+
+            @else
+
+                <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-xs font-semibold">
+                    Ditolak
+                </span>
+
+            @endif
+
+        </td>
+
+        <td class="px-6 py-4">
+            {{ $project->created_at->format('d M Y') }}
+        </td>
+
+        <td class="px-6 py-4">
+            <a href="{{ url('/admin/karya/'.$project->id) }}"
+               class="text-blue-600 hover:underline">
+                Detail
+            </a>
+        </td>
+
+    </tr>
+
+    @endforeach
+
+@else
+
+<tr>
+
+    <td colspan="6" class="text-center py-12">
+
+        @if(request()->filled('search'))
+
+            <div class="text-5xl mb-3">
+                🔍
+            </div>
+
+            <h2 class="font-bold text-lg text-gray-700">
+                Data tidak ditemukan
+            </h2>
+
+            <p class="text-gray-500">
+                Tidak ada karya yang cocok dengan pencarian
+                <strong>"{{ request('search') }}"</strong>
+            </p>
+
+        @else
+
+            <div class="text-5xl mb-3">
+                📁
+            </div>
+
+            <h2 class="font-bold text-lg text-gray-700">
+                Belum ada karya
+            </h2>
+
+            <p class="text-gray-500">
+                Belum ada project yang diupload oleh siswa.
+            </p>
+
+        @endif
+
+    </td>
+
+</tr>
+
+@endif
+
+</tbody>
+
+              
               </table>
             </div>
           </div>
@@ -183,7 +286,7 @@
 
         if (type === 'approve') {
           title.innerText = "Setujui Karya";
-          statusInput.value = "disetujui";
+          statusInput.value = "approved";
           textarea.placeholder = "Contoh: Karya sangat bagus dan memenuhi kriteria...";
           textarea.required = false;
           textarea.className = "w-full p-2 border border-gray-300 rounded mb-4 focus:ring-2 focus:ring-green-500 outline-none";
@@ -192,7 +295,7 @@
           submitBtn.className = "flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition font-semibold";
         } else if (type === 'reject') {
           title.innerText = "Tolak Karya";
-          statusInput.value = "ditolak";
+          statusInput.value = "rejected";
           textarea.placeholder = "Contoh: Mohon perbaiki repositori karena masih private...";
           textarea.required = true;
           textarea.className = "w-full p-2 border border-gray-300 rounded mb-4 focus:ring-2 focus:ring-red-500 outline-none";
@@ -213,7 +316,7 @@
         const statusInput = document.getElementById('modal-status-input').value;
         const textarea = document.getElementById('modal-note');
 
-        if (statusInput === 'ditolak' && !textarea.value.trim()) {
+        if (statusInput === 'rejected' && !textarea.value.trim()) {
           alert("Mohon isi alasan penolakan terlebih dahulu!");
           return;
         }
@@ -221,7 +324,7 @@
         const statusBadge = document.getElementById(`status-${currentKaryaId}`);
         const actionCell = document.getElementById(`action-${currentKaryaId}`);
 
-        if (statusInput === 'disetujui') {
+        if (statusInput === 'approved') {
           if (statusBadge) {
             statusBadge.className = "px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold";
             statusBadge.innerText = "Disetujui";
@@ -261,6 +364,12 @@
         `;
         container.appendChild(toast);
         setTimeout(() => toast.remove(), 3500);
+      }
+       function handleLogout() {
+        if (confirm('Anda yakin ingin logout?')) {
+          // Menjalankan/submit form tersembunyi yang membawa token @csrf ke route logout Laravel
+          document.getElementById('logout-form').submit();
+        }
       }
     </script>
   </body>

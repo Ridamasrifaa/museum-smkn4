@@ -13,10 +13,18 @@
       <div class="w-64 bg-gray-900 text-white shadow-lg flex flex-col">
         <div class="p-6 border-b border-gray-700">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-lg">O</div>
+            @if(Auth::user()->avatar)
+    <img
+        src="{{ Auth::user()->avatar }}"
+        alt="Foto Profil"
+        class="w-10 h-10 rounded-full object-cover">
+@else
+    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+        {{ strtoupper(substr(Auth::user()->name,0,1)) }}
+    </div>
+@endif
             <div>
-              <p class="font-bold text-sm">Oktavia Ayu W</p>
-              <p class="text-xs text-gray-400">XII RPL 1</p>
+              <p class="font-bold text-sm">{{ Auth::user()->name }}</p>
             </div>
           </div>
         </div>
@@ -56,12 +64,7 @@
         <header class="bg-white shadow-sm z-10">
           <div class="px-8 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold text-gray-900">Upload Project Baru</h1>
-            <div class="flex items-center gap-4">
-              <div class="text-right">
-                <p class="font-semibold text-gray-900">Oktavia Ayu W</p>
-              </div>
-              <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">O</div>
-            </div>
+           
           </div>
         </header>
 
@@ -74,29 +77,31 @@
           </div>
 
           <div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-8">
-            <form id="uploadForm" method="POST" action="/admin/karya/store" class="space-y-6" onsubmit="submitForm(event)">
+<form id="uploadForm" method="POST" action="{{ url('/siswa/upload') }}" class="space-y-6"> 
               @csrf
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Judul Karya *</label>
-                <input type="text" name="judul" required placeholder="Contoh: Game Android Tebak Kata" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                <input type="text" name="title" required placeholder="Contoh: Game Android Tebak Kata" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Kategori Project *</label>
-                <select name="kategori_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                  <option value="">Pilih Kategori</option>
-                  <option value="web">Web Application</option>
-                  <option value="mobile">Mobile Application</option>
-                  <option value="game">Game Development</option>
-                  <option value="iot">Internet of Things (IoT)</option>
+                <select name="category_id" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                 <option value="">Pilih Kategori</option>
+
+@foreach($categories as $category)
+    <option value="{{ $category->id }}">
+        {{ $category->name }}
+    </option>
+@endforeach
                 </select>
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Karya *</label>
                 <textarea
-                  name="deskripsi"
+                  name="description"
                   required
                   rows="4"
                   placeholder="Jelaskan Hasil karya yang telah anda buat....."
@@ -106,7 +111,7 @@
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Link Repository (GitHub/GitLab) *</label>
-                <input type="url" name="url_project" required placeholder="https://github.com/username/project-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                <input type="url" name="live_link" required placeholder="https://github.com/username/project-name" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
               </div>
 
               <div class="border border-gray-200 rounded-lg bg-gray-50 p-4 space-y-3">
@@ -142,7 +147,7 @@
         <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 text-2xl font-bold">✓</div>
         <h3 class="text-lg font-bold text-gray-900 mb-2">Berhasil!</h3>
         <p class="text-gray-600 mb-6">Karya mu berhasil diupload dan sedang menunggu tinjauan Dari Admin.</p>
-        <a href="#" class="block w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center font-semibold transition">Kembali ke Dashboard</a>
+        <a href="{{ url('/siswa/dashboard') }}" class="block w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-center font-semibold transition">Kembali ke Dashboard</a>
       </div>
     </div>
 
@@ -177,8 +182,7 @@
       function submitForm(e) {
         // Catatan: Jika ingin langsung mengirim data ke Controller Laravel tanpa memicu modal JS interupsi, 
         // hapus baris `e.preventDefault()` di bawah ini.
-        e.preventDefault();
-        document.getElementById("successModal").classList.remove("hidden");
+       
       }
 
       function resetForm() {

@@ -13,10 +13,18 @@
       <div class="w-64 bg-gray-900 text-white shadow-lg flex flex-col">
         <div class="p-6 border-b border-gray-700">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-lg">O</div>
+          @if(Auth::user()->avatar)
+    <img
+        src="{{ Auth::user()->avatar }}"
+        alt="Foto Profil"
+        class="w-10 h-10 rounded-full object-cover">
+@else
+    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+        {{ strtoupper(substr(Auth::user()->name,0,1)) }}
+    </div>
+@endif
             <div>
-              <p class="font-bold text-sm">Oktavia Ayu W</p>
-              <p class="text-xs text-gray-400">XII RPL 1</p>
+              <p class="font-bold text-sm">{{ Auth::user()->name }}</p>
             </div>
           </div>
         </div>
@@ -59,12 +67,7 @@
         <header class="bg-white shadow-sm z-10">
           <div class="px-8 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold text-gray-900">Student Dashboard</h1>
-            <div class="flex items-center gap-4">
-              <div class="text-right">
-                <p class="font-semibold text-gray-900">Oktavia Ayu W</p>
-              </div>
-              <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">O</div>
-            </div>
+           
           </div>
         </header>
 
@@ -78,7 +81,7 @@
           </div>
 
           <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg shadow p-8 text-white">
-            <h2 class="text-3xl font-bold mb-2">Selamat Datang, Oktavia! 👋</h2>
+           <h2 class="text-3xl font-bold mb-2">Selamat Datang, {{ explode(' ', Auth::user()->name)[0] }}! 👋</h2>
             <p class="text-blue-100">Kelola dan upload karya PPLG mu dengan mudah</p>
           </div>
 
@@ -87,7 +90,7 @@
               <div class="flex items-center justify-between">
                 <div>
                   <p class="text-gray-600 text-sm font-medium">Total Karya</p>
-                  <p class="text-3xl font-bold text-gray-900 mt-2">5</p>
+                  <p class="text-3xl font-bold text-gray-900 mt-2">{{ $totalProject }}</p>
                 </div>
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center font-bold text-blue-600">📊</div>
               </div>
@@ -97,7 +100,7 @@
               <div class="flex items-center justify-between">
                 <div>
                   <p class="text-gray-600 text-sm font-medium">Karya Disetujui</p>
-                  <p class="text-3xl font-bold text-green-600 mt-2">3</p>
+                  <p class="text-3xl font-bold text-green-600 mt-2">{{ $approved }}</p>
                 </div>
                 <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center font-bold text-green-600">✓</div>
               </div>
@@ -107,7 +110,7 @@
               <div class="flex items-center justify-between">
                 <div>
                   <p class="text-gray-600 text-sm font-medium">Menunggu Review</p>
-                  <p class="text-3xl font-bold text-yellow-600 mt-2">2</p>
+                  <p class="text-3xl font-bold text-yellow-600 mt-2">{{ $pending }}</p>
                 </div>
                 <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center font-bold text-yellow-600">⏳</div>
               </div>

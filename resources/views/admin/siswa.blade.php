@@ -37,9 +37,17 @@
             </a>
           </nav>
         </div>
-        <div class="p-6 border-t border-gray-700">
-          <button class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold">Logout</button>
-        </div>
+       
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+    @csrf
+</form>
+
+<button
+    type="button"
+    onclick="handleLogout()"
+    class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold">
+    Logout
+</button>
       </div>
 
       <div class="flex-1 flex flex-col overflow-hidden">
@@ -64,11 +72,24 @@
           </div>
 
           <div class="bg-white rounded-lg shadow p-6">
-            <h2 class="text-xl font-bold text-gray-900 mb-4">Cari Siswa</h2>
-            <div class="flex flex-col sm:flex-row gap-3">
-              <input type="text" placeholder="Cari nama, kelas, atau email siswa..." class="flex-1 px-4 py-2.5 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm" />
-              <button class="px-6 py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-sm whitespace-nowrap">Cari Siswa</button>
-            </div>
+            <form action="{{ url('/admin/siswa') }}" method="GET" class="flex flex-col sm:flex-row gap-3">
+
+<input
+type="text"
+name="search"
+value="{{ request('search') }}"
+placeholder="Cari nama, kelas, atau email siswa..."
+class="flex-1 px-4 py-2.5 rounded-lg border border-gray-300">
+
+<button
+type="submit"
+class="px-6 py-2.5 bg-blue-600 text-white rounded-lg">
+
+Cari Siswa
+
+</button>
+
+</form>
           </div>
 
           <div class="bg-white rounded-lg shadow overflow-hidden">
@@ -85,17 +106,107 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Aksi</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200">
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 text-sm font-semibold text-gray-900">Oktavia Ayu W</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">XII RPL 1</td>
-                    <td class="px-6 py-4 text-sm text-gray-600">oktavia@email.com</td>
-                    <td class="px-6 py-4 text-sm">
-                      <button type="button" onclick="openSiswaModal(this)" data-id="1" data-nama="Oktavia Ayu W" data-kelas="XII RPL 1" data-email="oktavia@email.com" class="text-blue-600 hover:text-blue-800 mr-3 font-medium cursor-pointer">Edit</button>
-                      <button type="button" onclick="konfirmasiHapusSiswa(1, 'Oktavia Ayu W')" class="text-red-600 hover:text-red-800 font-medium cursor-pointer">Hapus</button>
-                    </td>
-                  </tr>
-                </tbody>
+          <tbody class="divide-y divide-gray-200">
+
+@if($siswas->count())
+
+@foreach($siswas as $siswa)
+
+<tr class="hover:bg-gray-50">
+
+<td class="px-6 py-4 font-semibold">
+{{ $siswa->name }}
+</td>
+
+<td class="px-6 py-4">
+{{ $siswa->kelas }}
+</td>
+
+<td class="px-6 py-4">
+{{ $siswa->email }}
+</td>
+
+<td class="px-6 py-4">
+
+<button
+type="button"
+
+onclick="openSiswaModal(this)"
+
+data-id="{{ $siswa->id }}"
+data-nama="{{ $siswa->name }}"
+data-kelas="{{ $siswa->kelas }}"
+data-email="{{ $siswa->email }}"
+
+class="text-blue-600 mr-3">
+
+Edit
+
+</button>
+
+<form
+action="{{ url('/admin/siswa/'.$siswa->id) }}"
+method="POST"
+class="inline">
+
+@csrf
+@method('DELETE')
+
+<button
+onclick="return confirm('Hapus siswa ini?')"
+class="text-red-600">
+
+Hapus
+
+</button>
+
+</form>
+
+</td>
+
+</tr>
+
+@endforeach
+
+@else
+
+<tr>
+
+<td colspan="4" class="text-center py-12">
+
+@if(request()->filled('search'))
+
+<h2 class="font-bold text-lg">
+
+Data tidak ditemukan
+
+</h2>
+
+<p class="text-gray-500">
+
+Tidak ada siswa dengan kata kunci
+
+<strong>{{ request('search') }}</strong>
+
+</p>
+
+@else
+
+<h2 class="font-bold text-lg">
+
+Belum ada data siswa
+
+</h2>
+
+@endif
+
+</td>
+
+</tr>
+
+@endif
+
+</tbody>
               </table>
             </div>
           </div>
@@ -175,6 +286,12 @@
       function konfirmasiHapusSiswa(id, nama) {
         if (confirm(`Apakah Anda yakin ingin menghapus data siswa bernama "${nama}"?`)) {
           alert(`Proses kirim instruksi hapus ID: ${id} ke Laravel Controller.`);
+        }
+      }
+       function handleLogout() {
+        if (confirm('Anda yakin ingin logout?')) {
+          // Menjalankan/submit form tersembunyi yang membawa token @csrf ke route logout Laravel
+          document.getElementById('logout-form').submit();
         }
       }
     </script>

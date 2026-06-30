@@ -36,9 +36,16 @@
             </a>
           </nav>
         </div>
-        <div class="p-6 border-t border-gray-700">
-          <button class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold">Logout</button>
-        </div>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+    @csrf
+</form>
+
+<button
+    type="button"
+    onclick="handleLogout()"
+    class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold">
+    Logout
+</button>
       </div>
 
       <div class="flex-1 flex flex-col overflow-hidden">
@@ -77,29 +84,80 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Aksi</th>
                   </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200">
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 text-sm text-gray-600">1</td>
-                    <td class="px-6 py-4 text-sm font-semibold text-gray-900">
-                      <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">Game</span>
-                    </td>
-                    <td class="px-6 py-4 text-sm">
-                      <button type="button" onclick="openKategoriModal('edit', this)" data-id="1" data-nama="Game" data-keterangan="Kategori untuk karya bertema game" class="text-blue-600 hover:text-blue-800 mr-3 font-medium cursor-pointer">Edit</button>
-                      <button type="button" onclick="konfirmasiHapus(1, 'Game')" class="text-red-600 hover:text-red-800 font-medium cursor-pointer">Hapus</button>
-                    </td>
-                  </tr>
 
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 text-sm text-gray-600">2</td>
-                    <td class="px-6 py-4 text-sm font-semibold text-gray-900">
-                      <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-semibold">Website</span>
-                    </td>
-                    <td class="px-6 py-4 text-sm">
-                      <button type="button" onclick="openKategoriModal('edit', this)" data-id="2" data-nama="Website" data-keterangan="Kategori untuk karya berupa aplikasi web" class="text-blue-600 hover:text-blue-800 mr-3 font-medium cursor-pointer">Edit</button>
-                      <button type="button" onclick="konfirmasiHapus(2, 'Website')" class="text-red-600 hover:text-red-800 font-medium cursor-pointer">Hapus</button>
-                    </td>
-                  </tr>
-                </tbody>
+
+              <tbody class="divide-y divide-gray-200">
+
+@forelse($categories as $category)
+
+<tr class="hover:bg-gray-50">
+
+<td class="px-6 py-4">
+{{ $loop->iteration }}
+</td>
+
+<td class="px-6 py-4 font-semibold">
+
+<span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
+
+{{ $category->name }}
+
+</span>
+
+</td>
+
+<td class="px-6 py-4">
+<button
+type="button"
+onclick="openKategoriModal('edit',this)"
+data-id="{{ $category->id }}"
+data-name="{{ $category->name }}"
+class="text-blue-600">
+Edit
+</button>
+
+<form
+
+action="{{ url('/admin/kategori/'.$category->id) }}"
+
+method="POST"
+
+class="inline">
+
+@csrf
+@method('DELETE')
+
+<button
+
+onclick="return confirm('Hapus kategori ini?')"
+
+class="text-red-600">
+
+Hapus
+
+</button>
+
+</form>
+
+</td>
+
+</tr>
+
+@empty
+
+<tr>
+
+<td colspan="3" class="text-center py-10 text-gray-500">
+
+Belum ada kategori.
+
+</td>
+
+</tr>
+
+@endforelse
+
+</tbody>
               </table>
             </div>
           </div>
@@ -118,12 +176,15 @@
           <div class="space-y-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kategori</label>
-              <input type="text" id="input-nama" name="nama_kategori" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm" placeholder="Contoh: Mobile App" required />
+           <input
+type="text"
+id="input-name"
+name="name"
+class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
+placeholder="Contoh: Mobile App"
+required>
             </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Keterangan</label>
-              <textarea id="input-keterangan" name="keterangan" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm resize-none" rows="3" placeholder="Deskripsi singkat kategori..."></textarea>
-            </div>
+            
           </div>
           
           <div class="flex gap-3 mt-6">
@@ -144,42 +205,42 @@
         }, 1000);
       });
 
-      // SCRIPT MODAL DINAMIS (TAMBAH & EDIT)
-      function openKategoriModal(mode, element = null) {
-        const modal = document.getElementById('kategori-modal');
-        const title = document.getElementById('modal-title');
-        const form = document.getElementById('modal-form');
-        const methodContainer = document.getElementById('method-container');
-        
-        const inputNama = document.getElementById('input-nama');
-        const inputKeterangan = document.getElementById('input-keterangan');
+     function openKategoriModal(mode, element = null){
 
-        if (mode === 'tambah') {
-          title.innerText = "Tambah Kategori Baru";
-          form.action = "/admin/kategori/store"; // Set URL Route Store Laravel
-          methodContainer.innerHTML = ""; // Kosongkan karena method default-nya POST
-          
-          // Reset form input
-          inputNama.value = "";
-          inputKeterangan.value = "";
-        } else if (mode === 'edit') {
-          title.innerText = "Ubah Kategori";
-          
-          // Ambil data atribut dari tombol edit yang diklik
-          const id = element.getAttribute('data-id');
-          const nama = element.getAttribute('data-nama');
-          const keterangan = element.getAttribute('data-keterangan');
+    const form = document.getElementById('modal-form');
 
-          form.action = `/admin/kategori/${id}/update`; // Set URL Route Update Laravel
-          methodContainer.innerHTML = `@method('PUT')`; // Sisipkan directive @method('PUT') khas Laravel
-          
-          // Isi input dengan data lama
-          inputNama.value = nama;
-          inputKeterangan.value = keterangan;
-        }
+    const title = document.getElementById('modal-title');
 
-        modal.classList.remove('hidden');
-      }
+    const input = document.getElementById('input-name');
+
+    const method = document.getElementById('method-container');
+
+    if(mode=="tambah"){
+
+        title.innerHTML="Tambah Kategori";
+
+        form.action="/admin/kategori/store";
+
+        method.innerHTML="";
+
+        input.value="";
+
+    }else{
+
+        title.innerHTML="Edit Kategori";
+
+        form.action="/admin/kategori/"+element.dataset.id+"/update";
+
+       method.innerHTML =
+'<input type="hidden" name="_method" value="PUT">';
+
+        input.value=element.dataset.name;
+
+    }
+
+    document.getElementById("kategori-modal").classList.remove("hidden");
+
+}
 
       function closeKategoriModal() {
         document.getElementById('kategori-modal').classList.add('hidden');
@@ -190,6 +251,12 @@
         if (confirm(`Apakah kamu yakin ingin menghapus kategori "${nama}"?`)) {
           alert(`Proses hapus kategori dengan ID: ${id} dijalankan.`);
           // Di Laravel asli, ini nanti diarahkan lewat submit form DELETE terpisah.
+        }
+      }
+       function handleLogout() {
+        if (confirm('Anda yakin ingin logout?')) {
+          // Menjalankan/submit form tersembunyi yang membawa token @csrf ke route logout Laravel
+          document.getElementById('logout-form').submit();
         }
       }
     </script>

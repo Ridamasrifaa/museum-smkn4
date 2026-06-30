@@ -1,4 +1,4 @@
-```blade
+
 @extends('layouts.app')
 
 @section('title','Galeri Karya')
@@ -196,8 +196,7 @@ Lihat
 </section>
 
 @endsection
-```
-```blade
+
 @extends('layouts.app')
 
 @section('title','Galeri Karya')
@@ -395,4 +394,4 @@ Lihat
 </section>
 
 @endsection
-```
+

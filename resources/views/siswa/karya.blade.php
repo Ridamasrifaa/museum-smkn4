@@ -13,10 +13,18 @@
       <div class="w-64 bg-gray-900 text-white shadow-lg flex flex-col">
         <div class="p-6 border-b border-gray-700">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-lg">O</div>
+         @if(Auth::user()->avatar)
+    <img
+        src="{{ Auth::user()->avatar }}"
+        alt="Foto Profil"
+        class="w-10 h-10 rounded-full object-cover">
+@else
+    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+        {{ strtoupper(substr(Auth::user()->name,0,1)) }}
+    </div>
+@endif
             <div>
-              <p class="font-bold text-sm">Oktavia Ayu W</p>
-              <p class="text-xs text-gray-400">XII RPL 1</p>
+             <p class="font-bold text-sm">{{ Auth::user()->name }}</p>
             </div>
           </div>
         </div>
@@ -58,12 +66,7 @@
         <header class="bg-white shadow-sm z-10">
           <div class="px-8 py-4 flex justify-between items-center">
             <h1 class="text-2xl font-bold text-gray-900">Karya Saya</h1>
-            <div class="flex items-center gap-4">
-              <div class="text-right">
-                <p class="font-semibold text-gray-900">Oktavia Ayu W</p>
-              </div>
-              <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">O</div>
-            </div>
+          
           </div>
         </header>
 
@@ -93,15 +96,62 @@
                   </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                  <tr class="hover:bg-gray-50">
-                    <td class="px-6 py-4 text-sm font-semibold text-gray-900">Game Android Tebak Kata</td>
-                    <td class="px-6 py-4"><span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">Game</span></td>
-                    <td class="px-6 py-4"><span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold">Menunggu</span></td>
-                    <td class="px-6 py-4 text-sm text-gray-600">20 Juni 2024</td>
-                    <td class="px-6 py-4">
-                      <a href="{{ url('/siswa/karya/detail')}}" class="text-blue-600 hover:text-blue-800 text-sm font-medium inline-block">Lihat</a>
-                    </td>
-                  </tr>
+               @forelse($projects as $project)
+<tr class="hover:bg-gray-50">
+
+    <td class="px-6 py-4 text-sm font-semibold text-gray-900">
+        {{ $project->title }}
+    </td>
+
+    <td class="px-6 py-4">
+        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
+            {{ $project->category?->name ?? '-' }}
+        </span>
+    </td>
+
+    <td class="px-6 py-4">
+        @if($project->status == 'approved')
+            <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
+                Disetujui
+            </span>
+
+        @elseif($project->status == 'pending')
+
+            <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-semibold">
+                Menunggu
+            </span>
+
+        @else
+
+            <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-semibold">
+                Ditolak
+            </span>
+
+        @endif
+    </td>
+
+    <td class="px-6 py-4 text-sm text-gray-600">
+        {{ $project->created_at->format('d M Y') }}
+    </td>
+
+    <td class="px-6 py-4">
+<a href="{{ url('/siswa/karya/detail/'.$project->id) }}"
+            class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+            Lihat
+        </a>
+    </td>
+
+</tr>
+
+@empty
+
+<tr>
+    <td colspan="5" class="text-center py-10 text-gray-500">
+        Belum ada karya yang diupload.
+    </td>
+</tr>
+
+@endforelse
                 </tbody>
               </table>
             </div>
