@@ -16,36 +16,37 @@
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-lg">A</div>
               <div>
-                <p class="font-bold">Admin</p>
+                <p class="font-bold">{{ Auth::user()->name }}</p>
                 <p class="text-xs text-gray-400">PPLG</p>
               </div>
             </div>
           </div>
           <nav class="mt-6 space-y-1">
-            <a href="{{ url('/admin/dashboard')}}" class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 transition">
+            <a href="{{ url('/admin/dashboard') }}" class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 transition">
               <span>Dashboard</span>
             </a>
-            <a href="{{ url('/admin/karya')}}" class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 transition">
+            <a href="{{ url('/admin/karya') }}" class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 transition">
               <span>Data Karya</span>
             </a>
-            <a href="{{ url('/admin/siswa')}}" class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 transition">
+            <a href="{{ url('/admin/siswa') }}" class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 transition">
               <span>Data Siswa</span>
             </a>
-            <a href="{{ url('/admin/kategori')}}" class="flex items-center gap-3 px-6 py-3 bg-blue-600 text-white transition">
+            <a href="{{ url('/admin/kategori') }}" class="flex items-center gap-3 px-6 py-3 bg-blue-600 text-white transition">
               <span>Kategori</span>
+            </a>
+            <a href="{{ url('/admin/manajemen-admin')}}" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
+              <span>Manajemen Admin</span>
             </a>
           </nav>
         </div>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-    @csrf
-</form>
-
-<button
-    type="button"
-    onclick="handleLogout()"
-    class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold">
-    Logout
-</button>
+        <div class="p-6 border-t border-gray-700">
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+            @csrf
+          </form>
+          <button type="button" onclick="handleLogout()" class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold">
+            Logout
+          </button>
+        </div>
       </div>
 
       <div class="flex-1 flex flex-col overflow-hidden">
@@ -72,7 +73,9 @@
           <div class="bg-white rounded-lg shadow overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <h2 class="text-xl font-bold text-gray-900">Daftar Kategori</h2>
-              <button type="button" onclick="openKategoriModal('tambah')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold cursor-pointer">Tambah Kategori</button>
+              <button type="button" onclick="openKategoriModal('tambah')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold cursor-pointer">
+                Tambah Kategori
+              </button>
             </div>
 
             <div class="overflow-x-auto">
@@ -84,80 +87,38 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Aksi</th>
                   </tr>
                 </thead>
-
-
-              <tbody class="divide-y divide-gray-200">
-
-@forelse($categories as $category)
-
-<tr class="hover:bg-gray-50">
-
-<td class="px-6 py-4">
-{{ $loop->iteration }}
-</td>
-
-<td class="px-6 py-4 font-semibold">
-
-<span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">
-
-{{ $category->name }}
-
-</span>
-
-</td>
-
-<td class="px-6 py-4">
-<button
-type="button"
-onclick="openKategoriModal('edit',this)"
-data-id="{{ $category->id }}"
-data-name="{{ $category->name }}"
-class="text-blue-600">
-Edit
-</button>
-
-<form
-
-action="{{ url('/admin/kategori/'.$category->id) }}"
-
-method="POST"
-
-class="inline">
-
-@csrf
-@method('DELETE')
-
-<button
-
-onclick="return confirm('Hapus kategori ini?')"
-
-class="text-red-600">
-
-Hapus
-
-</button>
-
-</form>
-
-</td>
-
-</tr>
-
-@empty
-
-<tr>
-
-<td colspan="3" class="text-center py-10 text-gray-500">
-
-Belum ada kategori.
-
-</td>
-
-</tr>
-
-@endforelse
-
-</tbody>
+                <tbody class="divide-y divide-gray-200">
+                  @forelse($categories as $category)
+                    <tr class="hover:bg-gray-50">
+                      <td class="px-6 py-4 text-sm text-gray-600">
+                        {{ $loop->iteration }}
+                      </td>
+                      <td class="px-6 py-4 text-sm font-semibold text-gray-900">
+                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
+                          {{ $category->name }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 text-sm">
+                        <button type="button" onclick="openKategoriModal('edit', this)" data-id="{{ $category->id }}" data-name="{{ $category->name }}" class="text-blue-600 hover:text-blue-800 mr-3 font-semibold transition cursor-pointer">
+                          Edit
+                        </button>
+                        <form action="{{ url('/admin/kategori/'.$category->id) }}" method="POST" class="inline">
+                          @csrf
+                          @method('DELETE')
+                          <button type="submit" onclick="return confirm('Hapus kategori ini?')" class="text-red-600 hover:text-red-800 font-semibold transition cursor-pointer">
+                            Hapus
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  @empty
+                    <tr>
+                      <td colspan="3" class="text-center py-12 text-gray-500">
+                        Belum ada kategori ditemukan.
+                      </td>
+                    </tr>
+                  @endforelse
+                </tbody>
               </table>
             </div>
           </div>
@@ -176,27 +137,24 @@ Belum ada kategori.
           <div class="space-y-4">
             <div>
               <label class="block text-sm font-medium text-gray-700 mb-1">Nama Kategori</label>
-           <input
-type="text"
-id="input-name"
-name="name"
-class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm"
-placeholder="Contoh: Mobile App"
-required>
+              <input type="text" id="input-name" name="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm" placeholder="Contoh: Mobile App" required />
             </div>
-            
           </div>
           
           <div class="flex gap-3 mt-6">
-            <button type="button" onclick="closeKategoriModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-sm">Batal</button>
-            <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold text-sm">Simpan</button>
+            <button type="button" onclick="closeKategoriModal()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition text-sm">
+              Batal
+            </button>
+            <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold text-sm">
+              Simpan
+            </button>
           </div>
         </form>
       </div>
     </div>
 
     <script>
-      // SCRIPT LOADING SCREEN
+      // SCRIPT LOADING SCREEN LOKAL (100% menggunakan durasi FE Anda)
       window.addEventListener("load", function () {
         const loadingContent = document.getElementById("loading-content");
         setTimeout(() => {
@@ -205,57 +163,35 @@ required>
         }, 1000);
       });
 
-     function openKategoriModal(mode, element = null){
+      // SCRIPT MODAL BOX DINAMIS (Menggunakan logika BE teman Anda)
+      function openKategoriModal(mode, element = null) {
+        const form = document.getElementById('modal-form');
+        const title = document.getElementById('modal-title');
+        const input = document.getElementById('input-name');
+        const method = document.getElementById('method-container');
 
-    const form = document.getElementById('modal-form');
+        if (mode === "tambah") {
+          title.innerHTML = "Tambah Kategori Baru";
+          form.action = "/admin/kategori/store";
+          method.innerHTML = "";
+          input.value = "";
+        } else {
+          title.innerHTML = "Edit Kategori";
+          form.action = "/admin/kategori/" + element.dataset.id + "/update";
+          method.innerHTML = '<input type="hidden" name="_method" value="PUT">';
+          input.value = element.dataset.name;
+        }
 
-    const title = document.getElementById('modal-title');
-
-    const input = document.getElementById('input-name');
-
-    const method = document.getElementById('method-container');
-
-    if(mode=="tambah"){
-
-        title.innerHTML="Tambah Kategori";
-
-        form.action="/admin/kategori/store";
-
-        method.innerHTML="";
-
-        input.value="";
-
-    }else{
-
-        title.innerHTML="Edit Kategori";
-
-        form.action="/admin/kategori/"+element.dataset.id+"/update";
-
-       method.innerHTML =
-'<input type="hidden" name="_method" value="PUT">';
-
-        input.value=element.dataset.name;
-
-    }
-
-    document.getElementById("kategori-modal").classList.remove("hidden");
-
-}
+        document.getElementById("kategori-modal").classList.remove("hidden");
+      }
 
       function closeKategoriModal() {
         document.getElementById('kategori-modal').classList.add('hidden');
       }
 
-      // FUNGSI AKSES TOMBOL HAPUS (OPSIONAL)
-      function konfirmasiHapus(id, nama) {
-        if (confirm(`Apakah kamu yakin ingin menghapus kategori "${nama}"?`)) {
-          alert(`Proses hapus kategori dengan ID: ${id} dijalankan.`);
-          // Di Laravel asli, ini nanti diarahkan lewat submit form DELETE terpisah.
-        }
-      }
-       function handleLogout() {
+      // LOGOUT HANDLER
+      function handleLogout() {
         if (confirm('Anda yakin ingin logout?')) {
-          // Menjalankan/submit form tersembunyi yang membawa token @csrf ke route logout Laravel
           document.getElementById('logout-form').submit();
         }
       }

@@ -1,397 +1,487 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Semua Karya - Museum Karya SMKN 4 Tasikmalaya</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
-@extends('layouts.app')
+    <style type="text/tailwindcss">
+      @custom-variant dark (&:where(.dark, .dark *));
+    </style>
+    <link rel="stylesheet" href="{{ asset('assets/css/karya.css')}}">
+  </head>
 
-@section('title','Galeri Karya')
+  <body class="scroll-smooth bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <header class="navbar shadow-sm sticky top-0 z-50 bg-white dark:bg-gray-900 transition-colors duration-300">
+      <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
+        <div class="flex lg:flex-1 items-center gap-2">
+          <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">🏛️</div>
+          <span class="text-2xl font-bold text-blue-600">Museum Karya</span>
+        </div>
+        <div class="hidden lg:flex lg:gap-x-8 lg:items-center">
+          <a href="{{ url('/')}}" class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Beranda</a>
+          <a href="{{ url('/karya')}}" class="text-sm font-semibold text-blue-600 border-b-2 border-blue-600 pb-1">Karya</a>
+          <!-- <a href="#" class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Tentang</a> -->
+          <a href="{{ url('/login')}}" class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Login</a>
+          <button id="themeToggle" onclick="toggleTheme()" aria-label="Ganti mode terang/gelap" class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-yellow-300">
+            <svg class="icon-sun w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            </svg>
+          </button>
+        </div>
+      </nav>
+    </header>
 
-@section('content')
+    <section class="my-bg text-white py-20">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
+        <h1 class="text-3xl lg:text-5xl font-bold mb-4">📚 Semua Karya</h1>
+        <p class="text-lg text-gray-100">Jelajahi seluruh koleksi karya siswa Teaching Factory (Tefa)</p>
+      </div>
+    </section>
 
-<!-- HERO -->
+    <section id="karya" class="py-16 bg-gray-50 dark:bg-gray-900">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <!-- Search & Filter (unik: live search + pill kategori + counter) -->
+        <div class="mb-10">
+          <div class="relative max-w-xl mx-auto mb-6">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Ketik judul, nama siswa, deskripsi...."
+              class="w-full pl-12 pr-4 py-4 rounded-full border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-blue-600 dark:focus:border-blue-400 shadow-sm transition"
+            />
+          </div>
 
-<section class="relative py-20">
+          <div class="flex flex-wrap items-center justify-center gap-2 mb-4">
+            <button data-filter="all" class="filter-pill active px-4 py-2 rounded-full text-sm font-semibold border-2 transition">✨ Semua</button>
+            <button data-filter="Website" class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">🌐 Website</button>
+            <button data-filter="Game" class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">🎮 Game</button>
+            <button data-filter="Mobile App" class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">📱 Mobile App</button>
+          </div>
 
-    <div class="text-center max-w-4xl mx-auto">
+          <p id="resultCounter" class="text-center text-sm text-gray-500 dark:text-gray-400"></p>
+        </div>
 
-        <span class="inline-block px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400">
-            🎨 Galeri Digital
-        </span>
+        <div id="allKaryaGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <!-- KARTU 1 -->
+          <div
+            class="karya-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md card-hover transition-colors duration-300"
+            data-id="1"
+            data-title="Catatan Keuangan"
+            data-desc="Platform sistem mencatat keuangan anda dan juga dilengkapi fitur target menabung jadi anda bisa mencapai target menabung anda bisa"
+            data-category="Website"
+            data-event="Bazarr"
+            data-siswa="Zaki Nur Faizy"
+            data-guru="Adi Iasan"
+            data-avatar="Z"
+            data-tahun="2024"
+            data-views="342"
+            data-likes="89"
+            data-tech="React, Node.js, MongoDB"
+            data-live="https://catatan-keuanganzs.netlify.app"
+            data-download="/files/catatan-keuangan.zip"
+          >
+            <div class="iframe-container" onclick="openModal(this.closest('.karya-card'))">
+              <iframe src="https://catatan-keuanganzs.netlify.app" loading="lazy"></iframe>
+              <div class="overlay"></div>
+            </div>
+            <div class="p-6">
+              <span class="badge-custom mb-3">Website</span>
+              <p class="text-gray-600 dark:text-gray-400 text-sm mb-2 mt-2">
+                <strong class="text-gray-900 dark:text-gray-200">Zaki Nur Faizy</strong><br />
+                <span class="text-gray-500 dark:text-gray-500 text-xs">oleh zakinurfaizy</span>
+              </p>
+              <p class="text-gray-900 dark:text-white font-semibold mb-4">Catatan Keuangan</p>
+              
+              <button onclick="openModal(this.closest('.karya-card'))" class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                </svg>
+                Lihat Detail
+              </button>
+            </div>
+          </div>
 
-        <h1 class="text-5xl font-black mt-8">
+          <!-- KARTU 2 -->
+          <div
+            class="karya-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md card-hover transition-colors duration-300"
+            data-id="2"
+            data-title="PROPERTY OF ARU"
+            data-desc="Take photo then draw it XD - Aplikasi interaktif yang memungkinkan pengguna untuk mengambil foto dan menggambarnya"
+            data-category="Game"
+            data-event="MVP"
+            data-siswa="Almira Lubnaa K"
+            data-guru="Guru Pembimbing"
+            data-avatar="A"
+            data-tahun="2024"
+            data-views="256"
+            data-likes="64"
+            data-tech="Unity, C#"
+            data-live="https://almiralubnaakhansa.itch.io"
+            data-download="/files/property-of-aru.zip"
+          >
+            <div class="iframe-container" onclick="openModal(this.closest('.karya-card'))">
+              <iframe src="https://almiralubnaakhansa.itch.io" loading="lazy"></iframe>
+              <div class="overlay"></div>
+            </div>
+            <div class="p-6">
+              <span class="badge-custom mb-3">Game</span>
+              <p class="text-gray-600 dark:text-gray-400 text-sm mb-2 mt-2">
+                <strong class="text-gray-900 dark:text-gray-200">Almira Lubnaa K</strong><br />
+                <span class="text-gray-500 dark:text-gray-500 text-xs">oleh almiralubnaakhansa</span>
+              </p>
+              <p class="text-gray-900 dark:text-white font-semibold mb-4">PROPERTY OF ARU</p>
+              
+              <button onclick="openModal(this.closest('.karya-card'))" class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                </svg>
+                Lihat Detail
+              </button>
+            </div>
+          </div>
 
-            Galeri Karya
-            <span class="text-blue-500">
-                Siswa PPLG
-            </span>
+          <!-- KARTU 3 -->
+          <div
+            class="karya-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md card-hover transition-colors duration-300"
+            data-id="3"
+            data-title="Fleyer Donor Darah KARSA PRADA"
+            data-desc="Fleyer digital untuk kampanye donor darah KARSA PRADA dengan desain yang menarik dan informatif"
+            data-category="Website"
+            data-event="Bazarr"
+            data-siswa="Alwan Lutfi M"
+            data-guru="Guru Pembimbing"
+            data-avatar="A"
+            data-tahun="2024"
+            data-views="198"
+            data-likes="45"
+            data-tech="React, Tailwind CSS"
+            data-live="https://donor-karsa-prada.netlify.app"
+            data-download="/files/donor-karsa-prada.zip"
+          >
+            <div class="iframe-container" onclick="openModal(this.closest('.karya-card'))">
+              <iframe src="https://donor-karsa-prada.netlify.app" loading="lazy"></iframe>
+              <div class="overlay"></div>
+            </div>
+            <div class="p-6">
+              <span class="badge-custom mb-3">Website</span>
+              <p class="text-gray-600 dark:text-gray-400 text-sm mb-2 mt-2">
+                <strong class="text-gray-900 dark:text-gray-200">Alwan Lutfi M</strong><br />
+                <span class="text-gray-500 dark:text-gray-500 text-xs">oleh alwanlutfimaulida</span>
+              </p>
+              <p class="text-gray-900 dark:text-white font-semibold mb-4">Fleyer Donor Darah KARSA PRADA</p>
+              
+              <button onclick="openModal(this.closest('.karya-card'))" class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                </svg>
+                Lihat Detail
+              </button>
+            </div>
+          </div>
 
-        </h1>
+          <!-- KARTU 4 -->
+          <div
+            class="karya-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md card-hover transition-colors duration-300"
+            data-id="4"
+            data-title="E-Learning Platform"
+            data-desc="Platform pembelajaran online dengan fitur video streaming, quiz interaktif, dan tracking progress siswa"
+            data-category="Website"
+            data-event="MVP"
+            data-siswa="Budi Santoso"
+            data-guru="Bu Siti"
+            data-avatar="B"
+            data-tahun="2024"
+            data-views="512"
+            data-likes="156"
+            data-tech="React, Express, PostgreSQL"
+            data-live="https://elearning-demo.vercel.app"
+            data-download="/files/elearning-platform.zip"
+          >
+            <div class="iframe-container" onclick="openModal(this.closest('.karya-card'))">
+              <iframe src="https://elearning-demo.vercel.app" loading="lazy"></iframe>
+              <div class="overlay"></div>
+            </div>
+            <div class="p-6">
+              <span class="badge-custom mb-3">Website</span>
+              <p class="text-gray-600 dark:text-gray-400 text-sm mb-2 mt-2">
+                <strong class="text-gray-900 dark:text-gray-200">Budi Santoso</strong><br />
+                <span class="text-gray-500 dark:text-gray-500 text-xs">oleh budisantoso</span>
+              </p>
+              <p class="text-gray-900 dark:text-white font-semibold mb-4">E-Learning Platform</p>
+              
+              <button onclick="openModal(this.closest('.karya-card'))" class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                </svg>
+                Lihat Detail
+              </button>
+            </div>
+          </div>
 
-        <p class="text-slate-400 mt-6 text-lg">
+          <!-- KARTU 5 -->
+          <div
+            class="karya-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md card-hover transition-colors duration-300"
+            data-id="5"
+            data-title="Mobile Weather App"
+            data-desc="Aplikasi mobile untuk melihat informasi cuaca dengan detail, forecast 7 hari, dan notifikasi peringatan"
+            data-category="Mobile App"
+            data-event="MVP"
+            data-siswa="Siti Nurhaliza"
+            data-guru="Pak Ahmad"
+            data-avatar="S"
+            data-tahun="2024"
+            data-views="428"
+            data-likes="98"
+            data-tech="Flutter, Firebase"
+            data-live="https://play.google.com/store/apps/details?id=com.weather.app"
+            data-download="/files/weather-app.apk"
+          >
+            <div class="iframe-container gradient-cyan flex items-center justify-center" onclick="openModal(this.closest('.karya-card'))">
+              <p class="text-white font-bold text-3xl">🌤️</p>
+            </div>
+            <div class="p-6">
+              <span class="badge-custom mb-3">Mobile App</span>
+              <p class="text-gray-600 dark:text-gray-400 text-sm mb-2 mt-2">
+                <strong class="text-gray-900 dark:text-gray-200">Siti Nurhaliza</strong><br />
+                <span class="text-gray-500 dark:text-gray-500 text-xs">oleh sitinurhaliza</span>
+              </p>
+              <p class="text-gray-900 dark:text-white font-semibold mb-4">Mobile Weather App</p>
+              
+              <button onclick="openModal(this.closest('.karya-card'))" class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                </svg>
+                Lihat Detail
+              </button>
+            </div>
+          </div>
 
-            Temukan berbagai karya Website, Aplikasi,
-            Game, UI/UX, Poster, Video,
-            serta project terbaik siswa
-            SMKN 4 Tasikmalaya.
+          <!-- KARTU 6 -->
+          <div
+            class="karya-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md card-hover transition-colors duration-300"
+            data-id="6"
+            data-title="Social Media Dashboard"
+            data-desc="Dashboard untuk mengelola multiple social media accounts dengan scheduling posts dan analytics"
+            data-category="Website"
+            data-event="Bazarr"
+            data-siswa="Diana Kusuma"
+            data-guru="Bu Rini"
+            data-avatar="D"
+            data-tahun="2024"
+            data-views="367"
+            data-likes="82"
+            data-tech="Vue.js, Python"
+            data-live="https://social-dashboard-demo.vercel.app"
+            data-download="/files/social-dashboard.zip"
+          >
+            <div class="iframe-container" onclick="openModal(this.closest('.karya-card'))">
+              <iframe src="https://social-dashboard-demo.vercel.app" loading="lazy"></iframe>
+              <div class="overlay"></div>
+            </div>
+            <div class="p-6">
+              <span class="badge-custom mb-3">Website</span>
+              <p class="text-gray-600 dark:text-gray-400 text-sm mb-2 mt-2">
+                <strong class="text-gray-900 dark:text-gray-200">Diana Kusuma</strong><br />
+                <span class="text-gray-500 dark:text-gray-500 text-xs">oleh dianakusuma</span>
+              </p>
+              <p class="text-gray-900 dark:text-white font-semibold mb-4">Social Media Dashboard</p>
+              
+              <button onclick="openModal(this.closest('.karya-card'))" class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                </svg>
+                Lihat Detail
+              </button>
+            </div>
+          </div>
+        </div>
 
-        </p>
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-16">
+          <div class="text-6xl mb-4">📭</div>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Tidak ada karya ditemukan</h3>
+          <p class="text-gray-600 dark:text-gray-400">Coba ubah kata kunci atau filter kategori Anda</p>
+        </div>
+      </div>
+    </section>
 
+    <footer class="bg-gray-900 dark:bg-black text-white text-center py-12">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="border-t border-gray-800 pt-8">
+          <p class="text-gray-400 text-sm">&copy; 2026 Museum Karya SMKN 4 Tasikmalaya</p>
+          <p class="text-gray-400 text-sm">Design &amp; Development By PPLG</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Modal Detail -->
+    <div id="detailModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div class="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transition-colors duration-300">
+        <div class="sticky top-0 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-white dark:bg-gray-900">
+          <h3 id="modalTitle" class="text-xl font-bold text-gray-900 dark:text-white"></h3>
+          <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+        <div class="p-6 space-y-6">
+          <div class="flex gap-2 flex-wrap">
+            <span class="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-semibold">✅ Disetujui</span>
+            <span id="modalCategory" class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-semibold"></span>
+            <span id="modalEvent" class="inline-block bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm font-semibold"></span>
+          </div>
+          <div>
+            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Deskripsi</h4>
+            <p id="modalDescription" class="text-gray-700 dark:text-gray-300 leading-relaxed"></p>
+          </div>
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+            <div class="flex items-center gap-3">
+              <div id="modalAvatar" class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg"></div>
+              <div>
+                <p id="modalSiswa" class="font-semibold text-gray-900 dark:text-white"></p>
+                <p id="modalGuru" class="text-sm text-gray-600 dark:text-gray-400"></p>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <p class="text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Kategori</p>
+              <p id="modalKategoriDetail" class="font-semibold text-gray-900 dark:text-white"></p>
+            </div>
+            <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+              <p class="text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Tahun</p>
+              <p id="modalTahun" class="font-semibold text-gray-900 dark:text-white"></p>
+            </div>
+          </div>
+          <!-- <div>
+            <h4 class="font-semibold text-gray-900 dark:text-white mb-2">🛠️ Teknologi</h4>
+            <p id="modalTech" class="text-gray-700 dark:text-gray-300"></p>
+          </div> -->
+          <div class="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <a id="liveBtn" href="#" target="_blank" class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-center">🔗 Buka Live</a>
+            <!-- <a id="downloadBtn" href="#" download class="px-4 py-2 border-2 border-blue-600 text-blue-600 dark:text-blue-400 rounded-lg font-semibold hover:bg-blue-50 dark:hover:bg-blue-950 transition text-center">📥 Download</a> -->
+          </div>
+        </div>
+      </div>
     </div>
 
-</section>
-
-<!-- SEARCH -->
-
-<section>
-
-<div class="card p-7">
-
-<div class="grid lg:grid-cols-4 gap-5">
-
-<input
-type="text"
-placeholder="Cari karya..."
-class="bg-slate-900 border border-slate-700 rounded-xl px-5 py-4">
-
-<select
-class="bg-slate-900 border border-slate-700 rounded-xl px-5">
-
-<option>Semua</option>
-<option>Website</option>
-<option>Game</option>
-<option>Aplikasi</option>
-<option>Poster</option>
-<option>UI UX</option>
-
-</select>
-
-<select
-class="bg-slate-900 border border-slate-700 rounded-xl px-5">
-
-<option>Terbaru</option>
-<option>Terlama</option>
-<option>Populer</option>
-
-</select>
-
-<button class="btn-primary">
-
-Cari
-
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- GRID -->
-
-<section class="mt-16">
-
-<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-@for($i=1;$i<=12;$i++)
-
-<div class="card overflow-hidden group">
-
-<div class="overflow-hidden">
-
-<img
-src="https://picsum.photos/600/400?random={{$i}}"
-class="w-full h-56 object-cover duration-500 group-hover:scale-110">
-
-</div>
-
-<div class="p-6">
-
-<div class="flex justify-between">
-
-<span class="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm">
-
-Website
-
-</span>
-
-<span class="text-yellow-400">
-
-★★★★★
-
-</span>
-
-</div>
-
-<h2 class="text-2xl font-bold mt-5">
-
-Museum Digital {{$i}}
-
-</h2>
-
-<p class="text-slate-400 mt-3">
-
-Project Laravel 12 + Tailwind CSS.
-
-</p>
-
-<div class="flex justify-between items-center mt-8">
-
-<div>
-
-<p class="font-semibold">
-
-Ridda Masrifa
-
-</p>
-
-<p class="text-slate-500 text-sm">
-
-PPLG XI
-
-</p>
-
-</div>
-
-<a
-href="/karya/{{$i}}"
-class="btn-primary">
-
-Lihat
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-@endfor
-
-</div>
-
-</section>
-
-<!-- PAGINATION -->
-
-<section class="mt-20">
-
-<div class="flex justify-center gap-3">
-
-<button class="px-5 py-3 rounded-lg bg-blue-600">
-1
-</button>
-
-<button class="px-5 py-3 rounded-lg bg-slate-800 hover:bg-blue-600">
-2
-</button>
-
-<button class="px-5 py-3 rounded-lg bg-slate-800 hover:bg-blue-600">
-3
-</button>
-
-<button class="px-5 py-3 rounded-lg bg-slate-800 hover:bg-blue-600">
-→
-</button>
-
-</div>
-
-</section>
-
-@endsection
-
-@extends('layouts.app')
-
-@section('title','Galeri Karya')
-
-@section('content')
-
-<!-- HERO -->
-
-<section class="relative py-20">
-
-    <div class="text-center max-w-4xl mx-auto">
-
-        <span class="inline-block px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400">
-            🎨 Galeri Digital
-        </span>
-
-        <h1 class="text-5xl font-black mt-8">
-
-            Galeri Karya
-            <span class="text-blue-500">
-                Siswa PPLG
-            </span>
-
-        </h1>
-
-        <p class="text-slate-400 mt-6 text-lg">
-
-            Temukan berbagai karya Website, Aplikasi,
-            Game, UI/UX, Poster, Video,
-            serta project terbaik siswa
-            SMKN 4 Tasikmalaya.
-
-        </p>
-
-    </div>
-
-</section>
-
-<!-- SEARCH -->
-
-<section>
-
-<div class="card p-7">
-
-<div class="grid lg:grid-cols-4 gap-5">
-
-<input
-type="text"
-placeholder="Cari karya..."
-class="bg-slate-900 border border-slate-700 rounded-xl px-5 py-4">
-
-<select
-class="bg-slate-900 border border-slate-700 rounded-xl px-5">
-
-<option>Semua</option>
-<option>Website</option>
-<option>Game</option>
-<option>Aplikasi</option>
-<option>Poster</option>
-<option>UI UX</option>
-
-</select>
-
-<select
-class="bg-slate-900 border border-slate-700 rounded-xl px-5">
-
-<option>Terbaru</option>
-<option>Terlama</option>
-<option>Populer</option>
-
-</select>
-
-<button class="btn-primary">
-
-Cari
-
-</button>
-
-</div>
-
-</div>
-
-</section>
-
-<!-- GRID -->
-
-<section class="mt-16">
-
-<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-@for($i=1;$i<=12;$i++)
-
-<div class="card overflow-hidden group">
-
-<div class="overflow-hidden">
-
-<img
-src="https://picsum.photos/600/400?random={{$i}}"
-class="w-full h-56 object-cover duration-500 group-hover:scale-110">
-
-</div>
-
-<div class="p-6">
-
-<div class="flex justify-between">
-
-<span class="bg-blue-500/20 text-blue-400 px-3 py-1 rounded-full text-sm">
-
-Website
-
-</span>
-
-<span class="text-yellow-400">
-
-★★★★★
-
-</span>
-
-</div>
-
-<h2 class="text-2xl font-bold mt-5">
-
-Museum Digital {{$i}}
-
-</h2>
-
-<p class="text-slate-400 mt-3">
-
-Project Laravel 12 + Tailwind CSS.
-
-</p>
-
-<div class="flex justify-between items-center mt-8">
-
-<div>
-
-<p class="font-semibold">
-
-Ridda Masrifa
-
-</p>
-
-<p class="text-slate-500 text-sm">
-
-PPLG XI
-
-</p>
-
-</div>
-
-<a
-href="/karya/{{$i}}"
-class="btn-primary">
-
-Lihat
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-@endfor
-
-</div>
-
-</section>
-
-<!-- PAGINATION -->
-
-<section class="mt-20">
-
-<div class="flex justify-center gap-3">
-
-<button class="px-5 py-3 rounded-lg bg-blue-600">
-1
-</button>
-
-<button class="px-5 py-3 rounded-lg bg-slate-800 hover:bg-blue-600">
-2
-</button>
-
-<button class="px-5 py-3 rounded-lg bg-slate-800 hover:bg-blue-600">
-3
-</button>
-
-<button class="px-5 py-3 rounded-lg bg-slate-800 hover:bg-blue-600">
-→
-</button>
-
-</div>
-
-</section>
-
-@endsection
-
+    <script>
+      // ===== Dark / Light Mode =====
+      function applyTheme(theme) {
+        document.documentElement.classList.toggle("dark", theme === "dark");
+      }
+      function toggleTheme() {
+        const isDark = document.documentElement.classList.contains("dark");
+        const next = isDark ? "light" : "dark";
+        localStorage.setItem("theme", next);
+        applyTheme(next);
+      }
+      (function initTheme() {
+        const saved = localStorage.getItem("theme");
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        applyTheme(saved || (prefersDark ? "dark" : "light"));
+      })();
+
+      // ===== Modal (baca data langsung dari atribut data-* card, aman dari error elemen null) =====
+      function openModal(card) {
+        if (!card) return;
+        const d = card.dataset;
+        
+        // Cek keberadaan elemen terlebih dahulu sebelum mengisi data agar tidak menyebabkan error crash
+        if (document.getElementById("modalTitle")) document.getElementById("modalTitle").textContent = d.title;
+        if (document.getElementById("modalCategory")) document.getElementById("modalCategory").textContent = d.category;
+        if (document.getElementById("modalEvent")) document.getElementById("modalEvent").textContent = "🎉 " + d.event;
+        if (document.getElementById("modalDescription")) document.getElementById("modalDescription").textContent = d.desc;
+        if (document.getElementById("modalSiswa")) document.getElementById("modalSiswa").textContent = d.siswa;
+        if (document.getElementById("modalGuru")) document.getElementById("modalGuru").textContent = "👨‍🏫 " + d.guru;
+        if (document.getElementById("modalKategoriDetail")) document.getElementById("modalKategoriDetail").textContent = d.category;
+        if (document.getElementById("modalTahun")) document.getElementById("modalTahun").textContent = d.tahun;
+        if (document.getElementById("modalAvatar")) document.getElementById("modalAvatar").textContent = d.avatar;
+        if (document.getElementById("liveBtn")) document.getElementById("liveBtn").href = d.live;
+
+        // Elemen-elemen yang sedang di-comment di HTML diproteksi di sini:
+        if (document.getElementById("modalViews")) document.getElementById("modalViews").textContent = d.views;
+        if (document.getElementById("modalLikes")) document.getElementById("modalLikes").textContent = d.likes;
+        if (document.getElementById("modalTech")) document.getElementById("modalTech").textContent = d.tech;
+        if (document.getElementById("downloadBtn")) document.getElementById("downloadBtn").href = d.download;
+        
+        // Tampilkan modal
+        const modal = document.getElementById("detailModal");
+        if (modal) modal.classList.remove("hidden");
+      }
+
+      function closeModal() {
+        document.getElementById("detailModal").classList.add("hidden");
+      }
+
+      document.getElementById("detailModal").addEventListener("click", (e) => {
+        if (e.target.id === "detailModal") closeModal();
+      });
+
+      // ===== Pencarian & Filter Kategori (unik: live search + pill + counter) =====
+      const searchInput = document.getElementById("searchInput");
+      const filterPills = document.querySelectorAll(".filter-pill");
+      const allCards = document.querySelectorAll(".karya-card");
+      const resultCounter = document.getElementById("resultCounter");
+      const emptyState = document.getElementById("emptyState");
+
+      let activeCategory = "all";
+
+      function normalize(text) {
+        return (text || "").toLowerCase();
+      }
+
+      function runFilter() {
+        const query = normalize(searchInput.value.trim());
+        let visibleCount = 0;
+
+        allCards.forEach((card) => {
+          const d = card.dataset;
+          const haystack = normalize(`${d.title} ${d.siswa} ${d.tech} ${d.category} ${d.desc}`);
+          const matchesQuery = query === "" || haystack.includes(query);
+          const matchesCategory = activeCategory === "all" || d.category === activeCategory;
+          const isMatch = matchesQuery && matchesCategory;
+
+          card.classList.toggle("card-filtered-out", !isMatch);
+          if (isMatch) visibleCount++;
+        });
+
+        if (resultCounter) {
+          resultCounter.textContent = visibleCount === allCards.length ? `Menampilkan semua ${allCards.length} karya` : `Menampilkan ${visibleCount} dari ${allCards.length} karya`;
+        }
+
+        if (emptyState) {
+          emptyState.classList.toggle("hidden", visibleCount > 0);
+        }
+      }
+
+      if (searchInput) searchInput.addEventListener("input", runFilter);
+
+      filterPills.forEach((pill) => {
+        pill.addEventListener("click", () => {
+          filterPills.forEach((p) => p.classList.remove("active"));
+          pill.classList.add("active");
+          activeCategory = pill.dataset.filter;
+          runFilter();
+        });
+      });
+
+      // Jalankan sekali di awal untuk isi counter
+      runFilter();
+    </script>
+  </body>
+</html>

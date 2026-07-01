@@ -9,29 +9,18 @@ use App\Http\controllers\Admin\AdminProjectController;
 use App\Http\Controllers\Admin\AdminSiswaController;
 use App\Http\Controllers\Admin\AdminCategoryController;
 
-// use App\Http\Controllers\PublicController;
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+
 Route::get('/', function () {
     return view('index');
 });
+Route::get('/karya', function () {
+    return view('karya');
+});
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
-// Route::middleware('guest')->group(function () {
-//     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-//     Route::post('/login', [AuthController::class, 'login']);
-// });
-
-// // Route ini hanya bisa diakses oleh user yang SUDAH login (auth)
-// Route::middleware('auth')->group(function () {
-//     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    
-//     Route::get('/admin', function () {
-//         return view('admin.dashboard');
-//     })->name('admin.dashboard');
-// });
-
 Route::middleware('auth')->group(function () {
 
     Route::get('/admin/dashboard', [AdminDashboardController::class,'index']);
@@ -43,8 +32,9 @@ Route::get('/admin/karya', function () {
 Route::get('/admin/kategori', function () {
     return view('admin.kategori');
 });
-
-
+Route::get('/admin/manajemen-admin', function () {
+    return view('admin.admin');
+});
 
 Route::get('/siswa/karya/detail', function () {
     return view('siswa.detail');

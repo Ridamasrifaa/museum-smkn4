@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
     <title>@yield('title','Museum SMKN 4 Tasikmalaya')</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -285,7 +286,6 @@
 
 <a href="/" class="nav-link">Beranda</a>
 
-<a href="/artikel" class="nav-link">Artikel</a>
 
 <a href="/karya" class="nav-link">Karya</a>
 

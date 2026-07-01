@@ -11,10 +11,9 @@
     <div class="max-w-3xl mx-auto">
       
       <div class="mb-4">
-       <a href="{{ url('/siswa/karya') }}"
-   class="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition">
-    ← Kembali ke Daftar Karya
-</a>
+        <a href="{{ url('/siswa/karya') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition"> 
+          ← Kembali ke Daftar Karya 
+        </a>
       </div>
 
       <div class="bg-white rounded-lg shadow overflow-hidden relative min-h-[300px]">
@@ -25,6 +24,7 @@
             <p class="text-gray-700 font-medium text-sm tracking-wide">Memuat detail karya...</p>
           </div>
         </div>
+
         <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
           <h2 class="text-xl font-bold text-gray-900">Detail Informasi Karya</h2>
           <p class="text-sm text-gray-500 mt-0.5">Berikut rincian data project beserta umpan balik dari admin.</p>
@@ -41,7 +41,9 @@
                 <tr>
                   <td class="px-6 py-4 font-semibold text-gray-900">Kategori</td>
                   <td class="px-6 py-4">
-                    <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">{{ $project->category?->name ?? '-' }}</span>
+                    <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
+                      {{ $project->category?->name ?? '-' }}
+                    </span>
                   </td>
                 </tr>
                 <tr class="bg-gray-50/50">
@@ -51,50 +53,38 @@
                 <tr>
                   <td class="px-6 py-4 font-semibold text-gray-900">URL Project</td>
                   <td class="px-6 py-4">
-                   @if($project->live_link)
-<a href="{{ $project->live_link }}"
-   target="_blank"
-   class="text-blue-600 hover:text-blue-800 font-medium underline inline-flex items-center gap-1 break-all">
-
-    {{ $project->live_link }}
-
-</a>
-@else
-<span class="text-gray-500">Tidak ada link</span>
-@endif
+                    @if($project->live_link)
+                      <a href="{{ $project->live_link }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium underline inline-flex items-center gap-1 break-all"> 
+                        {{ $project->live_link }} ↗
+                      </a>
+                    @else
+                      <span class="text-gray-500">Tidak ada link</span>
+                    @endif
                   </td>
                 </tr>
                 <tr class="bg-amber-50/40">
                   <td class="px-6 py-4 font-semibold text-amber-900">Catatan / Alasan Admin</td>
-<td class="px-6 py-4">
+                  <td class="px-6 py-4">
+                    @if($project->status == 'approved')
+                      <p class="text-green-700 italic font-medium">
+                        "{{ $project->approval_note ?? 'Project telah disetujui.' }}"
+                      </p>
+                    @elseif($project->status == 'rejected')
+                      <p class="text-red-700 italic font-medium">
+                        "{{ $project->rejection_reason }}"
+                      </p>
+                    @else
+                      <p class="text-yellow-700">
+                        Project masih menunggu review admin.
+                      </p>
+                    @endif
 
-    @if($project->status == 'approved')
-
-        <p class="text-green-700 italic">
-            {{ $project->approval_note ?? 'Project telah disetujui.' }}
-        </p>
-
-    @elseif($project->status == 'rejected')
-
-        <p class="text-red-700 italic">
-            {{ $project->rejection_reason }}
-        </p>
-
-    @else
-
-        <p class="text-yellow-700">
-            Project masih menunggu review admin.
-        </p>
-
-    @endif
-
-    @if($project->reviewer)
-        <span class="inline-block mt-2 text-[10px] bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-semibold">
-            Dikirim oleh: {{ $project->reviewer->name }}
-        </span>
-    @endif
-
-</td>
+                    @if($project->reviewer)
+                      <span class="inline-block mt-2 text-[10px] bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-semibold"> 
+                        Dikirim oleh: {{ $project->reviewer->name }} 
+                      </span>
+                    @endif
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -107,7 +97,6 @@
       window.addEventListener("load", function () {
         const loadingContent = document.getElementById("loading-content");
 
-        // Jeda 1 detik agar animasi loading terasa halus sebelum data detail muncul
         setTimeout(() => {
           loadingContent.classList.add("opacity-0");
 
