@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Siswa;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Category;
 
@@ -30,11 +31,14 @@ class ProjectController extends Controller
 public function store(Request $request)
 {
     $request->validate([
-        'title' => 'required',
-        'category_id' => 'required',
-        'description' => 'required',
+        'title' => 'required|string|max:255',
+        'category_id' => 'required|exists:categories,id',
+        'description' => 'required|string',
         'live_link' => 'required|url',
+        'file_path' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
     ]);
+
+    $path = $request->file('file_path')->store('projects', 'public');
 
     Project::create([
         'user_id' => Auth::id(),
@@ -42,6 +46,9 @@ public function store(Request $request)
         'title' => $request->title,
         'description' => $request->description,
         'live_link' => $request->live_link,
+        'file_path' => $path,
+        'file_type' => $request->file('file_path')->getClientMimeType(),
+        'file_size' => $request->file('file_path')->getSize(),
         'status' => 'pending',
     ]);
 

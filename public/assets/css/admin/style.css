@@ -29,3 +29,18 @@
   background-color: var(--nav-link-hover);
   color: #ffffff;
 }
+.counter-card{
+    opacity:0;
+    transform:translateY(40px);
+    transition:.7s ease;
+}
+
+.counter-card.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+.counter-card:hover{
+    transform:translateY(-8px);
+    transition:.3s;
+}

@@ -1,18 +1,23 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Project;
 
 class KaryaController extends Controller
 {
     public function index()
-    {
-        $karyas = Project::all();
-        return view('admin.karya', compact('karyas'));
-    }
+{
+    $karyas = Project::with(['user','category'])
+        ->approved()
+        ->latest()
+        ->get();
 
-    public function show($id)
+    return view('karya', compact('karyas'));
+}
+
+    public function show(Project $project)
     {
-        return view('karya.detail');
+        return view('karya.detail', compact('project'));
     }
 }
