@@ -125,25 +125,13 @@
                             <span class="badge-custom mb-3">
                                 {{ $karya->kategori }}
                             </span>
+<p class="text-gray-900 dark:text-white font-semibold text-lg">
+    {{ $karya->title }}
+</p>
 
-                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-2 mt-2">
-
-                                <strong class="text-gray-900 dark:text-gray-200">
-                                    {{ $karya->user->name ?? '-' }}
-                                </strong>
-
-                                <br>
-
-                                <span class="text-gray-500 text-xs">
-                                    oleh {{ $karya->user->name ?? '-' }}
-                                </span>
-
-                            </p>
-
-                            <p class="text-gray-900 dark:text-white font-semibold mb-4">
-                                {{ $karya->title }}
-                            </p>
-
+<p class="text-gray-500 dark:text-gray-400 text-sm mb-4">
+    oleh: <span class="font-medium">{{ $karya->user->name ?? '-' }}</span>
+</p>
                             <button onclick="openModal(this.closest('.karya-card'))"
                                 class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700">
 
