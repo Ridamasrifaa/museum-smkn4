@@ -12,7 +12,7 @@ class AdminSiswaController extends Controller
     {
         $search = $request->search;
 
-        $siswas = User::where('role', 2)
+        $query = User::where('role', 2)
 
             ->when($search, function ($query) use ($search) {
 
@@ -23,12 +23,15 @@ class AdminSiswaController extends Controller
                      ;
                 });
 
-            })
+            });
 
-            ->latest()
-            ->get();
+        $totalSiswa = (clone $query)->count();
 
-        return view('admin.siswa', compact('siswas'));
+        $siswas = $query->latest()
+            ->simplePaginate(10)
+            ->withQueryString();
+
+        return view('admin.siswa', compact('siswas', 'totalSiswa'));
     }
 
     public function update(Request $request, User $user)

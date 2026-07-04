@@ -31,7 +31,8 @@ public function index(Request $request)
         })
 
         ->latest()
-        ->get();
+        ->simplePaginate(10)
+        ->withQueryString();
 
     return view('admin.karya',compact('projects'));
 }

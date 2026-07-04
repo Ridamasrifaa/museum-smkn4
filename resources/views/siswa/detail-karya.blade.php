@@ -62,6 +62,34 @@
                     @endif
                   </td>
                 </tr>
+                <tr class="bg-gray-50/50">
+                  <td class="px-6 py-4 font-semibold text-gray-900">Dokumentasi project</td>
+                  <td class="px-6 py-4">
+                    @if($project->file_path)
+                      <!-- Tampilan Gambar Utama (Bisa Diklik) -->
+                      <div class="relative inline-block">
+                        <img src="{{ asset('storage/' . $project->file_path) }}" 
+                            alt="Dokumentasi" 
+                            class="w-32 h-auto rounded-lg object-cover shadow-sm cursor-pointer hover:opacity-80 transition duration-200"
+                            onclick="openModal(this.src)"> <!-- Cukup panggil this.src -->
+                      </div>
+
+                      <!-- Struktur Modal Pop-up (Tersembunyi secara default) -->
+                      <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onclick="closeModal()">
+                        <div class="relative max-w-3xl max-h-[90vh] bg-white rounded-xl p-2 shadow-2xl" onclick="event.stopPropagation()">
+                          <!-- Tombol Close -->
+                          <button onclick="closeModal()" class="absolute -top-4 -right-4 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold shadow-lg">
+                            ✕
+                          </button>
+                          <!-- Gambar di dalam Pop-up -->
+                          <img id="modalImage" src="" alt="Preview" class="max-w-full max-h-[80vh] rounded-lg object-contain">
+                        </div>
+                      </div>
+                    @else
+                      <span class="text-gray-500">-</span>
+                    @endif
+                  </td>
+                </tr>
                 <tr class="bg-amber-50/40">
                   <td class="px-6 py-4 font-semibold text-amber-900">Catatan / Alasan Admin</td>
                   <td class="px-6 py-4">
@@ -94,6 +122,29 @@
     </div>
 
     <script>
+      function openModal(imageSrc) {
+      const modal = document.getElementById('imageModal');
+      const modalImg = document.getElementById('modalImage');
+      
+      // 1. Masukkan URL gambar yang diklik ke dalam tag img di dalam modal
+      modalImg.src = imageSrc; 
+      
+      // 2. Hilangkan class 'hidden' untuk menampilkan modal
+      modal.classList.remove('hidden'); 
+      
+      // 3. (Opsional) Mencegah halaman utama bisa di-scroll saat modal aktif
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('imageModal');
+      
+      // 1. Kembalikan class 'hidden' untuk menyembunyikan modal
+      modal.classList.add('hidden'); 
+      
+      // 2. Kembalikan fungsi scroll pada halaman utama
+      document.body.style.overflow = 'auto';
+    }
       window.addEventListener("load", function () {
         const loadingContent = document.getElementById("loading-content");
 

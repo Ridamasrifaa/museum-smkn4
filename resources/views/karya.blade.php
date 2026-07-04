@@ -12,6 +12,24 @@
         @custom-variant dark (&:where(.dark, .dark *));
     </style>
     <link rel="stylesheet" href="{{ asset('assets/css/karya.css') }}">
+    <style>
+        /* Icon toggle mode terang/gelap: disamakan dengan halaman index dan artikel */
+        .icon-moon {
+            display: block;
+        }
+
+        .icon-sun {
+            display: none;
+        }
+
+        .dark .icon-moon {
+            display: none;
+        }
+
+        .dark .icon-sun {
+            display: block;
+        }
+    </style>
 </head>
 
 <body class="scroll-smooth bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -28,7 +46,7 @@
                     class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Beranda</a>
                 <a href="{{ url('/karya') }}"
                     class="text-sm font-semibold text-blue-600 border-b-2 border-blue-600 pb-1">Karya</a>
-                <!-- <a href="#" class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Tentang</a> -->
+                <a href="{{ url('/artikel')}}" class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Artikel</a>
                 <a href="{{ url('/login') }}"
                     class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Login</a>
                 <button id="themeToggle" onclick="toggleTheme()" aria-label="Ganti mode terang/gelap"
@@ -94,31 +112,21 @@
                         data-tech="{{ $karya->technology_stack }}" data-live="{{ $karya->live_link }}"
                         data-views="{{ $karya->views_count }}" data-likes="{{ $karya->likes_count }}">
 
-                        {{-- Preview --}}
-                        @if ($karya->category->name === 'Website' && $karya->live_link)
-                            <div class="iframe-container" onclick="openModal(this.closest('.karya-card'))">
+                        {{-- Preview: disamakan persis dengan logika iframe di index.blade.php --}}
+                        <div class="iframe-container" onclick="openModal(this.closest('.karya-card'))">
 
+                            @if ($karya->live_link)
                                 <iframe src="{{ $karya->live_link }}" loading="lazy">
                                 </iframe>
+                            @else
+                                <div class="flex items-center justify-center h-full bg-gray-200">
+                                    Tidak ada Preview
+                                </div>
+                            @endif
 
-                                <div class="overlay"></div>
+                            <div class="overlay"></div>
 
-                            </div>
-                        @elseif($karya->file_path)
-                            <div class="iframe-container" onclick="openModal(this.closest('.karya-card'))">
-
-                                <img src="{{ asset('storage/' . $karya->file_path) }}"
-                                    class="w-full h-full object-cover">
-
-                            </div>
-                        @else
-                            <div class="iframe-container gradient-cyan flex items-center justify-center"
-                                onclick="openModal(this.closest('.karya-card'))">
-
-                                <span class="text-5xl">📱</span>
-
-                            </div>
-                        @endif
+                        </div>
 
                         <div class="p-6">
 

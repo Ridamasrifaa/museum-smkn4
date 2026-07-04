@@ -17,8 +17,8 @@
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-lg">A</div>
               <div>
-                <p class="font-bold">{{ Auth::user()->name }}</p>
-                <p class="text-xs text-gray-400">PPLG</p>
+                <p class="font-bold">Museum Karya Smkn 4</p>
+                <!-- <p class="text-xs text-gray-400">PPLG</p> -->
               </div>
             </div>
           </div>
@@ -37,6 +37,9 @@
             </a>
             <a href="{{ url('/admin/manajemen-admin')}}" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
               <span>Manajemen Admin</span>
+            </a>
+            <a href="{{ url('/admin/artikel')}}" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
+              <span>Manajemen Artikel</span>
             </a>
           </nav>
         </div>
@@ -57,7 +60,7 @@
             <h1 class="text-2xl font-bold text-gray-900">Manajemen Data Siswa</h1>
             <div class="flex items-center gap-4">
               <div class="text-right">
-                <p class="font-semibold text-gray-900">Admin User</p>
+                <p class="font-semibold text-gray-900">{{ Auth::user()->name }}</p>
                 <p class="text-sm text-gray-500">Login sebagai admin</p>
               </div>
             </div>
@@ -89,7 +92,7 @@
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <h2 class="text-xl font-bold text-gray-900">Daftar Siswa</h2>
             </div>
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto overflow-y-auto max-h-[500px]">
               <table class="w-full">
                 <thead class="bg-gray-50 border-b border-gray-200">
                   <tr>
@@ -139,6 +142,12 @@
                 </tbody>
               </table>
             </div>
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between items-center text-sm text-gray-600">
+                <span>Total: <span class="font-bold">{{ $totalSiswa }}</span> Siswa</span>
+                <div>
+                    {{ $siswas->links() }}
+                </div>
+            </div>
           </div>
 
         </div>
@@ -176,47 +185,6 @@
       </div>
     </div>
 
-    <script>
-      // Loading Screen Timer
-      window.addEventListener("load", function () {
-        const loadingContent = document.getElementById("loading-content");
-        setTimeout(() => {
-          loadingContent.classList.add("opacity-0");
-          setTimeout(() => {
-            loadingContent.classList.add("hidden");
-          }, 300);
-        }, 1000);
-      });
-
-      // Modal Controller Logika Backend
-      function openSiswaModal(element) {
-        const modal = document.getElementById('siswa-modal');
-        const form = document.getElementById('modal-form');
-        
-        const id = element.getAttribute('data-id');
-        const nama = element.getAttribute('data-nama');
-        const kelas = element.getAttribute('data-kelas');
-        const email = element.getAttribute('data-email');
-
-        form.action = `/admin/siswa/${id}/update`;
-
-        document.getElementById('input-nama').value = nama;
-        document.getElementById('input-kelas').value = kelas;
-        document.getElementById('input-email').value = email;
-
-        modal.classList.remove('hidden');
-      }
-
-      function closeSiswaModal() {
-        document.getElementById('siswa-modal').classList.add('hidden');
-      }
-
-      // Logout Form Trigger
-      function handleLogout() {
-        if (confirm('Anda yakin ingin logout?')) {
-          document.getElementById('logout-form').submit();
-        }
-      }
-    </script>
+    <script src="{{ asset('assets/admin/siswa.js')}}"></script>
   </body>
 </html>

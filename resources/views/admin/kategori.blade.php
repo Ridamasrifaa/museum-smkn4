@@ -16,8 +16,8 @@
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-lg">A</div>
               <div>
-                <p class="font-bold">{{ Auth::user()->name }}</p>
-                <p class="text-xs text-gray-400">PPLG</p>
+                <p class="font-bold">Museum Karya Smkn 4</p>
+                <!-- <p class="text-xs text-gray-400">PPLG</p> -->
               </div>
             </div>
           </div>
@@ -37,6 +37,9 @@
             <a href="{{ url('/admin/manajemen-admin')}}" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
               <span>Manajemen Admin</span>
             </a>
+            <a href="{{ url('/admin/artikel')}}" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
+              <span>Manajemen Artikel</span>
+            </a>
           </nav>
         </div>
         <div class="p-6 border-t border-gray-700">
@@ -55,7 +58,7 @@
             <h1 class="text-2xl font-bold text-gray-900">Manajemen Kategori Karya</h1>
             <div class="flex items-center gap-4">
               <div class="text-right">
-                <p class="font-semibold text-gray-900">Admin User</p>
+                <p class="font-semibold text-gray-900">{{ Auth::user()->name }}</p>
                 <p class="text-sm text-gray-500">Login sebagai admin</p>
               </div>
             </div>
@@ -153,48 +156,6 @@
       </div>
     </div>
 
-    <script>
-      // SCRIPT LOADING SCREEN LOKAL (100% menggunakan durasi FE Anda)
-      window.addEventListener("load", function () {
-        const loadingContent = document.getElementById("loading-content");
-        setTimeout(() => {
-          loadingContent.classList.add("opacity-0");
-          setTimeout(() => loadingContent.classList.add("hidden"), 300);
-        }, 1000);
-      });
-
-      // SCRIPT MODAL BOX DINAMIS (Menggunakan logika BE teman Anda)
-      function openKategoriModal(mode, element = null) {
-        const form = document.getElementById('modal-form');
-        const title = document.getElementById('modal-title');
-        const input = document.getElementById('input-name');
-        const method = document.getElementById('method-container');
-
-        if (mode === "tambah") {
-          title.innerHTML = "Tambah Kategori Baru";
-          form.action = "/admin/kategori/store";
-          method.innerHTML = "";
-          input.value = "";
-        } else {
-          title.innerHTML = "Edit Kategori";
-          form.action = "/admin/kategori/" + element.dataset.id + "/update";
-          method.innerHTML = '<input type="hidden" name="_method" value="PUT">';
-          input.value = element.dataset.name;
-        }
-
-        document.getElementById("kategori-modal").classList.remove("hidden");
-      }
-
-      function closeKategoriModal() {
-        document.getElementById('kategori-modal').classList.add('hidden');
-      }
-
-      // LOGOUT HANDLER
-      function handleLogout() {
-        if (confirm('Anda yakin ingin logout?')) {
-          document.getElementById('logout-form').submit();
-        }
-      }
-    </script>
+    <script src="{{ asset('assets/js/admin/kategori.js')}}"></script>
   </body>
 </html>

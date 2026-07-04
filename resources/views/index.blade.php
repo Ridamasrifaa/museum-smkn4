@@ -13,6 +13,24 @@
         @custom-variant dark (&:where(.dark, .dark *));
     </style>
     <link rel="stylesheet" href="{{ asset('assets/css/index.css') }}">
+    <style>
+        /* Icon toggle mode terang/gelap: disamakan dengan halaman artikel, tampilkan salah satu sesuai mode aktif */
+        .icon-moon {
+            display: block;
+        }
+
+        .icon-sun {
+            display: none;
+        }
+
+        .dark .icon-moon {
+            display: none;
+        }
+
+        .dark .icon-sun {
+            display: block;
+        }
+    </style>
 </head>
 
 <body class="scroll-smooth bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -29,7 +47,7 @@
                     class="text-sm font-semibold text-blue-600 border-b-2 border-blue-600 pb-1">Beranda</a>
                 <a href="{{ url('/karya') }}"
                     class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Karya</a>
-                <!-- <a href="#" class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Tentang</a> -->
+                <a href="{{ url('/artikel')}}" class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Tentang</a>
                 <a href="{{ url('/login') }}"
                     class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Login</a>
                 <button id="themeToggle" onclick="toggleTheme()" aria-label="Ganti mode terang/gelap"
@@ -51,6 +69,69 @@
         <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
             <h1 class="text-4xl lg:text-6xl font-bold mb-6">Selamat Datang Di Museum Karya SMKN 4 Tasikmalaya</h1>
             <p class="text-xl mb-12">Hasil dari Project Teaching Factory (Tefa)</p>
+        </div>
+    </section>
+
+    {{-- ===== Kartu Statistik: dipindahkan ke atas, tampil sebelum Semua Karya ===== --}}
+    <section class="py-16 bg-white dark:bg-gray-950">
+        <div class="max-w-7xl mx-auto px-6">
+
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <div
+                    class="counter-card bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 text-center border border-gray-100 dark:border-gray-800">
+                    <div class="text-5xl mb-4">📚</div>
+
+                    <p class="text-gray-500 mb-3">
+                        Total Karya
+                    </p>
+
+                    <div class="flex justify-center items-end gap-1">
+                        <h2 class="counter text-blue-600" data-target="{{ $totalKarya }}">0</h2>
+                        <!-- Span plus dinonaktifkan: tidak ditampilkan -->
+                        <!-- <span class="counter-plus text-blue-600">+</span> -->
+                    </div>
+                </div>
+
+
+
+
+
+                <div
+                    class="counter-card bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 text-center border border-gray-100 dark:border-gray-800">
+                    <div class="text-5xl mb-4">👨‍🎓</div>
+
+                    <p class="text-gray-500 mb-3">
+                        Total Siswa
+                    </p>
+
+                    <h2 class="counter" data-target="{{ $totalSiswa }}">
+                        0
+                    </h2>
+
+                    <!-- Span plus dinonaktifkan: tidak ditampilkan -->
+                    <!-- <span class="text-purple-600 font-bold text-xl">+</span> -->
+                </div>
+
+
+                <div
+                    class="counter-card bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 text-center border border-gray-100 dark:border-gray-800">
+                    <div class="text-5xl mb-4">👨‍🏫</div>
+
+                    <p class="text-gray-500 mb-3">
+                        Guru Pembimbing
+                    </p>
+
+                    <h2 class="counter" data-target="{{ $totalAdmin }}">
+                        0
+                    </h2>
+
+                    <!-- Span plus dinonaktifkan: tidak ditampilkan -->
+                    <!-- <span class="text-red-600 font-bold text-xl">+</span> -->
+                </div>
+
+            </div>
+
         </div>
     </section>
 
@@ -137,282 +218,94 @@
 
             </div>
         </div>
+    </section>
 
+    <footer class="bg-gray-900 dark:bg-black text-white text-center py-12">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="border-t border-gray-800 pt-8">
+                <p class="text-gray-400 text-sm">&copy; 2026 Museum Karya SMKN 4 Tasikmalaya</p>
+                <p class="text-gray-400 text-sm">Design &amp; Development By PPLG</p>
+            </div>
+        </div>
+    </footer>
 
-
-
-
-        <section class="py-16 bg-white dark:bg-gray-950">
-            <div class="max-w-7xl mx-auto px-6">
-
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
-
-                    <div
-                        class="counter-card bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 text-center border border-gray-100 dark:border-gray-800">
-                        <div class="text-5xl mb-4">📚</div>
-
-                        <p class="text-gray-500 mb-3">
-                            Total Karya
-                        </p>
-
-                        <div class="flex justify-center items-end gap-1">
-                            <h2 class="counter text-blue-600" data-target="{{ $totalKarya }}">0</h2>
-                            <!-- Span plus dinonaktifkan: tidak ditampilkan -->
-                            <!-- <span class="counter-plus text-blue-600">+</span> -->
+    <!-- Modal Detail -->
+    <div id="detailModal"
+        class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div
+            class="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transition-colors duration-300">
+            <div
+                class="sticky top-0 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-white dark:bg-gray-900">
+                <h3 id="modalTitle" class="text-xl font-bold text-gray-900 dark:text-white"></h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6 space-y-6">
+                <div class="flex gap-2 flex-wrap">
+                    <span
+                        class="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-semibold">✅
+                        Disetujui</span>
+                    <span id="modalCategory"
+                        class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-semibold"></span>
+                    <span id="modalEvent"
+                        class="inline-block bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm font-semibold"></span>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Deskripsi</h4>
+                    <p id="modalDescription" class="text-gray-700 dark:text-gray-300 leading-relaxed"></p>
+                </div>
+                <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                    <div class="flex items-center gap-3">
+                        <div id="modalAvatar"
+                            class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
+                        </div>
+                        <div>
+                            <p id="modalSiswa" class="font-semibold text-gray-900 dark:text-white"></p>
+                            <p id="modalGuru" class="text-sm text-gray-600 dark:text-gray-400"></p>
                         </div>
                     </div>
-
-
-
-
-
-                    <div
-                        class="counter-card bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 text-center border border-gray-100 dark:border-gray-800">
-                        <div class="text-5xl mb-4">👨‍🎓</div>
-
-                        <p class="text-gray-500 mb-3">
-                            Total Siswa
-                        </p>
-
-                        <h2 class="counter" data-target="{{ $totalSiswa }}">
-                            0
-                        </h2>
-
-                        <!-- Span plus dinonaktifkan: tidak ditampilkan -->
-                        <!-- <span class="text-purple-600 font-bold text-xl">+</span> -->
-                    </div>
-
-
-                    <div
-                        class="counter-card bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 text-center border border-gray-100 dark:border-gray-800">
-                        <div class="text-5xl mb-4">👨‍🏫</div>
-
-                        <p class="text-gray-500 mb-3">
-                            Guru Pembimbing
-                        </p>
-
-                        <h2 class="counter" data-target="{{ $totalAdmin }}">
-                            0
-                        </h2>
-
-                        <!-- Span plus dinonaktifkan: tidak ditampilkan -->
-                        <!-- <span class="text-red-600 font-bold text-xl">+</span> -->
-                    </div>
-
                 </div>
-
-            </div>
-        </section>
-        <footer class="bg-gray-900 dark:bg-black text-white text-center py-12">
-            <div class="mx-auto max-w-7xl px-6 lg:px-8">
-                <div class="border-t border-gray-800 pt-8">
-                    <p class="text-gray-400 text-sm">&copy; 2026 Museum Karya SMKN 4 Tasikmalaya</p>
-                    <p class="text-gray-400 text-sm">Design &amp; Development By PPLG</p>
-                </div>
-            </div>
-        </footer>
-
-        <!-- Modal Detail -->
-        <div id="detailModal"
-            class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-            <div
-                class="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transition-colors duration-300">
-                <div
-                    class="sticky top-0 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-white dark:bg-gray-900">
-                    <h3 id="modalTitle" class="text-xl font-bold text-gray-900 dark:text-white"></h3>
-                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="p-6 space-y-6">
-                    <div class="flex gap-2 flex-wrap">
-                        <span
-                            class="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-semibold">✅
-                            Disetujui</span>
-                        <span id="modalCategory"
-                            class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-semibold"></span>
-                        <span id="modalEvent"
-                            class="inline-block bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm font-semibold"></span>
-                    </div>
-                    <div>
-                        <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Deskripsi</h4>
-                        <p id="modalDescription" class="text-gray-700 dark:text-gray-300 leading-relaxed"></p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                        <p class="text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Kategori</p>
+                        <p id="modalKategoriDetail" class="font-semibold text-gray-900 dark:text-white"></p>
                     </div>
                     <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                        <div class="flex items-center gap-3">
-                            <div id="modalAvatar"
-                                class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
-                            </div>
-                            <div>
-                                <p id="modalSiswa" class="font-semibold text-gray-900 dark:text-white"></p>
-                                <p id="modalGuru" class="text-sm text-gray-600 dark:text-gray-400"></p>
-                            </div>
-                        </div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Tahun</p>
+                        <p id="modalTahun" class="font-semibold text-gray-900 dark:text-white"></p>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                            <p class="text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Kategori</p>
-                            <p id="modalKategoriDetail" class="font-semibold text-gray-900 dark:text-white"></p>
-                        </div>
-                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                            <p class="text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Tahun</p>
-                            <p id="modalTahun" class="font-semibold text-gray-900 dark:text-white"></p>
-                        </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-center bg-blue-50 dark:bg-blue-950 p-4 rounded-lg">
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">👁️ Dilihat</p>
+                        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="modalViews"></p>
                     </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="text-center bg-blue-50 dark:bg-blue-950 p-4 rounded-lg">
-                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">👁️ Dilihat</p>
-                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="modalViews"></p>
-                        </div>
-                        <div class="text-center bg-red-50 dark:bg-red-950 p-4 rounded-lg">
-                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">❤️ Suka</p>
-                            <p class="text-2xl font-bold text-red-600 dark:text-red-400" id="modalLikes"></p>
-                        </div>
+                    <div class="text-center bg-red-50 dark:bg-red-950 p-4 rounded-lg">
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">❤️ Suka</p>
+                        <p class="text-2xl font-bold text-red-600 dark:text-red-400" id="modalLikes"></p>
                     </div>
-                    <div>
-                        <h4 class="font-semibold text-gray-900 dark:text-white mb-2">🛠️ Teknologi</h4>
-                        <p id="modalTech" class="text-gray-700 dark:text-gray-300"></p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <a id="liveBtn" href="#" target="_blank"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-center">🔗
-                            Buka Live</a>
-                        <a id="downloadBtn" href="#" download
-                            class="px-4 py-2 border-2 border-blue-600 text-blue-600 dark:text-blue-400 rounded-lg font-semibold hover:bg-blue-50 dark:hover:bg-blue-950 transition text-center">📥
-                            Download</a>
-                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-900 dark:text-white mb-2">🛠️ Teknologi</h4>
+                    <p id="modalTech" class="text-gray-700 dark:text-gray-300"></p>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <a id="liveBtn" href="#" target="_blank"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-center">🔗
+                        Buka Live</a>
+                    <a id="downloadBtn" href="#" download
+                        class="px-4 py-2 border-2 border-blue-600 text-blue-600 dark:text-blue-400 rounded-lg font-semibold hover:bg-blue-50 dark:hover:bg-blue-950 transition text-center">📥
+                        Download</a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <script>
-            // ===== Dark / Light Mode =====
-            function applyTheme(theme) {
-                document.documentElement.classList.toggle("dark", theme === "dark");
-            }
-
-            function toggleTheme() {
-                const isDark = document.documentElement.classList.contains("dark");
-                const next = isDark ? "light" : "dark";
-                localStorage.setItem("theme", next);
-                applyTheme(next);
-            }
-            (function initTheme() {
-                const saved = localStorage.getItem("theme");
-                const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-                applyTheme(saved || (prefersDark ? "dark" : "light"));
-            })();
-
-            // ===== Modal (baca data langsung dari atribut data-* card, tanpa array JS) =====
-            function openModal(card) {
-                if (!card) return;
-                const d = card.dataset;
-                document.getElementById("modalTitle").textContent = d.title;
-                document.getElementById("modalCategory").textContent = d.category;
-                document.getElementById("modalEvent").textContent = "🎉 " + d.event;
-                document.getElementById("modalDescription").textContent = d.desc;
-                document.getElementById("modalSiswa").textContent = d.siswa;
-                document.getElementById("modalGuru").textContent = "👨‍🏫 " + d.guru;
-                document.getElementById("modalKategoriDetail").textContent = d.category;
-                document.getElementById("modalTahun").textContent = d.tahun;
-                document.getElementById("modalViews").textContent = d.views;
-                document.getElementById("modalLikes").textContent = d.likes;
-                document.getElementById("modalTech").textContent = d.tech;
-                document.getElementById("modalAvatar").textContent = d.avatar;
-                document.getElementById("downloadBtn").href = d.download;
-                document.getElementById("liveBtn").href = d.live;
-                document.getElementById("detailModal").classList.remove("hidden");
-            }
-
-            function closeModal() {
-                document.getElementById("detailModal").classList.add("hidden");
-            }
-
-            document.getElementById("detailModal").addEventListener("click", (e) => {
-                if (e.target.id === "detailModal") closeModal();
-            });
-        </script>
-
-
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-
-                const counters = document.querySelectorAll(".counter");
-
-                const observer = new IntersectionObserver(entries => {
-
-                    entries.forEach(entry => {
-
-                        if (!entry.isIntersecting) return;
-
-                        const counter = entry.target;
-
-                        const target = parseInt(counter.dataset.target);
-
-                        let current = 0;
-
-                        const duration = 1800; // 1.8 detik
-
-                        const increment = target / (duration / 16);
-
-                        function update() {
-
-                            current += increment;
-
-                            if (current >= target) {
-
-                                counter.innerText = target.toLocaleString();
-
-                            } else {
-
-                                counter.innerText = Math.floor(current).toLocaleString();
-
-                                requestAnimationFrame(update);
-
-                            }
-
-                        }
-
-                        update();
-
-                        observer.unobserve(counter);
-
-                    });
-
-                }, {
-
-                    threshold: 0.5
-
-                });
-
-                counters.forEach(counter => {
-                    observer.observe(counter);
-                });
-
-            });
-            const cards = document.querySelectorAll(".counter-card");
-
-            const cardObserver = new IntersectionObserver(entries => {
-
-                entries.forEach(entry => {
-
-                    if (entry.isIntersecting) {
-
-                        entry.target.classList.add("show");
-
-                    }
-
-                });
-
-            }, {
-                threshold: .2
-            });
-
-            cards.forEach(card => cardObserver.observe(card));
-        </script>
+    <script src="{{ asset('assets/js/index.js')}}"></script>
 </body>
 
 </html>

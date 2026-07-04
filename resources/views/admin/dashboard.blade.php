@@ -15,10 +15,10 @@
             <div>
                 <div class="p-6 border-b border-gray-700">
                     <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-lg">A</div>
+                        <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-md">A</div>
                         <div>
-                            <p class="font-bold">{{ Auth::user()->name }}</p>
-                            <p class="text-xs text-gray-400">PPLG</p>
+                            <p class="font-bold">Museum Karya Smkn 4</p>
+                            <!-- <p class="text-xs text-gray-400">PPLG</p> -->
                         </div>
                     </div>
                 </div>
@@ -37,6 +37,9 @@
                     </a>
                     <a href="{{ url('/admin/manajemen-admin')}}" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
                         <span>Manajemen Admin</span>
+                    </a>
+                    <a href="{{ url('/admin/artikel')}}" class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition">
+                        <span>Manajemen Artikel</span>
                     </a>
                 </nav>
             </div>
@@ -116,22 +119,6 @@
         </div>
     </div>
 
-    <script>
-        // Loading animation
-        window.addEventListener("load", function () {
-            const loadingContent = document.getElementById("loading-content");
-            setTimeout(() => {
-                loadingContent.classList.add("opacity-0");
-                setTimeout(() => { loadingContent.classList.add("hidden"); }, 300);
-            }, 1500);
-        });
-
-        // Logout handler
-        function handleLogout() {
-            if (confirm('Anda yakin ingin logout?')) {
-                document.getElementById('logout-form').submit();
-            }
-        }
-    </script>
+    <script src="{{ asset('assets/js/admin/dashboard.js')}}"></script>
 </body>
 </html>

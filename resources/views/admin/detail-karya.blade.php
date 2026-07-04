@@ -17,7 +17,6 @@
       </div>
 
       <div class="bg-white rounded-lg shadow overflow-hidden relative min-h-[300px]">
-        
         <div id="loading-content" class="absolute inset-0 bg-white z-40 flex flex-col items-center justify-center transition-opacity duration-300 ease-out">
           <div class="flex items-center gap-3 bg-gray-50 px-6 py-3 rounded-full border border-gray-200 shadow-xs">
             <div class="w-5 h-5 border-3 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
@@ -66,6 +65,35 @@
                       <a href="{{ $project->live_link }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium underline inline-flex items-center gap-1 break-all"> 
                         {{ $project->live_link }} ↗
                       </a>
+                    @else
+                      <span class="text-gray-500">-</span>
+                    @endif
+                  </td>
+                </tr>
+
+                <tr class="bg-gray-50/50">
+                  <td class="px-6 py-4 font-semibold text-gray-900">Dokumentasi project</td>
+                  <td class="px-6 py-4">
+                    @if($project->file_path)
+                      <!-- Tampilan Gambar Utama (Bisa Diklik) -->
+                      <div class="relative inline-block">
+                        <img src="{{ asset('storage/' . $project->file_path) }}" 
+                            alt="Dokumentasi" 
+                            class="w-32 h-auto rounded-lg object-cover shadow-sm cursor-pointer hover:opacity-80 transition duration-200"
+                            onclick="openModal(this.src)"> <!-- Cukup panggil this.src -->
+                      </div>
+
+                      <!-- Struktur Modal Pop-up (Tersembunyi secara default) -->
+                      <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4" onclick="closeModal()">
+                        <div class="relative max-w-3xl max-h-[90vh] bg-white rounded-xl p-2 shadow-2xl" onclick="event.stopPropagation()">
+                          <!-- Tombol Close -->
+                          <button onclick="closeModal()" class="absolute -top-4 -right-4 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold shadow-lg">
+                            ✕
+                          </button>
+                          <!-- Gambar di dalam Pop-up -->
+                          <img id="modalImage" src="" alt="Preview" class="max-w-full max-h-[80vh] rounded-lg object-contain">
+                        </div>
+                      </div>
                     @else
                       <span class="text-gray-500">-</span>
                     @endif
@@ -156,19 +184,6 @@
       </div>
     </div>
 
-    <script>
-      window.addEventListener("load", function () {
-        const loadingContent = document.getElementById("loading-content");
-
-        // Transisi halus menghapus loading screen setelah 1 detik
-        setTimeout(() => {
-          loadingContent.classList.add("opacity-0");
-
-          setTimeout(() => {
-            loadingContent.classList.add("hidden");
-          }, 300); // Sinkron dengan class duration-300 Tailwind
-        }, 1000);
-      });
-    </script>
+    <script src="{{ asset('assets/js/admin/detail.js')}}"></script>
   </body>
 </html>
