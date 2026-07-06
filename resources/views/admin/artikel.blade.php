@@ -63,7 +63,7 @@
             <header class="bg-white shadow-sm z-10">
                 <div class="px-8 py-4 flex justify-between items-center">
                     <h1 class="text-2xl font-bold text-gray-900">Kelola Artikel</h1>
-                    <a href="{{ url('/admin/artikel/upload')}}"
+                   <a href="{{ route('articles.create') }}"
                         class="px-5 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition flex items-center gap-2">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd"
@@ -88,15 +88,21 @@
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                     <div class="bg-white rounded-lg shadow p-5">
                         <p class="text-sm text-gray-500 mb-1">Total Artikel</p>
-                        <p class="text-2xl font-bold text-gray-900">6</p>
+                       <p class="text-2xl font-bold text-gray-900">
+    {{ $articles->count() }}
+</p>
                     </div>
                     <div class="bg-white rounded-lg shadow p-5">
                         <p class="text-sm text-gray-500 mb-1">Sudah Terbit</p>
-                        <p class="text-2xl font-bold text-green-600">5</p>
+                       <p class="text-2xl font-bold text-green-600">
+    {{ $articles->where('status','published')->count() }}
+</p>
                     </div>
                     <div class="bg-white rounded-lg shadow p-5">
                         <p class="text-sm text-gray-500 mb-1">Draft</p>
-                        <p class="text-2xl font-bold text-yellow-600">1</p>
+                       <p class="text-2xl font-bold text-yellow-600">
+    {{ $articles->where('status','draft')->count() }}
+</p>
                     </div>
                 </div>
 
@@ -113,13 +119,18 @@
                             <option value="draft">Draft</option>
                         </select>
 
-                        <select id="categoryFilter"
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                            <option value="">Semua Kategori</option>
-                            <option value="Prestasi">Prestasi</option>
-                            <option value="Kegiatan">Kegiatan</option>
-                            <option value="Tefa">Tefa</option>
-                        </select>
+                       <select id="categoryFilter"
+class="px-4 py-2 border border-gray-300 rounded-lg">
+
+    <option value="">Semua Kategori</option>
+
+    @foreach($categories as $category)
+        <option value="{{ $category->name }}">
+            {{ $category->name }}
+        </option>
+    @endforeach
+
+</select>
 
                         <button type="button" onclick="runFilter()"
                             class="px-5 py-2 bg-gray-800 text-white rounded-lg font-medium hover:bg-gray-900 transition">Terapkan</button>
@@ -143,116 +154,112 @@
                             </thead>
                             <tbody id="articleTableBody" class="divide-y divide-gray-200">
 
-                                <tr class="article-row hover:bg-gray-50" data-title="tim pplg raih juara lks provinsi"
-                                    data-category="Prestasi" data-status="published">
-                                    
-                                    <td class="px-6 py-4 text-sm font-semibold text-gray-900 max-w-xs truncate">Tim PPLG SMKN 4 Tasikmalaya Raih Juara 1 Lomba Aplikasi Tingkat Provinsi</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Prestasi</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Admin Sekolah</td>
-                                    <td class="px-6 py-4 text-sm">
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Terbit</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm"><span class="text-yellow-500 text-lg">⭐</span></td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">28 Jun 2026</td>
-                                    <td class="px-6 py-4 text-sm whitespace-nowrap">
-                                        <a href="{{ url('/admin/artikel/edit')}}" class="text-blue-600 hover:text-blue-800 mr-3 font-semibold transition cursor-pointer">Edit</a>
-                                        <button type="button" onclick="hapusBaris(this)" class="text-red-600 hover:text-red-800 font-semibold transition cursor-pointer">Hapus</button>
-                                    </td>
-                                </tr>
 
-                                <tr class="article-row hover:bg-gray-50" data-title="pameran teaching factory 2026"
-                                    data-category="Kegiatan" data-status="published">
-                                   
-                                    <td class="px-6 py-4 text-sm font-semibold text-gray-900 max-w-xs truncate">Pameran Teaching Factory 2026 Pamerkan Puluhan Karya Siswa</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Kegiatan</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Admin Sekolah</td>
-                                    <td class="px-6 py-4 text-sm">
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Terbit</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm"><span class="text-gray-300 text-lg">—</span></td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">20 Jun 2026</td>
-                                    <td class="px-6 py-4 text-sm whitespace-nowrap">
-                                        <a href="{{ url('/admin/artikel/edit')}}" class="text-blue-600 hover:text-blue-800 mr-3 font-semibold transition cursor-pointer">Edit</a>
-                                        <button type="button" onclick="hapusBaris(this)" class="text-red-600 hover:text-red-800 font-semibold transition cursor-pointer">Hapus</button>
-                                    </td>
-                                </tr>
 
-                                <tr class="article-row hover:bg-gray-50" data-title="kelas xi mulai program tefa"
-                                    data-category="Tefa" data-status="published">
-                                    
-                                    <td class="px-6 py-4 text-sm font-semibold text-gray-900 max-w-xs truncate">Siswa Kelas XI Resmi Mulai Program Teaching Factory Semester Ini</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Tefa</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Admin Sekolah</td>
-                                    <td class="px-6 py-4 text-sm">
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Terbit</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm"><span class="text-gray-300 text-lg">—</span></td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">12 Jun 2026</td>
-                                    <td class="px-6 py-4 text-sm whitespace-nowrap">
-                                        <a href="{{ url('/admin/artikel/edit')}}" class="text-blue-600 hover:text-blue-800 mr-3 font-semibold transition cursor-pointer">Edit</a>
-                                        <button type="button" onclick="hapusBaris(this)" class="text-red-600 hover:text-red-800 font-semibold transition cursor-pointer">Hapus</button>
-                                    </td>
-                                </tr>
+@forelse($articles as $article)
 
-                                <tr class="article-row hover:bg-gray-50" data-title="workshop ui ux bersama alumni"
-                                    data-category="Kegiatan" data-status="draft">
-                                    
-                                    <td class="px-6 py-4 text-sm font-semibold text-gray-900 max-w-xs truncate">Workshop UI/UX Bersama Alumni yang Kini Bekerja di Startup</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Kegiatan</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Admin Sekolah</td>
-                                    <td class="px-6 py-4 text-sm">
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">Draft</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm"><span class="text-gray-300 text-lg">—</span></td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">5 Jun 2026</td>
-                                    <td class="px-6 py-4 text-sm whitespace-nowrap">
-                                        <a href="{{ url('/admin/artikel/edit')}}" class="text-blue-600 hover:text-blue-800 mr-3 font-semibold transition cursor-pointer">Edit</a>
-                                        <button type="button" onclick="hapusBaris(this)" class="text-red-600 hover:text-red-800 font-semibold transition cursor-pointer">Hapus</button>
-                                    </td>
-                                </tr>
+<tr
+    class="article-row hover:bg-gray-50"
+    data-title="{{ strtolower($article->title) }}"
+    data-category="{{ $article->category?->name }}"
+    data-status="{{ $article->status }}"
+>
 
-                                <tr class="article-row hover:bg-gray-50" data-title="karya game siswa tembus 1000 unduhan"
-                                    data-category="Prestasi" data-status="published">
-                                    
-                                    <td class="px-6 py-4 text-sm font-semibold text-gray-900 max-w-xs truncate">Game Buatan Siswa Kelas XII Tembus 1.000 Unduhan di Play Store</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Prestasi</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Admin Sekolah</td>
-                                    <td class="px-6 py-4 text-sm">
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">Terbit</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm"><span class="text-gray-300 text-lg">—</span></td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">1 Jun 2026</td>
-                                    <td class="px-6 py-4 text-sm whitespace-nowrap">
-                                        <a href="{{ url('/admin/artikel/edit')}}" class="text-blue-600 hover:text-blue-800 mr-3 font-semibold transition cursor-pointer">Edit</a>
-                                        <button type="button" onclick="hapusBaris(this)" class="text-red-600 hover:text-red-800 font-semibold transition cursor-pointer">Hapus</button>
-                                    </td>
-                                </tr>
+    <td class="px-6 py-4 text-sm font-semibold text-gray-900 max-w-xs truncate">
+        {{ $article->title }}
+    </td>
 
-                                <tr class="article-row hover:bg-gray-50" data-title="pengumuman libur semester genap"
-                                    data-category="Kegiatan" data-status="draft">
-                                    
-                                    <td class="px-6 py-4 text-sm font-semibold text-gray-900 max-w-xs truncate">Pengumuman Jadwal Libur Semester Genap Tahun Ajaran 2025/2026</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Kegiatan</td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">Admin Sekolah</td>
-                                    <td class="px-6 py-4 text-sm">
-                                        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">Draft</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-sm"><span class="text-gray-300 text-lg">—</span></td>
-                                    <td class="px-6 py-4 text-sm text-gray-600">-</td>
-                                    <td class="px-6 py-4 text-sm whitespace-nowrap">
-                                        <a href="{{ url('/admin/artikel/edit')}}" class="text-blue-600 hover:text-blue-800 mr-3 font-semibold transition cursor-pointer">Edit</a>
-                                        <button type="button" onclick="hapusBaris(this)" class="text-red-600 hover:text-red-800 font-semibold transition cursor-pointer">Hapus</button>
-                                    </td>
-                                </tr>
+    <td class="px-6 py-4 text-sm text-gray-600">
+       {{ $article->category?->name }}
+    </td>
 
-                                <tr id="emptyRow" class="hidden">
-                                    <td colspan="8" class="text-center py-12">
-                                        <h2 id="emptyTitle" class="font-bold text-lg text-gray-500">Belum ada data artikel</h2>
-                                        <p id="emptyDesc" class="hidden text-gray-500 text-sm">
-                                            Tidak ada artikel dengan kata kunci <strong id="emptyQuery"></strong>
-                                        </p>
-                                    </td>
-                                </tr>
+    <td class="px-6 py-4 text-sm text-gray-600">
+        {{ $article->author->name }}
+    </td>
+
+    <td class="px-6 py-4 text-sm">
+
+        @if($article->status=='published')
+
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700">
+                Terbit
+            </span>
+
+        @else
+
+            <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-700">
+                Draft
+            </span>
+
+        @endif
+
+    </td>
+
+    <td class="px-6 py-4 text-sm">
+
+        @if($article->is_featured)
+
+            ⭐
+
+        @else
+
+            —
+
+        @endif
+
+    </td>
+
+    <td class="px-6 py-4 text-sm text-gray-600">
+        {{ $article->created_at->format('d M Y') }}
+    </td>
+
+    <td class="px-6 py-4 text-sm whitespace-nowrap">
+
+        <a
+            href="{{ route('articles.edit',$article) }}"
+            class="text-blue-600 hover:text-blue-800 mr-3 font-semibold"
+        >
+            Edit
+        </a>
+
+        <form
+            action="{{ route('articles.destroy',$article) }}"
+            method="POST"
+            class="inline"
+        >
+
+            @csrf
+            @method('DELETE')
+
+            <button
+                onclick="return confirm('Hapus artikel ini?')"
+                class="text-red-600 hover:text-red-800 font-semibold"
+            >
+                Hapus
+            </button>
+
+        </form>
+
+    </td>
+
+</tr>
+
+@empty
+
+<tr>
+
+    <td colspan="7" class="text-center py-10">
+
+        Belum ada artikel.
+
+    </td>
+
+</tr>
+
+@endforelse
+
+
+
 
                             </tbody>
                         </table>
@@ -289,23 +296,22 @@
         const statusFilter = document.getElementById("statusFilter");
         const categoryFilter = document.getElementById("categoryFilter");
         const rows = document.querySelectorAll(".article-row");
-        const emptyRow = document.getElementById("emptyRow");
+    
 
-        const emptyTitle = document.getElementById("emptyTitle");
-        const emptyDesc = document.getElementById("emptyDesc");
-        const emptyQuery = document.getElementById("emptyQuery");
-
+        
         function runFilter() {
             const query = (searchInput.value || "").toLowerCase().trim();
             const status = statusFilter.value;
-            const category = categoryFilter.value;
+            const category = categoryFilter.value.toLowerCase();
             let visibleCount = 0;
 
             rows.forEach((row) => {
                 const d = row.dataset;
                 const matchesQuery = query === "" || d.title.includes(query);
                 const matchesStatus = status === "" || d.status === status;
-                const matchesCategory = category === "" || d.category === category;
+                const matchesCategory =
+    category === "" ||
+    d.category.toLowerCase() === category;
                 const isMatch = matchesQuery && matchesStatus && matchesCategory;
                 row.classList.toggle("hidden", !isMatch);
                 if (isMatch) visibleCount++;

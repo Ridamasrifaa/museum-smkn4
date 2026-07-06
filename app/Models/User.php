@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Article;
 
 class User extends Authenticatable
 {
@@ -91,4 +92,8 @@ class User extends Authenticatable
     {
         return $this->role === 1 ? 'Admin' : 'Siswa';
     }
+    public function articles()
+{
+    return $this->hasMany(Article::class);
+}
 }

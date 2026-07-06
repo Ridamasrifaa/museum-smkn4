@@ -78,46 +78,96 @@
                 </div>
 
                 <div class="max-w-3xl mx-auto bg-white rounded-lg shadow p-8">
-                    <form id="articleForm" onsubmit="handleSubmit(event)" class="space-y-6">
+                    @if ($errors->any())
+
+<div class="mb-6 bg-red-100 border border-red-300 text-red-700 rounded-lg p-4">
+
+    <ul class="list-disc ml-5">
+
+        @foreach($errors->all() as $error)
+
+        <li>{{ $error }}</li>
+
+        @endforeach
+
+    </ul>
+
+</div>
+
+@endif
+                   <form
+    action="{{ route('articles.store') }}"
+    method="POST"
+    enctype="multipart/form-data"
+    class="space-y-6"
+>
+    @csrf
+    
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Judul Artikel *</label>
-                            <input type="text" name="title" required
-                                placeholder="Contoh: Tim PPLG Raih Juara 1 Lomba Aplikasi Tingkat Provinsi"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                          <input
+    type="text"
+    name="title"
+    value="{{ old('title') }}"
+    required
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg"
+/>
+
+@error('title')
+<p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+@enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Kategori Artikel *</label>
                             <select name="category_id" required
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                                <option value="">Pilih Kategori</option>
-                                <option value="1">Prestasi</option>
-                                <option value="2">Kegiatan</option>
-                                <option value="3">Teaching Factory</option>
-                                <option value="4">Pengumuman</option>
+                               <option value="">Pilih Kategori</option>
+
+@foreach($categories as $category)
+
+<option
+    value="{{ $category->id }}"
+    @selected(old('category_id') == $category->id)
+>
+    {{ $category->name }}
+</option>
+
+@endforeach
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Ringkasan Singkat *</label>
-                            <textarea name="excerpt" required rows="2" maxlength="200"
-                                placeholder="Ringkasan 1-2 kalimat, tampil di daftar & sorotan artikel"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"></textarea>
+<textarea
+name="excerpt"
+rows="2"
+required
+>{{ old('excerpt') }}</textarea>
+
+@error('excerpt')
+<p class="text-red-500 text-sm">{{ $message }}</p>
+@enderror
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Isi Artikel *</label>
-                            <textarea name="content" required rows="10"
-                                placeholder="Tulis isi lengkap artikel di sini..."
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg resize-y focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"></textarea>
-                            <p class="text-xs text-gray-400 mt-1">Bisa diganti nanti dengan rich text editor
-                                (mis. TinyMCE/CKEditor) jika perlu format tebal, gambar sisipan, dsb.</p>
+                            <textarea
+name="content"
+rows="10"
+required
+>{{ old('content') }}</textarea>
+
+@error('content')
+<p class="text-red-500 text-sm">{{ $message }}</p>
+@enderror
+                            
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Sampul (Cover) *</label>
-                            <input type="file" name="cover_path" accept="image/*" required
+                            <input type="file" name="cover" accept="image/*" required
                                 onchange="previewCover(event)"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                             <div id="coverPreviewWrap" class="hidden mt-3">
@@ -196,10 +246,7 @@
             reader.readAsDataURL(file);
         }
 
-        function handleSubmit(event) {
-            event.preventDefault();
-            document.getElementById("successModal").classList.remove("hidden");
-        }
+       
 
         function handleLogout() {
             if (confirm('Anda yakin ingin logout?')) {

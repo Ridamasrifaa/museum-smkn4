@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\AdminCategoryController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\KaryaController;
+use App\Http\Controllers\Admin\ArticleController;
+use App\Http\Controllers\ArticlePageController;
 
 
 
@@ -19,9 +21,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 
 Route::get('/', [PublicController::class,'index']);
-Route::get('/artikel', function() {
-    return view('artikel');
-});
+
 Route::get('/karya', [KaryaController::class, 'index']);
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
@@ -54,14 +54,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/manajemen-admin/{user}',[AdminManagementController::class,'destroy']);
 
     // bagian artikel
-    Route::get('/admin/artikel', function() {
-        return view('admin.artikel');
-    });
-    Route::get('/admin/artikel/upload', function() {
-        return view('admin.upload-artikel');
-    });
-    Route::get('/admin/artikel/edit', function() {
-        return view('admin.edit-artikel');
-    });
+   
 });
+Route::get('/admin/artikel', [ArticleController::class,'index']);
+Route::resource('admin/articles', ArticleController::class);
+
+
+
+Route::get('/artikel', [ArticlePageController::class, 'index'])
+    ->name('artikel.index');
+
+Route::get('/artikel/{slug}', [ArticlePageController::class, 'show'])
+    ->name('artikel.show');
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

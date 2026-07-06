@@ -11,6 +11,6 @@ class ArtikelController extends Controller
 
     public function show($id)
     {
-        return view('artikel.detail');
+        return view('artikel.show', ['id' => $id]);
     }
 }

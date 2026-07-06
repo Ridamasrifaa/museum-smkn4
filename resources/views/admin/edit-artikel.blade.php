@@ -78,69 +78,139 @@
                 </div>
 
                 <div class="max-w-3xl mx-auto bg-white rounded-lg shadow p-8">
-                    <form id="articleForm" onsubmit="handleSubmit(event)" class="space-y-6">
+                    @if ($errors->any())
+<div class="mb-5 bg-red-100 border border-red-300 rounded-lg p-4">
+    <ul class="list-disc ml-5 text-red-600">
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+                   <form
+    action="{{ route('articles.update', $article->id) }}"
+    method="POST"
+    enctype="multipart/form-data"
+    class="space-y-6"
+>
+    @csrf
+    @method('PUT')
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Judul Artikel *</label>
                             <input type="text" name="title" required
-                                value="Tim PPLG SMKN 4 Tasikmalaya Raih Juara 1 Lomba Aplikasi Tingkat Provinsi"
+                                value="{{ old('title', $article->title) }}"
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Kategori Artikel *</label>
-                            <select name="category_id" required
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                                <option value="">Pilih Kategori</option>
-                                <option value="1" selected>Prestasi</option>
-                                <option value="2">Kegiatan</option>
-                                <option value="3">Teaching Factory</option>
-                                <option value="4">Pengumuman</option>
-                            </select>
+                          <select
+    name="category_id"
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg"
+    required
+>
+
+<option value="">Pilih Kategori</option>
+
+@foreach($categories as $category)
+
+<option
+    value="{{ $category->id }}"
+    @selected(old('category_id',$article->category_id)==$category->id)
+>
+    {{ $category->name }}
+</option>
+
+@endforeach
+
+</select>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Ringkasan Singkat *</label>
-                            <textarea name="excerpt" required rows="2" maxlength="200"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">Aplikasi Museum Karya mengalahkan puluhan peserta lain dalam ajang LKS Jawa Barat.</textarea>
+<textarea
+name="excerpt"
+rows="2"
+required
+class="w-full px-4 py-2 border border-gray-300 rounded-lg"
+>{{ old('excerpt',$article->excerpt) }}</textarea>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Isi Artikel *</label>
-                            <textarea name="content" required rows="10"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg resize-y focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">Aplikasi "Museum Karya" yang dikembangkan siswa kelas XII PPLG berhasil menyabet juara pertama dalam ajang Lomba Kompetensi Siswa (LKS) tingkat provinsi Jawa Barat, mengalahkan puluhan sekolah lain dengan inovasi digitalisasi karya siswa.
-
-Tim yang beranggotakan lima siswa ini mempersiapkan aplikasi selama kurang lebih tiga bulan di bawah bimbingan guru pengampu mata pelajaran RPL. Juri memberikan apresiasi khusus terhadap kelengkapan fitur serta tampilan antarmuka yang dinilai matang untuk ukuran karya siswa SMK.
-
-Prestasi ini menambah daftar panjang capaian program Teaching Factory sekolah dalam beberapa tahun terakhir.</textarea>
-                            <p class="text-xs text-gray-400 mt-1">Bisa diganti nanti dengan rich text editor
-                                (mis. TinyMCE/CKEditor) jika perlu format tebal, gambar sisipan, dsb.</p>
+                      <textarea
+name="content"
+rows="10"
+required
+class="w-full px-4 py-2 border border-gray-300 rounded-lg"
+>{{ old('content',$article->content) }}</textarea>
                         </div>
 
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Gambar Sampul (Cover)</label>
                             <div id="coverPreviewWrap" class="mb-3">
                                 <div class="w-full h-48 rounded-lg border border-gray-200 bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center">
-                                    <span class="text-6xl">🏆</span>
+                                   <div id="coverPreviewWrap" class="mb-3">
+
+@if($article->cover)
+
+<img
+    id="coverPreview"
+    src="{{ asset('storage/'.$article->cover) }}"
+    class="w-full h-48 object-cover rounded-lg border"
+/>
+
+@else
+
+<img
+    id="coverPreview"
+    class="hidden w-full h-48 object-cover rounded-lg border"
+/>
+
+@endif
+
+</div>
                                 </div>
                             </div>
-                            <input type="file" name="cover_path" accept="image/*" onchange="previewCover(event)"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                           <input
+type="file"
+name="cover"
+accept="image/*"
+onchange="previewCover(event)"
+class="w-full px-4 py-2 border rounded-lg"
+/>
                             <p class="text-xs text-gray-400 mt-1">Kosongkan jika tidak ingin mengganti gambar sampul yang lama.</p>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Status *</label>
-                                <select name="status" required
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                                    <option value="draft">Draft (belum tayang)</option>
-                                    <option value="published" selected>Terbit</option>
-                                </select>
+                              <select
+name="status"
+required
+class="w-full px-4 py-2 border rounded-lg"
+>
+
+<option
+value="draft"
+@selected(old('status',$article->status)=='draft')
+>
+Draft
+</option>
+
+<option
+value="published"
+@selected(old('status',$article->status)=='published')
+>
+Published
+</option>
+
+</select>
                             </div>
 
                             <div class="flex items-center gap-3 pt-8">
-                                <input type="checkbox" id="isFeatured" name="is_featured" value="1" checked
+                                <input type="checkbox" id="isFeatured" name="is_featured" value="1" @checked(old('is_featured',$article->is_featured))
                                     class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 cursor-pointer" />
                                 <label for="isFeatured" class="text-sm text-gray-700 font-medium cursor-pointer select-none">
                                     ⭐ Jadikan artikel sorotan (tampil di hero)
@@ -149,12 +219,12 @@ Prestasi ini menambah daftar panjang capaian program Teaching Factory sekolah da
                         </div>
 
                         <div class="flex items-center justify-between text-xs text-gray-400 pt-2 border-t border-gray-100">
-                            <span>Dibuat oleh: Admin Sekolah</span>
-                            <span>Terakhir diperbarui: 28 Jun 2026</span>
+                            <span>Dibuat oleh: {{ $article->author->name }}</span>
+                            <span>Terakhir diperbarui:{{ $article->updated_at->format('d M Y') }} </span>
                         </div>
 
                         <div class="flex gap-4 pt-2">
-                            <a href="admin-artikel-index-statis.html"
+                            <a href="{{ route('articles.index') }}"
                                 class="flex-1 text-center px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium">Batal</a>
                             <button type="submit"
                                 class="flex-1 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-md transition">Simpan
@@ -200,10 +270,7 @@ Prestasi ini menambah daftar panjang capaian program Teaching Factory sekolah da
             reader.readAsDataURL(file);
         }
 
-        function handleSubmit(event) {
-            event.preventDefault();
-            document.getElementById("successModal").classList.remove("hidden");
-        }
+       
 
         function handleLogout() {
             if (confirm('Anda yakin ingin logout?')) {
