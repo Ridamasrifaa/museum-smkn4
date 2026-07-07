@@ -185,6 +185,6 @@
       </div>
     </div>
 
-    <script src="{{ asset('assets/admin/siswa.js')}}"></script>
+    <script src="{{ asset('assets/js/admin/siswa.js')}}"></script>
   </body>
 </html>

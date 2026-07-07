@@ -65,7 +65,7 @@
         </nav>
     </header>
 
-    <section id="beranda" class="my-bg text-white py-32 flex items-center justify-center min-h-screen">
+    <section id="beranda" class="my-bg text-white py-32 flex items-center justify-center" style="height: 350px;">
         <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
             <h1 class="text-4xl lg:text-6xl font-bold mb-6">Selamat Datang Di Museum Karya SMKN 4 Tasikmalaya</h1>
             <p class="text-xl mb-12">Hasil dari Project Teaching Factory (Tefa)</p>

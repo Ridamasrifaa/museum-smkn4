@@ -83,7 +83,7 @@
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Judul</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Siswa</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Kategori</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Jurusan</th> <!-- kategori ini nanti dinamiskan , jadi pake jurusan gitu faham? tapi pake tabel kategori -->
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Status</th>
                                     <th class="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase">Aksi</th>
                                 </tr>

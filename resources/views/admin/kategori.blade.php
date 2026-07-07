@@ -86,7 +86,7 @@
                 <thead class="bg-gray-50 border-b border-gray-200">
                   <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">No</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Nama Kategori</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Nama Jurusan</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Aksi</th>
                   </tr>
                 </thead>

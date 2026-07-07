@@ -22,7 +22,7 @@
             @endif
             <div>
               <p class="font-bold text-sm">{{ Auth::user()->name }}</p>
-              <p class="text-xs text-gray-400">Siswa PPLG</p>
+              <!-- <p class="text-xs text-gray-400">Siswa PPLG</p> -->
             </div>
           </div>
         </div>
@@ -88,7 +88,7 @@
                 <thead class="bg-gray-50 border-b border-gray-200">
                   <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Judul Karya</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Kategori</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Jurusan</th> <!-- <--nanti di td jurusan ini ganti sama dengan kategori saja yaa -->
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Status</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Tanggal Upload</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Aksi</th>

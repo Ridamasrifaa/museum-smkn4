@@ -87,17 +87,23 @@
 
                 <div class="flex flex-wrap items-center justify-center gap-2 mb-4">
                     <button data-filter="all"
-                        class="filter-pill active px-4 py-2 rounded-full text-sm font-semibold border-2 transition">✨
+                        class="filter-pill active px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
                         Semua</button>
-                    <button data-filter="Website"
-                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">🌐
-                        Website</button>
-                    <button data-filter="Game"
-                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">🎮
-                        Game</button>
-                    <button data-filter="Mobile App"
-                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">📱 Mobile
-                        App</button>
+                    <button data-filter="pplg"
+                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
+                        PPLG</button>
+                    <button data-filter="tkj"
+                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
+                        TKJ</button>
+                    <button data-filter="dkv"
+                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
+                        DKV</button>
+                    <button data-filter="toi"
+                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
+                        TOI</button>
+                    <button data-filter="tsm"
+                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
+                        TSM</button>
                 </div>
 
                 <p id="resultCounter" class="text-center text-sm text-gray-500 dark:text-gray-400"></p>
