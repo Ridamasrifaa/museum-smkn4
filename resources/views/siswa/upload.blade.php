@@ -121,27 +121,7 @@
 
                     {{-- Mapping nama kategori -> id kategori dari database.
                          PENTING: sesuaikan key di bawah kalau nama kategori di DB kamu beda penulisannya. --}}
-                    @php
-                        $categoryMap = [];
-                        foreach ($categories as $category) {
-                            $categoryMap[strtoupper($category->name)] = $category->id;
-                        }
-                        $jurusanList = ['PPLG', 'TKJ', 'DKV', 'TOI', 'TSM'];
-                        $jurusanColor = [
-                            'PPLG' => 'bg-green-600 hover:bg-green-700',
-                            'TKJ'  => 'bg-blue-600 hover:bg-blue-700',
-                            'DKV'  => 'bg-amber-500 hover:bg-amber-600',
-                            'TOI'  => 'bg-gray-500 hover:bg-gray-600',
-                            'TSM'  => 'bg-red-600 hover:bg-red-700',
-                        ];
-                        $jurusanBadge = [
-                            'PPLG' => 'bg-green-600',
-                            'TKJ'  => 'bg-blue-600',
-                            'DKV'  => 'bg-amber-500 text-gray-900',
-                            'TOI'  => 'bg-gray-500',
-                            'TSM'  => 'bg-red-600',
-                        ];
-                    @endphp
+                   
 
                     <!-- Pilihan Jurusan -->
                     <div class="flex flex-row justify-between gap-4 flex-wrap">
@@ -176,7 +156,7 @@
                                 Form Upload - {{ $jurusan }}
                             </span>
 
-                            <input type="hidden" name="category_id" value="{{ $categoryMap[$jurusan] ?? '' }}" />
+                            <input type="hidden" name="jurusan" value="{{ $jurusan }}" />
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Judul Karya *</label>
@@ -321,7 +301,9 @@
         // Hanya show/hide form, tidak mengubah isi form
         function pilihJurusan(nama, event) {
             belumPilihJurusan.classList.add("hidden");
-
+            document.querySelectorAll('input[name="jurusan"]').forEach(input=>{
+    input.value = nama;
+});
             daftarJurusan.forEach((j) => {
                 const form = document.getElementById("form_" + j);
                 if (j === nama) {

@@ -9,7 +9,7 @@ class PublicController extends Controller
 {
     public function index()
     {
-        $projects = Project::with(['user','category'])
+        $projects = Project::with(['user'])
             ->where('status', 'approved')
             ->latest()
             ->get();

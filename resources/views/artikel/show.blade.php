@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-<title>{{ $article->title }} - Museum Karya SMKN 4 Tasikmalaya</title>
+    <title>{{ $article->title }} - Museum Karya SMKN 4 Tasikmalaya</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <style type="text/tailwindcss">
@@ -22,7 +22,8 @@
 
         .badge-custom {
             display: inline-block;
-            background-color: #dbeafe;
+            background-color: transparent;
+            border: 1px solid rgba(29, 78, 216, 0.15);
             color: #1d4ed8;
             font-size: 0.75rem;
             font-weight: 600;
@@ -31,7 +32,8 @@
         }
 
         .dark .badge-custom {
-            background-color: rgba(37, 99, 235, 0.25);
+            background-color: transparent;
+            border-color: rgba(147, 197, 253, 0.25);
             color: #93c5fd;
         }
 
@@ -72,6 +74,12 @@
         }
 
         /* Konten artikel */
+        .article-content {
+            white-space: pre-wrap;
+            word-break: break-word;
+            overflow-wrap: break-word;
+        }
+
         .article-content h2 {
             font-size: 1.375rem;
             font-weight: 700;
@@ -176,8 +184,8 @@
             <a href="#" class="hover:text-blue-600">Artikel</a>
             <span class="mx-1">/</span>
             <span class="text-gray-700 dark:text-gray-300">
-    {{ $article->category->name }}
-</span>
+                {{ $article->category->name }}
+            </span>
         </div>
     </div>
 
@@ -189,64 +197,63 @@
             <article class="lg:col-span-2">
 
                 <span class="badge-custom mb-4">
-    🏆 {{ $article->category->name }}
-</span>
+                    {{ $article->category->name }}
+                </span>
 
                 <h1 class="text-2xl lg:text-4xl font-bold text-gray-900 dark:text-white leading-snug mt-3 mb-4">
-
-    {{ $article->title }}
+                    {{ $article->title }}
                 </h1>
 
-                <div class="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-6 pb-6 border-b border-gray-200 dark:border-gray-800">
-                    <div class="w-8 h-8 rounded-full gradient-cyan flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+                <div
+                    class="flex flex-wrap items-center gap-3 text-sm text-gray-500 dark:text-gray-400 mb-6 pb-6 border-b border-gray-200 dark:border-gray-800">
+                    <div
+                        class="w-8 h-8 rounded-full gradient-cyan flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
                         TR
                     </div>
                     <span class="font-medium text-gray-700 dark:text-gray-300">{{ $article->author->name }}</span>
                     <span>•</span>
                     <span>
-    {{ $article->created_at->format('d F Y') }}
-</span>
+                        {{ $article->created_at->format('d F Y') }}
+                    </span>
                     <span>•</span>
                     <span>4 menit membaca</span>
                 </div>
 
                 <div class="w-full h-56 sm:h-80 lg:h-96 rounded-2xl overflow-hidden mb-8 article-thumb">
-                    <img
-    src="{{ asset('storage/' . $article->cover) }}"
-    alt="{{ $article->title }}"
-    class="w-full h-full object-cover">
+                    <img src="{{ asset('storage/' . $article->cover) }}" alt="{{ $article->title }}"
+                        class="w-full h-full object-cover">
                 </div>
 
                 <div class="article-content text-gray-700 dark:text-gray-300">
+                    {!! nl2br(e($article->content)) !!}
 
-                   <div class="article-content">
-    {!! nl2br(e($article->content)) !!}
-</div>
-                  
+                    {{-- Tag / kategori --}}
+                    <div class="flex flex-wrap gap-2 mt-8 pt-6 border-t border-gray-200 dark:border-gray-800">
+     
+                    </div>
 
-
-                </div>
-
-                {{-- Tag / kategori --}}
-                <div class="flex flex-wrap gap-2 mt-8 pt-6 border-t border-gray-200 dark:border-gray-800">
-                    <span class="px-3 py-1 rounded-full ...">
-    #{{ $article->category->name }}
-</span>
-                </div>
-
-                {{-- Bagikan artikel --}}
-                <div class="flex items-center gap-3 mt-6">
-                    <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Bagikan:</span>
-                    <a href="#" aria-label="Bagikan ke WhatsApp" class="share-btn bg-green-500 text-white">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.52 3.48A11.9 11.9 0 0012.02 0C5.4 0 .06 5.34.06 11.94c0 2.1.55 4.15 1.6 5.96L0 24l6.27-1.64a11.9 11.9 0 005.75 1.47h.01c6.62 0 11.96-5.34 11.96-11.94 0-3.19-1.24-6.19-3.47-8.41zM12.03 21.5a9.5 9.5 0 01-4.84-1.32l-.35-.21-3.6.94.96-3.51-.23-.36a9.53 9.53 0 01-1.46-5.1c0-5.27 4.29-9.55 9.56-9.55 2.55 0 4.95.99 6.75 2.8a9.5 9.5 0 012.79 6.76c0 5.27-4.29 9.55-9.58 9.55z"/></svg>
-                    </a>
-                    <a href="#" aria-label="Bagikan ke Facebook" class="share-btn bg-blue-600 text-white">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M22 12a10 10 0 10-11.56 9.87v-6.98H7.9V12h2.54V9.8c0-2.5 1.5-3.9 3.79-3.9 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.98A10 10 0 0022 12z"/></svg>
-                    </a>
-                    <a href="#" aria-label="Bagikan ke Twitter" class="share-btn bg-sky-500 text-white">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23 4.5c-.8.36-1.66.6-2.56.7a4.5 4.5 0 001.98-2.48 9 9 0 01-2.83 1.08 4.47 4.47 0 00-7.63 4.08A12.7 12.7 0 013 3.16a4.47 4.47 0 001.38 5.96 4.4 4.4 0 01-2.02-.56v.06a4.47 4.47 0 003.58 4.38 4.5 4.5 0 01-2 .08 4.47 4.47 0 004.17 3.1A9 9 0 011 18.57 12.7 12.7 0 007.86 20.6c8.23 0 12.74-6.82 12.74-12.74l-.01-.58A9.1 9.1 0 0023 4.5z"/></svg>
-                    </a>
-                </div>
+                    {{-- Bagikan artikel --}}
+                    <div class="flex items-center gap-3 mt-6">
+                        <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Bagikan:</span>
+                        <a href="#" aria-label="Bagikan ke WhatsApp" class="share-btn bg-green-500 text-white">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M20.52 3.48A11.9 11.9 0 0012.02 0C5.4 0 .06 5.34.06 11.94c0 2.1.55 4.15 1.6 5.96L0 24l6.27-1.64a11.9 11.9 0 005.75 1.47h.01c6.62 0 11.96-5.34 11.96-11.94 0-3.19-1.24-6.19-3.47-8.41zM12.03 21.5a9.5 9.5 0 01-4.84-1.32l-.35-.21-3.6.94.96-3.51-.23-.36a9.53 9.53 0 01-1.46-5.1c0-5.27 4.29-9.55 9.56-9.55 2.55 0 4.95.99 6.75 2.8a9.5 9.5 0 012.79 6.76c0 5.27-4.29 9.55-9.58 9.55z" />
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="Bagikan ke Facebook" class="share-btn bg-blue-600 text-white">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M22 12a10 10 0 10-11.56 9.87v-6.98H7.9V12h2.54V9.8c0-2.5 1.5-3.9 3.79-3.9 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56V12h2.78l-.44 2.89h-2.34v6.98A10 10 0 0022 12z" />
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="Bagikan ke Twitter" class="share-btn bg-sky-500 text-white">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M23 4.5c-.8.36-1.66.6-2.56.7a4.5 4.5 0 001.98-2.48 9 9 0 01-2.83 1.08 4.47 4.47 0 00-7.63 4.08A12.7 12.7 0 013 3.16a4.47 4.47 0 001.38 5.96 4.4 4.4 0 01-2.02-.56v.06a4.47 4.47 0 003.58 4.38 4.5 4.5 0 01-2 .08 4.47 4.47 0 004.17 3.1A9 9 0 011 18.57 12.7 12.7 0 007.86 20.6c8.23 0 12.74-6.82 12.74-12.74l-.01-.58A9.1 9.1 0 0023 4.5z" />
+                            </svg>
+                        </a>
+                    </div>
 
             </article>
 
@@ -257,15 +264,13 @@
                         Kategori
                     </h3>
                     <div class="flex flex-col gap-2">
-                      @foreach($categories as $category)
+                        @foreach ($categories as $category)
+                            <a href="#">
+                                <span>{{ $category->name }}</span>
 
-<a href="#">
-    <span>{{ $category->name }}</span>
-
-    <span>{{ $category->articles_count }}</span>
-</a>
-
-@endforeach
+                                <span>{{ $category->articles_count }}</span>
+                            </a>
+                        @endforeach
                     </div>
                 </div>
 
@@ -274,29 +279,28 @@
                         Paling Banyak Dibaca
                     </h3>
                     <div class="flex flex-col gap-4">
-@foreach($popular as $item)
+                        @foreach ($popular as $item)
+                            <a href="{{ route('artikel.show', $item->slug) }}">
 
-<a href="{{ route('artikel.show',$item->slug) }}">
+                                <img src="{{ asset('storage/' . $item->cover) }}">
 
-    <img src="{{ asset('storage/'.$item->cover) }}">
+                                <span>{{ $item->category->name }}</span>
 
-    <span>{{ $item->category->name }}</span>
+                                <h4>{{ $item->title }}</h4>
 
-    <h4>{{ $item->title }}</h4>
+                                <small>{{ number_format($item->views) }} kali dibaca</small>
 
-    <small>{{ number_format($item->views) }} kali dibaca</small>
+                            </a>
+                        @endforeach
 
-</a>
-
-@endforeach
-                      
                     </div>
                 </div>
 
                 <div class="rounded-xl my-bg text-white p-6">
                     <h3 class="font-bold mb-2">Punya kabar dari kelas?</h3>
                     <p class="text-sm text-gray-100 mb-4">Kirimkan liputan kegiatan Tefa untuk ditampilkan di sini.</p>
-                    <a href="#" class="inline-block px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold text-sm hover:bg-gray-100 transition">
+                    <a href="#"
+                        class="inline-block px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold text-sm hover:bg-gray-100 transition">
                         Kirim Artikel
                     </a>
                 </div>
@@ -314,38 +318,34 @@
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        @foreach($related as $item)
+                @foreach ($related as $item)
+                    <a href="{{ url('/artikel/' . $item->slug) }}"
+                        class="related-card group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg">
 
-<a href="{{ url('/artikel/'.$item->slug) }}"
-   class="related-card group bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg">
+                        <div class="article-thumb h-40 overflow-hidden">
 
-    <div class="article-thumb h-40 overflow-hidden">
+                            <img src="{{ asset('storage/' . $item->cover) }}" class="w-full h-full object-cover">
 
-        <img
-            src="{{ asset('storage/'.$item->cover) }}"
-            class="w-full h-full object-cover">
+                        </div>
 
-    </div>
+                        <div class="p-5">
 
-    <div class="p-5">
+                            <span class="badge-custom mb-3">
+                                {{ $item->category->name }}
+                            </span>
 
-        <span class="badge-custom mb-3">
-            {{ $item->category->name }}
-        </span>
+                            <h3 class="font-bold">
+                                {{ $item->title }}
+                            </h3>
 
-        <h3 class="font-bold">
-            {{ $item->title }}
-        </h3>
+                            <p class="text-xs text-gray-400">
+                                {{ $item->created_at->format('d M Y') }}
+                            </p>
 
-        <p class="text-xs text-gray-400">
-            {{ $item->created_at->format('d M Y') }}
-        </p>
+                        </div>
 
-    </div>
-
-</a>
-
-@endforeach
+                    </a>
+                @endforeach
 
             </div>
         </div>

@@ -19,7 +19,7 @@ class Project extends Model
         'user_id',
         'title',
         'description',
-        'category_id',
+        'jurusan',
         'file_path',
         'file_type',
         'file_size',
@@ -59,10 +59,7 @@ class Project extends Model
     /**
      * Get category project ini
      */
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
+   
 
     /**
      * Get admin yang review project ini
@@ -109,11 +106,11 @@ class Project extends Model
     }
 
     /**
-     * Scope untuk ambil project dari kategori tertentu
+     * Scope untuk ambil project dari jurusan tertentu
      */
-    public function scopeByCategory($query, $categoryId)
+    public function scopeByJurusan($query, $jurusan)
     {
-        return $query->where('category_id', $categoryId);
+        return $query->where('jurusan', $jurusan);
     }
 
     /**

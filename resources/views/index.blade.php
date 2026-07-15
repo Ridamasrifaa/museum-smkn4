@@ -47,7 +47,8 @@
                     class="text-sm font-semibold text-blue-600 border-b-2 border-blue-600 pb-1">Beranda</a>
                 <a href="{{ url('/karya') }}"
                     class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Karya</a>
-                <a href="{{ url('/artikel')}}" class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Artikel</a>
+                <a href="{{ url('/artikel') }}"
+                    class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Artikel</a>
                 <a href="{{ url('/login') }}"
                     class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Login</a>
                 <button id="themeToggle" onclick="toggleTheme()" aria-label="Ganti mode terang/gelap"
@@ -152,18 +153,25 @@
                 @forelse($projects as $project)
                     <div class="karya-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md card-hover transition-colors duration-300"
                         data-title="{{ $project->title }}" data-desc="{{ $project->description }}"
-                        data-category="{{ $project->category->name }}" data-event="Museum Karya"
+                        data-category="{{ $project->jurusan }}" data-event="Museum Karya"
                         data-siswa="{{ $project->user->name }}" data-guru="{{ $project->guru_pengampu ?? '-' }}"
                         data-avatar="{{ strtoupper(substr($project->user->name, 0, 1)) }}"
                         data-tahun="{{ $project->created_at->format('Y') }}" data-views="{{ $project->views_count }}"
                         data-likes="{{ $project->likes_count }}" data-tech="{{ $project->technology_stack }}"
-                        data-live="{{ $project->live_link }}" data-download="#">
+                        data-live="{{ $project->live_link }}"
+                        data-file-path="{{ $project->file_path ? asset('storage/' . $project->file_path) : '' }}"
+                        data-file-type="{{ $project->file_type }}" data-download="#">
 
                         <div class="iframe-container" onclick="openModal(this.closest('.karya-card'))">
+                            @php
+                                $isImage = $project->file_path && str_starts_with($project->file_type ?? '', 'image/');
+                            @endphp
 
-                            @if ($project->live_link)
-                                <iframe src="{{ $project->live_link }}" loading="lazy">
-                                </iframe>
+                            @if ($isImage)
+                                <img src="{{ asset('storage/' . $project->file_path) }}" alt="{{ $project->title }}"
+                                    class="w-full h-full object-cover" />
+                            @elseif ($project->live_link)
+                                <iframe src="{{ $project->live_link }}" loading="lazy"></iframe>
                             @else
                                 <div class="flex items-center justify-center h-full bg-gray-200">
                                     Tidak ada Preview
@@ -177,7 +185,7 @@
                         <div class="p-6">
 
                             <span class="badge-custom mb-3">
-                                {{ $project->category->name }}
+                                {{ $project->jurusan }}
                             </span>
 
                             <p class="text-gray-600 text-sm mt-2">
@@ -245,6 +253,15 @@
                 </button>
             </div>
             <div class="p-6 space-y-6">
+                <div id="modalPreview" class="space-y-4">
+                    <img id="modalImagePreview" class="hidden w-full rounded-lg object-contain max-h-[360px]" />
+                    <iframe id="modalIframePreview" class="hidden w-full h-80 rounded-lg border border-gray-200"
+                        allowfullscreen></iframe>
+                    <div id="modalPreviewEmpty"
+                        class="hidden w-full h-80 flex items-center justify-center rounded-lg bg-gray-100 text-gray-600 border border-dashed border-gray-300">
+                        Tidak ada preview tersedia
+                    </div>
+                </div>
                 <div class="flex gap-2 flex-wrap">
                     <span
                         class="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-semibold">✅
@@ -305,7 +322,7 @@
         </div>
     </div>
 
-    <script src="{{ asset('assets/js/index.js')}}"></script>
+    <script src="{{ asset('assets/js/index.js') }}"></script>
 </body>
 
 </html>

@@ -23,6 +23,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/', [PublicController::class,'index']);
 
 Route::get('/karya', [KaryaController::class, 'index']);
+Route::post('/karya/{project}/like', [KaryaController::class, 'like']);
 Route::get('/auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
@@ -33,12 +34,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/siswa/dashboard', [DashboardController::class, 'index']);
     Route::get('/siswa/karya', [ProjectController::class, 'index']);
     Route::get('/siswa/karya/detail/{project}', [ProjectController::class, 'show']);
+    Route::delete('/siswa/karya/{project}', [ProjectController::class, 'destroy']);
     Route::get('/siswa/upload', [ProjectController::class, 'upload']);
     Route::post('/siswa/upload', [ProjectController::class, 'store']);
     // manajemen karya siswa
     Route::get('/admin/karya', [AdminProjectController::class,'index']);
     Route::get('/admin/karya/{project}', [AdminProjectController::class,'show']);
     Route::put('/admin/karya/{project}/update-status', [AdminProjectController::class,'updateStatus']);
+    Route::delete('/admin/karya/{project}', [AdminProjectController::class,'destroy']);
     // manajemen siswa
     Route::get('/admin/siswa', [AdminSiswaController::class,'index']);
     Route::put('/admin/siswa/{user}/update', [AdminSiswaController::class,'update']);

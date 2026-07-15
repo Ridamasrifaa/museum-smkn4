@@ -48,7 +48,7 @@
                   <td class="px-6 py-4 font-semibold text-gray-900">Kategori</td>
                   <td class="px-6 py-4">
                     <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">
-                      {{ $project->category->name }}
+                      {{ $project->jurusan }}
                     </span>
                   </td>
                 </tr>

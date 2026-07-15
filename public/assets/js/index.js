@@ -21,20 +21,60 @@ function toggleTheme() {
 function openModal(card) {
     if (!card) return;
     const d = card.dataset;
-    document.getElementById("modalTitle").textContent = d.title;
-    document.getElementById("modalCategory").textContent = d.category;
-    document.getElementById("modalEvent").textContent = "🎉 " + d.event;
-    document.getElementById("modalDescription").textContent = d.desc;
-    document.getElementById("modalSiswa").textContent = d.siswa;
-    document.getElementById("modalGuru").textContent = "👨‍🏫 " + d.guru;
-    document.getElementById("modalKategoriDetail").textContent = d.category;
-    document.getElementById("modalTahun").textContent = d.tahun;
-    document.getElementById("modalViews").textContent = d.views;
-    document.getElementById("modalLikes").textContent = d.likes;
-    document.getElementById("modalTech").textContent = d.tech;
-    document.getElementById("modalAvatar").textContent = d.avatar;
-    document.getElementById("downloadBtn").href = d.download;
-    document.getElementById("liveBtn").href = d.live;
+    const modalTitle = document.getElementById("modalTitle");
+    const modalCategory = document.getElementById("modalCategory");
+    const modalEvent = document.getElementById("modalEvent");
+    const modalDescription = document.getElementById("modalDescription");
+    const modalSiswa = document.getElementById("modalSiswa");
+    const modalGuru = document.getElementById("modalGuru");
+    const modalKategoriDetail = document.getElementById("modalKategoriDetail");
+    const modalTahun = document.getElementById("modalTahun");
+    const modalViews = document.getElementById("modalViews");
+    const modalLikes = document.getElementById("modalLikes");
+    const modalTech = document.getElementById("modalTech");
+    const modalAvatar = document.getElementById("modalAvatar");
+    const liveBtn = document.getElementById("liveBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const previewImage = document.getElementById("modalImagePreview");
+    const previewIframe = document.getElementById("modalIframePreview");
+    const previewEmpty = document.getElementById("modalPreviewEmpty");
+    const filePath = d.filePath || "";
+    const fileType = d.fileType || "";
+
+    if (modalTitle) modalTitle.textContent = d.title;
+    if (modalCategory) modalCategory.textContent = d.category;
+    if (modalEvent) modalEvent.textContent = "🎉 " + d.event;
+    if (modalDescription) modalDescription.textContent = d.desc;
+    if (modalSiswa) modalSiswa.textContent = d.siswa;
+    if (modalGuru) modalGuru.textContent = "👨‍🏫 " + d.guru;
+    if (modalKategoriDetail) modalKategoriDetail.textContent = d.category;
+    if (modalTahun) modalTahun.textContent = d.tahun;
+    if (modalViews) modalViews.textContent = d.views;
+    if (modalLikes) modalLikes.textContent = d.likes;
+    if (modalTech) modalTech.textContent = d.tech;
+    if (modalAvatar) modalAvatar.textContent = d.avatar;
+    if (downloadBtn) downloadBtn.href = d.download;
+    if (liveBtn) liveBtn.href = d.live;
+
+    if (previewImage && previewIframe && previewEmpty) {
+        const isImage = filePath && fileType.startsWith("image/");
+        if (isImage) {
+            previewImage.src = filePath;
+            previewImage.classList.remove("hidden");
+            previewIframe.classList.add("hidden");
+            previewEmpty.classList.add("hidden");
+        } else if (d.live) {
+            previewIframe.src = d.live;
+            previewIframe.classList.remove("hidden");
+            previewImage.classList.add("hidden");
+            previewEmpty.classList.add("hidden");
+        } else {
+            previewImage.classList.add("hidden");
+            previewIframe.classList.add("hidden");
+            previewEmpty.classList.remove("hidden");
+        }
+    }
+
     document.getElementById("detailModal").classList.remove("hidden");
 }
 

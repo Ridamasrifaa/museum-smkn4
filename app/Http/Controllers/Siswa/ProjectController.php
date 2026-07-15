@@ -7,7 +7,7 @@ use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use App\Models\Category;
+
 
 class ProjectController extends Controller
 {
@@ -28,42 +28,72 @@ class ProjectController extends Controller
 
     return view('siswa.detail-karya', compact('project'));
 }
+
+public function destroy(Project $project)
+{
+    if ($project->user_id != Auth::id()) {
+        abort(403);
+    }
+
+    if ($project->file_path) {
+        Storage::disk('public')->delete($project->file_path);
+    }
+
+    $project->delete();
+
+    return redirect('/siswa/karya')
+        ->with('success', 'Karya berhasil dihapus.');
+}
+
 public function store(Request $request)
 {
     $request->validate([
         'title' => 'required|string|max:255',
-        'category_id' => 'required|exists:categories,id',
         'description' => 'required|string',
-        'live_link' => 'required|url',
-        'file_path' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
+        'jurusan' => 'required|string|max:255',
+        'technology_stack' => 'nullable|string|max:255',
+        'live_link' => 'nullable|url|max:255',
+        'file_path' => 'required|file|mimes:jpg,jpeg,png,pdf,doc,docx,zip,rar|max:10240', // max 10MB
     ]);
 
+    // upload gambar
     $path = $request->file('file_path')->store('projects', 'public');
+Project::create([
+    'user_id'=>Auth::id(),
+    'title'=>$request->title,
+    'description'=>$request->description,
+    'jurusan'=>$request->jurusan,
+    'technology_stack'=>$request->technology_stack,
+    'live_link'=>$request->live_link,
 
-    Project::create([
-        'user_id' => Auth::id(),
-        'category_id' => $request->category_id,
-        'title' => $request->title,
-        'description' => $request->description,
-        'live_link' => $request->live_link,
-        'file_path' => $path,
-        'file_type' => $request->file('file_path')->getClientMimeType(),
-        'file_size' => $request->file('file_path')->getSize(),
-        'status' => 'pending',
-    ]);
+    'file_path'=>$path,
+    'file_type'=>$request->file('file_path')->getClientMimeType(),
+    'file_size'=>$request->file('file_path')->getSize(),
 
-    return redirect('/siswa/karya')->with('success', 'Project berhasil diupload.');
-}
-public function create()
-{
-    $categories = Category::all();
+    'status'=>'pending'
+]);
 
-    return view('siswa.upload', compact('categories'));
+    return redirect('/siswa/upload')
+            ->with('success','Karya berhasil diupload.');
 }
 public function upload()
 {
-    $categories = Category::all();
+    $jurusanList = ['PPLG', 'TKJ', 'DKV', 'TOI', 'TSM'];
+    $jurusanColor = [
+        'PPLG' => 'bg-blue-600 hover:bg-blue-700',
+        'TKJ' => 'bg-green-600 hover:bg-green-700',
+        'DKV' => 'bg-purple-600 hover:bg-purple-700',
+        'TOI' => 'bg-yellow-500 hover:bg-yellow-600',
+        'TSM' => 'bg-red-600 hover:bg-red-700',
+    ];
+    $jurusanBadge = [
+        'PPLG' => 'bg-blue-600',
+        'TKJ' => 'bg-green-600',
+        'DKV' => 'bg-purple-600',
+        'TOI' => 'bg-yellow-500',
+        'TSM' => 'bg-red-600',
+    ];
 
-    return view('siswa.upload', compact('categories'));
+    return view('siswa.upload', compact('jurusanList', 'jurusanColor', 'jurusanBadge'));
 }
 }

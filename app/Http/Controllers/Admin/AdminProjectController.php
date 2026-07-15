@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 
 class AdminProjectController extends Controller
@@ -14,27 +15,24 @@ public function index(Request $request)
 {
     $search = $request->search;
 
-    $projects = Project::with(['user','category'])
+    $projects = Project::with('user')
 
-        ->when($search,function($query) use ($search){
+        ->when($search, function ($query) use ($search) {
 
-            $query->where('title','like',"%$search%")
+            $query->where('title', 'like', "%{$search}%")
 
-            ->orWhereHas('user',function($q) use ($search){
-                $q->where('name','like',"%$search%");
-            })
+                ->orWhereHas('user', function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                })
 
-            ->orWhereHas('category',function($q) use ($search){
-                $q->where('name','like',"%$search%");
-            });
-
+                ->orWhere('jurusan', 'like', "%{$search}%");
         })
 
         ->latest()
         ->simplePaginate(10)
         ->withQueryString();
 
-    return view('admin.karya',compact('projects'));
+    return view('admin.karya', compact('projects'));
 }
     public function updateStatus(Request $request, Project $project)
 {
@@ -66,8 +64,21 @@ public function index(Request $request)
     return redirect('/admin/karya')
         ->with('success','Status berhasil diperbarui');
 }
- public function show(Project $project)
-{
-    return view('admin.detail-karya', compact('project'));
-}
+
+    public function show(Project $project)
+    {
+        return view('admin.detail-karya', compact('project'));
+    }
+
+    public function destroy(Project $project)
+    {
+        if ($project->file_path) {
+            Storage::disk('public')->delete($project->file_path);
+        }
+
+        $project->delete();
+
+        return redirect('/admin/karya')
+            ->with('success', 'Karya berhasil dihapus.');
+    }
 }
