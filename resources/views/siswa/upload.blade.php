@@ -361,10 +361,10 @@
             if (checkbox.checked) {
                 submitBtn.disabled = false;
                 submitBtn.classList.remove("bg-gray-400", "cursor-not-allowed");
-                submitBtn.classList.add("bg-blue-600", "hover:bg-blue-700");
+                submitBtn.classList.add("bg-blue-600", "hover:bg-blue-700", "cursor-pointer");
             } else {
                 submitBtn.disabled = true;
-                submitBtn.classList.remove("bg-blue-600", "hover:bg-blue-700");
+                submitBtn.classList.remove("bg-blue-600", "hover:bg-blue-700", "cursor-pointer");
                 submitBtn.classList.add("bg-gray-400", "cursor-not-allowed");
             }
         }

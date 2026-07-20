@@ -88,23 +88,44 @@
 
                 <div class="flex flex-wrap items-center justify-center gap-2 mb-4">
                     <button data-filter="all"
-                        class="filter-pill active px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
-                        Semua</button>
+                        class="filter-pill active flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
+                        Semua
+                    </button>
+
                     <button data-filter="pplg"
-                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
-                        PPLG</button>
+                        class="filter-pill flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
+                        <img src="{{ asset('assets/img/pplg.jpeg') }}" alt="Logo PPLG"
+                            class="w-4 h-4 rounded-full object-cover">
+                        PPLG
+                    </button>
+
                     <button data-filter="tkj"
-                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
-                        TKJ</button>
+                        class="filter-pill flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
+                        <img src="{{ asset('assets/img/tkj.jpeg') }}" alt="Logo TKJ"
+                            class="w-4 h-4 rounded-full object-cover">
+                        TKJ
+                    </button>
+
                     <button data-filter="dkv"
-                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
-                        DKV</button>
+                        class="filter-pill flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
+                        <img src="{{ asset('assets/img/dkv.jpeg') }}" alt="Logo DKV"
+                            class="w-4 h-4 rounded-full object-cover">
+                        DKV
+                    </button>
+
                     <button data-filter="toi"
-                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
-                        TOI</button>
+                        class="filter-pill flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
+                        <img src="{{ asset('assets/img/toi.jpeg') }}" alt="Logo TOI"
+                            class="w-4 h-4 rounded-full object-cover">
+                        TOI
+                    </button>
+
                     <button data-filter="tsm"
-                        class="filter-pill px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
-                        TSM</button>
+                        class="filter-pill flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
+                        <img src="{{ asset('assets/img/tsm.jpeg') }}" alt="Logo TSM"
+                            class="w-4 h-4 rounded-full object-cover">
+                        TSM
+                    </button>
                 </div>
 
                 <p id="resultCounter" class="text-center text-sm text-gray-500 dark:text-gray-400"></p>

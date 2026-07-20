@@ -58,7 +58,7 @@ public function store(Request $request)
 
     // upload gambar
     $path = $request->file('file_path')->store('projects', 'public');
-Project::create([
+    Project::create([
     'user_id'=>Auth::id(),
     'title'=>$request->title,
     'description'=>$request->description,
@@ -79,19 +79,24 @@ Project::create([
 public function upload()
 {
     $jurusanList = ['PPLG', 'TKJ', 'DKV', 'TOI', 'TSM'];
+
+    // Warna tombol pilihan jurusan (PPLG=success/hijau, TKJ=primary/biru,
+    // DKV=warning/orange, TOI=secondary/abu-abu, TSM=danger/merah)
     $jurusanColor = [
-        'PPLG' => 'bg-blue-600 hover:bg-blue-700',
-        'TKJ' => 'bg-green-600 hover:bg-green-700',
-        'DKV' => 'bg-purple-600 hover:bg-purple-700',
-        'TOI' => 'bg-yellow-500 hover:bg-yellow-600',
-        'TSM' => 'bg-red-600 hover:bg-red-700',
+        'PPLG' => 'bg-green-600 hover:bg-green-700',
+        'TKJ'  => 'bg-blue-600 hover:bg-blue-700',
+        'DKV'  => 'bg-orange-500 hover:bg-orange-600',
+        'TOI'  => 'bg-gray-500 hover:bg-gray-600',
+        'TSM'  => 'bg-red-600 hover:bg-red-700',
     ];
+
+    // Warna badge "Form Upload - XXX"
     $jurusanBadge = [
-        'PPLG' => 'bg-blue-600',
-        'TKJ' => 'bg-green-600',
-        'DKV' => 'bg-purple-600',
-        'TOI' => 'bg-yellow-500',
-        'TSM' => 'bg-red-600',
+        'PPLG' => 'bg-green-600',
+        'TKJ'  => 'bg-blue-600',
+        'DKV'  => 'bg-orange-500',
+        'TOI'  => 'bg-gray-500',
+        'TSM'  => 'bg-red-600',
     ];
 
     return view('siswa.upload', compact('jurusanList', 'jurusanColor', 'jurusanBadge'));
