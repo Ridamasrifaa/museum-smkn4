@@ -135,15 +135,17 @@
                     </div>
 
                     <hr class="my-4 border-gray-200" />
-                    <p class="text-center text-sm text-gray-500 mb-2">Pilih Jurusan Kamu Terlebih Dahulu</p>
+                    <div id="pilihJurusanNotice">
+                        <p id="pilihJurusanText" class="text-center text-sm text-gray-500 mb-2">Pilih Jurusan Kamu Terlebih Dahulu</p>
 
-                    <!-- Pesan kalau belum pilih jurusan -->
-                    <div id="belumPilihJurusan" class="text-center text-gray-500 py-8">
-                        <svg class="w-8 h-8 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M5 10l7-7m0 0l7 7m-7-7v18" />
-                        </svg>
-                        <p class="mt-2">Silahkan pilih jurusan di atas untuk menampilkan form upload.</p>
+                        <!-- Pesan kalau belum pilih jurusan -->
+                        <div id="belumPilihJurusan" class="text-center text-gray-500 py-8">
+                            <svg class="w-8 h-8 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                            </svg>
+                            <p class="mt-2">Silahkan pilih jurusan di atas untuk menampilkan form upload.</p>
+                        </div>
                     </div>
 
                     @foreach ($jurusanList as $jurusan)
@@ -297,19 +299,23 @@
         // Daftar semua jurusan yang ada formnya
         const daftarJurusan = ["PPLG", "TKJ", "DKV", "TOI", "TSM"];
         const belumPilihJurusan = document.getElementById("belumPilihJurusan");
+        const pilihJurusanText = document.getElementById("pilihJurusanText");
 
         // Hanya show/hide form, tidak mengubah isi form
         function pilihJurusan(nama, event) {
-            belumPilihJurusan.classList.add("hidden");
+            if (belumPilihJurusan) belumPilihJurusan.classList.add("hidden");
+            if (pilihJurusanText) pilihJurusanText.classList.add("hidden");
             document.querySelectorAll('input[name="jurusan"]').forEach(input=>{
-    input.value = nama;
-});
+                input.value = nama;
+            });
             daftarJurusan.forEach((j) => {
                 const form = document.getElementById("form_" + j);
-                if (j === nama) {
-                    form.classList.remove("hidden");
-                } else {
-                    form.classList.add("hidden");
+                if (form) {
+                    if (j === nama) {
+                        form.classList.remove("hidden");
+                    } else {
+                        form.classList.add("hidden");
+                    }
                 }
             });
 

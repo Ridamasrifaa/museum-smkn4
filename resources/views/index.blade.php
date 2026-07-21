@@ -37,12 +37,11 @@
     <header class="navbar shadow-sm sticky top-0 z-50 bg-white dark:bg-gray-900 transition-colors duration-300">
         <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
             <div class="flex lg:flex-1 items-center gap-2">
-                <div
-                    class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                    🏛️</div>
+                <img src="{{ asset('images/smk4.png') }}" alt="SMK4 Logo"
+                    class="w-10 h-10 rounded-full object-cover" />
                 <span class="text-2xl font-bold text-blue-600">Museum Karya</span>
             </div>
-            <div class="hidden lg:flex lg:gap-x-8 lg:items-center">
+            <div class="flex flex-wrap items-center justify-center gap-3 lg:gap-x-8 lg:justify-end lg:items-center">
                 <a href="{{ url('/') }}"
                     class="text-sm font-semibold text-blue-600 border-b-2 border-blue-600 pb-1">Beranda</a>
                 <a href="{{ url('/karya') }}"
