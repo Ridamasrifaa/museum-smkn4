@@ -58,7 +58,7 @@ public function store(Request $request)
 
     // upload gambar
     $path = $request->file('file_path')->store('projects', 'public');
-Project::create([
+    Project::create([
     'user_id'=>Auth::id(),
     'title'=>$request->title,
     'description'=>$request->description,
