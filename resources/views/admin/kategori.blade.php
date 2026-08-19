@@ -75,7 +75,7 @@
 
           <div class="bg-white rounded-lg shadow overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-              <h2 class="text-xl font-bold text-gray-900">Daftar Kategori</h2>
+              <h2 class="text-xl font-bold text-gray-900">Kategori Artikel</h2>
               <button type="button" onclick="openKategoriModal('tambah')" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-semibold cursor-pointer">
                 Tambah Kategori
               </button>
@@ -86,7 +86,7 @@
                 <thead class="bg-gray-50 border-b border-gray-200">
                   <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">No</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Nama Jurusan</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Kategori artikel</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Aksi</th>
                   </tr>
                 </thead>
@@ -117,7 +117,7 @@
                   @empty
                     <tr>
                       <td colspan="3" class="text-center py-12 text-gray-500">
-                        Belum ada kategori ditemukan.
+                        Belum ada kategori Artikel ditemukan.
                       </td>
                     </tr>
                   @endforelse

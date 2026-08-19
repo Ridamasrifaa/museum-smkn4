@@ -66,10 +66,20 @@
         </nav>
     </header>
 
-    <section id="beranda" class="my-bg text-white py-32 flex items-center justify-center" style="height: 350px;">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-            <h1 class="text-4xl lg:text-6xl font-bold mb-6">Selamat Datang Di Museum Karya SMKN 4 Tasikmalaya</h1>
-            <p class="text-xl mb-12">Hasil dari Project Teaching Factory (Tefa)</p>
+    <section id="beranda"
+        class="my-bg relative text-white flex items-center justify-center overflow-hidden h-[55vh] min-h-[380px] max-h-[600px]">
+
+        {{-- Video background --}}
+        <video autoplay muted loop playsinline
+            class="absolute inset-0 w-full h-full object-cover">
+            <source src="{{ asset('assets/img/museum_karya.mp4') }}" type="video/mp4">
+        </video>
+
+        {{-- Overlay gelap biar teks tetap kebaca di atas video --}}
+        <div class="absolute inset-0 bg-black/55"></div>
+
+        <div class="relative z-10 mx-auto max-w-5xl px-6 lg:px-8 text-center">
+            <h1 class="text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight">Selamat Datang Di Museum Karya SMKN 4 Tasikmalaya</h1>
         </div>
     </section>
 
@@ -77,58 +87,35 @@
     <section class="py-16 bg-white dark:bg-gray-950">
         <div class="max-w-7xl mx-auto px-6">
 
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="flex flex-wrap justify-center gap-6">
 
                 <div
-                    class="counter-card bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 text-center border border-gray-100 dark:border-gray-800">
-                    <div class="text-5xl mb-4">📚</div>
-
+                    class="counter-card w-full sm:w-64 bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 text-center border border-gray-100 dark:border-gray-800">
+                    <div class="text-5xl mb-4"></div>
+                        <div class="flex justify-center items-end gap-1">
+                            <h2 class="counter text-blue-600" data-target="{{ $totalKarya }}">0</h2>
+                        </div>
                     <p class="text-gray-500 mb-3">
                         Total Karya
                     </p>
 
-                    <div class="flex justify-center items-end gap-1">
-                        <h2 class="counter text-blue-600" data-target="{{ $totalKarya }}">0</h2>
-                        <!-- Span plus dinonaktifkan: tidak ditampilkan -->
-                        <!-- <span class="counter-plus text-blue-600">+</span> -->
-                    </div>
+                    
                 </div>
 
-
-
-
-
                 <div
-                    class="counter-card bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 text-center border border-gray-100 dark:border-gray-800">
-                    <div class="text-5xl mb-4">👨‍🎓</div>
-
-                    <p class="text-gray-500 mb-3">
-                        Total Siswa
-                    </p>
-
+                    class="counter-card w-full sm:w-64 bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 text-center border border-gray-100 dark:border-gray-800">
+                    <div class="text-5xl mb-3"></div>
                     <h2 class="counter" data-target="{{ $totalSiswa }}">
                         0
                     </h2>
+                    <p class="text-gray-500 mb-4">
+                        Total Siswa
+                    </p>
+
+                    
 
                     <!-- Span plus dinonaktifkan: tidak ditampilkan -->
                     <!-- <span class="text-purple-600 font-bold text-xl">+</span> -->
-                </div>
-
-
-                <div
-                    class="counter-card bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-8 text-center border border-gray-100 dark:border-gray-800">
-                    <div class="text-5xl mb-4">👨‍🏫</div>
-
-                    <p class="text-gray-500 mb-3">
-                        Guru Pembimbing
-                    </p>
-
-                    <h2 class="counter" data-target="{{ $totalAdmin }}">
-                        0
-                    </h2>
-
-                    <!-- Span plus dinonaktifkan: tidak ditampilkan -->
-                    <!-- <span class="text-red-600 font-bold text-xl">+</span> -->
                 </div>
 
             </div>
@@ -296,16 +283,6 @@
                         <p id="modalTahun" class="font-semibold text-gray-900 dark:text-white"></p>
                     </div>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="text-center bg-blue-50 dark:bg-blue-950 p-4 rounded-lg">
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">👁️ Dilihat</p>
-                        <p class="text-2xl font-bold text-blue-600 dark:text-blue-400" id="modalViews"></p>
-                    </div>
-                    <div class="text-center bg-red-50 dark:bg-red-950 p-4 rounded-lg">
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">❤️ Suka</p>
-                        <p class="text-2xl font-bold text-red-600 dark:text-red-400" id="modalLikes"></p>
-                    </div>
-                </div>
                 <div>
                     <h4 class="font-semibold text-gray-900 dark:text-white mb-2">🛠️ Teknologi</h4>
                     <p id="modalTech" class="text-gray-700 dark:text-gray-300"></p>
@@ -314,9 +291,6 @@
                     <a id="liveBtn" href="#" target="_blank"
                         class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-center">🔗
                         Buka Live</a>
-                    <a id="downloadBtn" href="#" download
-                        class="px-4 py-2 border-2 border-blue-600 text-blue-600 dark:text-blue-400 rounded-lg font-semibold hover:bg-blue-50 dark:hover:bg-blue-950 transition text-center">📥
-                        Download</a>
                 </div>
             </div>
         </div>

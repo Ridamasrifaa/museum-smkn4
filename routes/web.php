@@ -37,6 +37,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/siswa/karya/{project}', [ProjectController::class, 'destroy']);
     Route::get('/siswa/upload', [ProjectController::class, 'upload']);
     Route::post('/siswa/upload', [ProjectController::class, 'store']);
+    Route::get('/siswa/profil', function() {
+        return view('siswa.profil-siswa');
+    });
+    Route::get('/siswa/profil/edit', function() {
+        return view('siswa.edit-profil');
+    });
     // manajemen karya siswa
     Route::get('/admin/karya', [AdminProjectController::class,'index']);
     Route::get('/admin/karya/{project}', [AdminProjectController::class,'show']);

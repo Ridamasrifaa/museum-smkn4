@@ -67,8 +67,7 @@
 
     <section class="my-bg text-white py-20">
         <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
-            <h1 class="text-3xl lg:text-5xl font-bold mb-4">📚 Semua Karya</h1>
-            <p class="text-lg text-gray-100">Jelajahi seluruh koleksi karya siswa Teaching Factory (Tefa)</p>
+            <h1 class="text-3xl lg:text-5xl font-bold mb-4">Semua Karya</h1>
         </div>
     </section>
 

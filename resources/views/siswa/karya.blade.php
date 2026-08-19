@@ -41,6 +41,13 @@
                     <span>Dashboard</span>
                 </a>
 
+                <a href="{{ url('/siswa/profil') }}" class="w-full flex items-center gap-3 px-6 py-3 hover:bg-gray-800 text-gray-400 hover:text-white transition text-left">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                    <span>profil</span>
+                </a>
+
                 <a href="{{ url('/siswa/karya') }}"
                     class="w-full flex items-center gap-3 px-6 py-3 bg-blue-600 text-white border-l-4 border-blue-500 transition">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">

@@ -69,6 +69,13 @@
                     <span>Dashboard</span>
                 </a>
 
+                <a href="{{ url('/siswa/profil') }}" class="w-full flex items-center gap-3 px-6 py-3 hover:bg-gray-800 text-gray-400 hover:text-white transition text-left">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                    <span>profil</span>
+                </a>
+
                 <a href="{{ url('/siswa/karya') }}"
                     class="w-full flex items-center gap-3 px-6 py-3 hover:bg-gray-800 text-gray-400 hover:text-white transition text-left">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -213,7 +220,7 @@
                                     @endswitch
                                 </label>
                                 <input type="url" name="live_link" required value="{{ old('live_link') }}"
-                                    placeholder="https://..."
+                                    placeholder="https://"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                                 @error('live_link')
                                     <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
@@ -246,6 +253,8 @@
                                     </li>
                                     <li>Karya yang melanggar hak cipta atau mengandung konten negatif akan langsung
                                         dihapus.</li>
+                                    <li>karya adalah buatan siswa smk 4 aktif dan alumni</li>
+                                    <li>Karya yang tidak mengadung SARA</li>
                                 </ul>
 
                                 <hr class="border-gray-200 my-2" />

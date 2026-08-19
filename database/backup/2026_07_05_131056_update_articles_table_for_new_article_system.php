@@ -12,8 +12,8 @@ return new class extends Migration
         Schema::table('articles', function (Blueprint $table) {
 
             // Ganti nama kolom lama
-            $table->renameColumn('user_id', 'author_id');
-            $table->renameColumn('thumbnail', 'cover');
+            // $table->renameColumn('user_id', 'author_id');
+            // $table->renameColumn('thumbnail', 'cover');
 
             // Kolom baru
             $table->foreignId('category_id')

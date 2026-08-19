@@ -101,24 +101,21 @@
         <div class="login-right">
             <div>
                 <h2 class="right-title">Museum Karya SMK Negeri 4 Tasikmalaya</h2>
-                <p class="right-subtitle">Platform untuk menampilkan karya terbaik siswa.</p>
+                <p class="right-subtitle">kamu siswa smk 4 kamu punya karya? pamerkan disini</p>
                 <div class="right-features">
                     <div class="right-feature-item">
-                        <span class="right-feature-icon">🎓</span>
                         <div>
-                          <div class="right-feature-title">Portfolio Siswa</div>
+                          <div class="right-feature-title">Portofolio Siswa</div>
                           <p>Tunjukkan karya terbaik Anda kepada dunia</p>
                       </div>
                     </div>
                     <div class="right-feature-item">
-                        <span class="right-feature-icon">⭐</span>
                         <div>
                           <div class="right-feature-title">Apresiasi Karya</div>
                           <p>Dapatkan feedback dan apresiasi dari komunitas</p>
                       </div>
                     </div>
                     <div class="right-feature-item">
-                        <span class="right-feature-icon">🚀</span>
                         <div>
                           <div class="right-feature-title">Pengembangan Karir</div>
                           <p>Terhubung dengan peluang kerja yang relevan</p>
