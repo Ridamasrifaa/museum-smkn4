@@ -41,7 +41,7 @@
                 </div>
                 <span class="text-2xl font-bold text-blue-600">Museum Karya</span>
             </div>
-            <div class="hidden lg:flex lg:gap-x-8 lg:items-center">
+            <div class="flex flex-wrap items-center justify-center gap-3 lg:gap-x-8 lg:justify-end lg:items-center">
                 <a href="/"
                     class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Beranda</a>
                 <a href="/karya"

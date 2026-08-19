@@ -101,4 +101,6 @@ public function upload()
 
     return view('siswa.upload', compact('jurusanList', 'jurusanColor', 'jurusanBadge'));
 }
+
+
 }
