@@ -50,22 +50,22 @@
             </a>
 
             <a href="{{ url('/siswa/karya') }}"
-                class="w-full flex items-center gap-3 px-6 py-3 hover:bg-gray-800 text-gray-400 hover:text-white transition text-left">
+                class="w-full flex items-center gap-3 px-6 py-3 hover:bg-gray-800 text-gray-400 border-l-4 border-blue-500 transition">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path
                         d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.3A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
                 </svg>
-                <span>Karya Ku</span>
+                <span>My karya</span>
             </a>
 
             <a href="{{ url('/siswa/upload') }}"
-                class="w-full flex items-center gap-3 px-6 py-3 bg-blue-600 text-white border-l-4 border-blue-500 transition">
+                class="w-full flex items-center gap-3 px-6 py-3 bg-blue-600 text-white hover:text-white transition text-left">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd"
                         d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.293a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
                         clip-rule="evenodd" />
                 </svg>
-                <span>Upload Project</span>
+                <span>Submit Project</span>
             </a>
         </nav>
 

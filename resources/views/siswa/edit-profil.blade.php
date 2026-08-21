@@ -167,7 +167,7 @@
                             <option value="" disabled {{ $jurusanTerpilih == '' ? 'selected' : '' }}>Pilih Jurusan</option>
                             <option value="PPLG" {{ $jurusanTerpilih == 'PPLG' ? 'selected' : '' }}>Pengembangan Perangkat Lunak dan Gim</option>
                             <option value="DKV" {{ $jurusanTerpilih == 'DKV' ? 'selected' : '' }}>Desain Komunikasi Visual</option>
-                            <option value="TKJ" {{ $jurusanTerpilih == 'TKJ' ? 'selected' : '' }}>Teknik Komputer dan Jaringan</option>
+                            <option value="TOI" {{ $jurusanTerpilih == 'TOI' ? 'selected' : '' }}>Teknik Otomasi Industri</option>
                         </select>
                         @error('jurusan')
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
@@ -183,20 +183,9 @@
                             <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                         @enderror
                     </div>
-
-                    <div class="md:col-span-2">
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
-                        <input type="email" name="email" id="email" value="{{ old('email', Auth::user()->email) }}"
-                            class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        @error('email')
-                            <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                        @enderror
-                    </div>
                 </div>
 
                 <div class="border-t border-gray-100 my-8"></div>
-
-                {{-- ============ GANTI PASSWORD (opsional) ============ --}}
                 <div>
                     <h3 class="font-semibold text-sm text-gray-900 mb-1">Ganti Password</h3>
                     <p class="text-xs text-gray-400 mb-4">Kosongkan bagian ini jika tidak ingin mengganti password.</p>

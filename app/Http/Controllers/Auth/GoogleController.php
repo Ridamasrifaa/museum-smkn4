@@ -19,38 +19,36 @@ class GoogleController extends Controller
 
     public function handleGoogleCallback(Request $request)
     {
-        // Jika user membatalkan login Google
         if ($request->has('error')) {
-            return redirect('/login')
-                ->with('error', 'Login Google dibatalkan.');
+            return redirect('/login')->with('error', 'Login Google dibatalkan.');
         }
 
         try {
+            $googleUser = Socialite::driver('google')->stateless()->user();
 
-            $googleUser = Socialite::driver('google')
-                ->stateless()
-                ->user();
+            // Cek apakah email sudah terdaftar
+            $user = User::where('email', $googleUser->getEmail())->first();
 
-            $user = User::updateOrCreate(
-                [
-                    'email' => $googleUser->getEmail(),
-                ],
-                [
-                    'name' => $googleUser->getName(),
-                    'avatar' => $googleUser->getAvatar(),
-                    'password' => bcrypt('password_siswa123'),
-                    'role' => 2,
+            if ($user) {
+                // User sudah ada → langsung login
+                Auth::login($user);
+                return redirect('/siswa/dashboard');
+            }
+
+            // User belum ada → simpan data Google ke session, lalu minta kode undangan
+            session([
+                'google_user' => [
+                    'google_id' => $googleUser->getId(),
+                    'name'      => $googleUser->getName(),
+                    'email'     => $googleUser->getEmail(),
+                    'avatar'    => $googleUser->getAvatar(),
                 ]
-            );
+            ]);
 
-            Auth::login($user);
-
-            return redirect('/siswa/dashboard');
+            return redirect()->route('auth.kode-undangan');
 
         } catch (\Exception $e) {
-
-            return redirect('/login')
-                ->with('error', 'Login Google gagal. Silakan coba lagi.');
+            return redirect('/login')->with('error', 'Login Google gagal. Silakan coba lagi.');
         }
     }
 }

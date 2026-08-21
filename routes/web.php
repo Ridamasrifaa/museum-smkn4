@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminProjectController;
 use App\Http\Controllers\Admin\AdminSiswaController;
 use App\Http\Controllers\Admin\AdminCategoryController;
+use App\Http\Controllers\Admin\AdminInvitationCodeController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\KaryaController;
@@ -18,6 +19,8 @@ use App\Http\Controllers\ArticlePageController;
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 
 
 Route::get('/', [PublicController::class,'index']);
@@ -30,6 +33,9 @@ Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallb
 Route::middleware('auth')->group(function () {
     // dashboard admin
     Route::get('/admin/dashboard', [AdminDashboardController::class,'index']);
+    Route::resource('/admin/kode-undangan', AdminInvitationCodeController::class)
+    ->parameters(['kode-undangan' => 'kodeUndangan'])
+    ->names('admin.kode-undangan');
     // dashboard siswa
     Route::get('/siswa/dashboard', [DashboardController::class, 'index']);
     Route::get('/siswa/karya', [ProjectController::class, 'index']);
@@ -67,9 +73,8 @@ Route::middleware('auth')->group(function () {
 });
 Route::get('/admin/artikel', [ArticleController::class,'index']);
 Route::resource('admin/articles', ArticleController::class);
-
-
-
+Route::get('/auth/kode-undangan', [AuthController::class, 'showKodeUndangan'])->name('auth.kode-undangan');
+Route::post('/auth/kode-undangan', [AuthController::class, 'submitKodeUndangan'])->name('auth.kode-undangan.submit');
 Route::get('/artikel', [ArticlePageController::class, 'index'])
     ->name('artikel.index');
 

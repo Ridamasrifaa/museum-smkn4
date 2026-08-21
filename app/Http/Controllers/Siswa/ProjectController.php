@@ -78,25 +78,21 @@ public function store(Request $request)
 }
 public function upload()
 {
-    $jurusanList = ['PPLG', 'TKJ', 'DKV', 'TOI', 'TSM'];
+    $jurusanList = ['PPLG','DKV', 'TOI'];
 
     // Warna tombol pilihan jurusan (PPLG=success/hijau, TKJ=primary/biru,
     // DKV=warning/orange, TOI=secondary/abu-abu, TSM=danger/merah)
     $jurusanColor = [
         'PPLG' => 'bg-green-600 hover:bg-green-700',
-        'TKJ'  => 'bg-blue-600 hover:bg-blue-700',
         'DKV'  => 'bg-orange-500 hover:bg-orange-600',
         'TOI'  => 'bg-gray-500 hover:bg-gray-600',
-        'TSM'  => 'bg-red-600 hover:bg-red-700',
     ];
 
     // Warna badge "Form Upload - XXX"
     $jurusanBadge = [
         'PPLG' => 'bg-green-600',
-        'TKJ'  => 'bg-blue-600',
         'DKV'  => 'bg-orange-500',
         'TOI'  => 'bg-gray-500',
-        'TSM'  => 'bg-red-600',
     ];
 
     return view('siswa.upload', compact('jurusanList', 'jurusanColor', 'jurusanBadge'));

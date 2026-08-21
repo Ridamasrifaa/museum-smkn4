@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\InvitationCode;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
+
+class AdminInvitationCodeController extends Controller
+{
+    public function index()
+    {
+        $codes = InvitationCode::latest()->get();
+        return view('admin.kode-undangan.index', compact('codes'));
+    }
+
+    public function create()
+    {
+        return view('admin.kode-undangan.create');
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'code'        => 'required|string|max:255|unique:invitation_codes,code',
+            'kelas'       => 'required|string|max:255',
+            'jurusan'     => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'max_uses'    => 'required|integer|min:1',
+            'is_active'   => 'nullable|boolean',
+            'expires_at'  => 'nullable|date|after:today',
+        ]);
+
+        $validated['is_active']   = $request->boolean('is_active', true);
+        $validated['used_count']  = 0;
+        $validated['created_by']  = Auth::id();
+
+        InvitationCode::create($validated);
+
+        return redirect()->route('admin.kode-undangan.index')
+            ->with('success', 'Kode undangan berhasil ditambahkan.');
+    }
+
+    public function edit(InvitationCode $kodeUndangan)
+    {
+        return view('admin.kode-undangan.edit', compact('kodeUndangan'));
+    }
+
+    public function update(Request $request, InvitationCode $kodeUndangan)
+    {
+        $validated = $request->validate([
+            'code' => [
+                'required', 'string', 'max:255',
+                Rule::unique('invitation_codes', 'code')->ignore($kodeUndangan->id)
+            ],
+            'kelas'       => 'required|string|max:255',
+            'jurusan'     => 'required|string|max:255',
+            'description' => 'nullable|string|max:255',
+            'max_uses'    => 'required|integer|min:1',
+            'is_active'   => 'nullable|boolean',
+            'expires_at'  => 'nullable|date',
+        ]);
+
+        $validated['is_active'] = $request->boolean('is_active');
+
+        $kodeUndangan->update($validated);
+
+        return redirect()->route('admin.kode-undangan.index')
+            ->with('success', 'Kode undangan berhasil diperbarui.');
+    }
+
+    public function destroy(InvitationCode $kodeUndangan)
+    {
+        $kodeUndangan->delete();
+
+        return redirect()->route('admin.kode-undangan.index')
+            ->with('success', 'Kode undangan berhasil dihapus.');
+    }
+}

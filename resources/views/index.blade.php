@@ -125,7 +125,7 @@
     <section id="karya" class="py-16 bg-gray-50 dark:bg-gray-900">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <div class="flex items-center justify-between mb-12">
-                <h2 class="text-3xl font-bold">📚 Semua Karya</h2>
+                <h2 class="text-3xl font-bold"> Semua Karya</h2>
                 <a href="{{ url('/karya') }}"
                     class="text-blue-600 font-semibold hover:text-blue-700 flex items-center gap-1 transition group">
                     Lihat Semua
@@ -250,7 +250,7 @@
                 </div>
                 <div class="flex gap-2 flex-wrap">
                     <span
-                        class="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-semibold">✅
+                        class="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-semibold">
                         Disetujui</span>
                     <span id="modalCategory"
                         class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-semibold"></span>
@@ -283,12 +283,11 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="font-semibold text-gray-900 dark:text-white mb-2">🛠️ Teknologi</h4>
                     <p id="modalTech" class="text-gray-700 dark:text-gray-300"></p>
                 </div>
                 <div class="grid grid-cols-2 gap-3 pt-4 border-t border-gray-200 dark:border-gray-700">
                     <a id="liveBtn" href="#" target="_blank"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-center">🔗
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-center">
                         Buka Live</a>
                 </div>
             </div>

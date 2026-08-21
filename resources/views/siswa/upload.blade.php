@@ -82,7 +82,7 @@
                         <path
                             d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.3A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
                     </svg>
-                    <span>Karya Ku</span>
+                    <span>My Karya</span>
                 </a>
 
                 <a href="{{ url('/siswa/upload') }}"
@@ -92,7 +92,7 @@
                             d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.293a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
                             clip-rule="evenodd" />
                     </svg>
-                    <span>Upload Project</span>
+                    <span>Submit Project</span>
                 </a>
             </nav>
 
@@ -125,11 +125,6 @@
                 </div>
 
                 <div class="max-w-2xl mx-auto bg-white rounded-lg shadow p-8">
-
-                    {{-- Mapping nama kategori -> id kategori dari database.
-                         PENTING: sesuaikan key di bawah kalau nama kategori di DB kamu beda penulisannya. --}}
-                   
-
                     <!-- Pilihan Jurusan -->
                     <div class="flex flex-row justify-between gap-4 flex-wrap">
                         @foreach ($jurusanList as $jurusan)
@@ -181,19 +176,15 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     @switch($jurusan)
                                         @case('PPLG') Bahasa Pemrograman / Framework yang Digunakan * @break
-                                        @case('TKJ') Topologi Jaringan yang Digunakan * @break
                                         @case('DKV') Software Desain yang Digunakan * @break
                                         @case('TOI') Jenis Alat / Mesin Otomasi * @break
-                                        @case('TSM') Jenis Kendaraan yang Dikerjakan * @break
                                     @endswitch
                                 </label>
                                 <input type="text" name="technology_stack" required value="{{ old('technology_stack') }}"
                                     placeholder="@switch($jurusan)
                                         @case('PPLG') Contoh: Laravel, React, Flutter @break
-                                        @case('TKJ') Contoh: Star, Mesh, Tree @break
                                         @case('DKV') Contoh: Adobe Photoshop, Figma, CorelDRAW @break
                                         @case('TOI') Contoh: PLC, Arduino, Sensor IoT @break
-                                        @case('TSM') Contoh: Motor Matic, Motor Sport @break
                                     @endswitch"
                                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
                                 @error('technology_stack')
@@ -215,10 +206,8 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     @switch($jurusan)
                                         @case('PPLG') Link Repository (GitHub/GitLab) * @break
-                                        @case('TKJ') Link Dokumentasi Konfigurasi (Google Drive/Docs) * @break
                                         @case('DKV') Link Portfolio (Behance/Dribbble/Drive) * @break
                                         @case('TOI') Link Video Demo Alat (YouTube/Drive) * @break
-                                        @case('TSM') Link Video Dokumentasi (YouTube/Drive) * @break
                                     @endswitch
                                 </label>
                                 <input type="url" name="live_link" required value="{{ old('live_link') }}"
@@ -233,10 +222,8 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     @switch($jurusan)
                                         @case('PPLG') Screenshot Tampilan Aplikasi * @break
-                                        @case('TKJ') Foto Konfigurasi / Topologi Jaringan * @break
                                         @case('DKV') File Hasil Desain * @break
                                         @case('TOI') Foto Alat / Mesin * @break
-                                        @case('TSM') Foto Kendaraan * @break
                                     @endswitch
                                 </label>
                                 <input type="file" name="file_path" accept="image/*" required
@@ -277,8 +264,7 @@
                                 <button type="button" onclick="resetForm('{{ $jurusan }}')"
                                     class="flex-1 px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium">Reset</button>
                                 <button type="submit" id="submit_{{ $jurusan }}" disabled
-                                    class="flex-1 px-6 py-2 bg-gray-400 text-white rounded-lg font-medium shadow-md cursor-not-allowed transition">Upload
-                                    Karya</button>
+                                    class="flex-1 px-6 py-2 bg-gray-400 text-white rounded-lg font-medium shadow-md cursor-not-allowed transition">Submit Karya</button>
                             </div>
                         </form>
                     @endforeach
@@ -306,7 +292,7 @@
 
     <script>
         // Daftar semua jurusan yang ada formnya
-        const daftarJurusan = ["PPLG", "TKJ", "DKV", "TOI", "TSM"];
+        const daftarJurusan = ["PPLG","DKV", "TOI"];
         const belumPilihJurusan = document.getElementById("belumPilihJurusan");
         const pilihJurusanText = document.getElementById("pilihJurusanText");
 

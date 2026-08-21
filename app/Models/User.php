@@ -17,13 +17,19 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-  protected $fillable = [
-    'name',
-    'email',
-    'avatar',
-    'password',
-    'role',
-];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'avatar',
+        'google_id',
+        'role',
+        'kelas',
+        'jurusan',
+        'angkatan',
+        'status',
+        'invitation_code_id',
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -52,6 +58,11 @@ class User extends Authenticatable
     /**
      * Get all projects yang di-upload oleh user ini (siswa)
      */
+
+    public function invitationCode()
+    {
+        return $this->belongsTo(InvitationCode::class);
+    }
     public function projects()
     {
         return $this->hasMany(Project::class);

@@ -31,18 +31,17 @@
                     <a href="{{ url('/admin/dashboard') }}"
                         class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 transition"><span>Dashboard</span></a>
                     <a href="{{ url('/admin/karya') }}"
-                        class="flex items-center gap-3 px-6 py-3 bg-blue-600 text-white transition"><span>Data
+                        class="flex items-center gap-3 px-6 py-3 bg-blue-600 text-white transition"><span>
                             Karya</span></a>
                     <a href="{{ url('/admin/siswa') }}"
-                        class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 transition"><span>Data
+                        class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 transition"><span>
                             Siswa</span></a>
                     <a href="{{ url('/admin/kategori') }}"
                         class="flex items-center gap-3 px-6 py-3 text-gray-300 hover:bg-gray-800 transition"><span>Kategori</span></a>
                     <a href="{{ url('/admin/manajemen-admin') }}"
-                        class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition"><span>Manajemen
-                            Admin</span></a>
+                        class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition"><span>Users</span></a>
                     <a href="{{ url('/admin/artikel') }}"
-                        class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition"><span>Manajemen
+                        class="flex items-center gap-3 px-6 py-3 nav-link-idle:hover text-gray-300 transition"><span>
                             Artikel</span></a>
                 </nav>
             </div>

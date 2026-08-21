@@ -85,6 +85,10 @@
                     <span>GitHub</span>
                 </button>
             </div>
+            <p class="login-register-text">
+                Belum punya akun?
+                <a href="{{ route('register') }}" class="login-register-link">Daftar disini</a>
+            </p>
         </div>
 
         <div id="comingSoonModal" class="modal-overlay" onclick="if(event.target === this) closeComingSoonModal()">
