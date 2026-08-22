@@ -15,9 +15,9 @@ class ProfilController extends Controller
      */
     public function index()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        // Ambil hanya karya milik user yang sedang login
         $projects = $user->projects()
             ->latest()
             ->get();
@@ -39,6 +39,7 @@ class ProfilController extends Controller
      */
     public function update(Request $request)
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
         $validated = $request->validate([
@@ -51,9 +52,9 @@ class ProfilController extends Controller
         ]);
 
         // Update data dasar
-        $user->name    = $validated['name'];
-        $user->kelas   = $validated['kelas'] ?? $user->kelas;
-        $user->jurusan = $validated['jurusan'] ?? $user->jurusan;
+        $user->name     = $validated['name'];
+        $user->kelas    = $validated['kelas'] ?? $user->kelas;
+        $user->jurusan  = $validated['jurusan'] ?? $user->jurusan;
         $user->angkatan = $validated['angkatan'] ?? $user->angkatan;
 
         // Update avatar jika ada
