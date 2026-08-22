@@ -13,16 +13,14 @@ class AdminSiswaController extends Controller
         $search = $request->search;
 
         $query = User::where('role', 2)
-
+            ->with('invitationCode') // ← tambahkan ini
             ->when($search, function ($query) use ($search) {
-
                 $query->where(function ($q) use ($search) {
-
                     $q->where('name', 'like', "%$search%")
-                      ->orWhere('email', 'like', "%$search%")
-                     ;
+                    ->orWhere('email', 'like', "%$search%")
+                    ->orWhere('kelas', 'like', "%$search%")
+                    ->orWhere('angkatan', 'like', "%$search%");
                 });
-
             });
 
         $totalSiswa = (clone $query)->count();

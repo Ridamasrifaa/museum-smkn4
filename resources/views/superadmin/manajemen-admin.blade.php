@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('layouts.superadmin')
 
 @section('title', 'Manajemen Admin')
 @section('page_title', 'Manajemen Akun Admin')
@@ -25,7 +25,7 @@
                 <input id="searchInput" name="search" value="{{ request('search') }}" placeholder="Cari username atau email..." class="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <button type="submit" class="bg-blue-600 text-white px-5 rounded-lg font-semibold hover:bg-blue-700 transition cursor-pointer">Cari</button>
             </form>
-            <a href="{{ url('/admin/manajemen-admin') }}" class="px-6 py-2.5 bg-gray-500 text-white rounded-lg font-semibold hover:bg-gray-600 transition text-sm whitespace-nowrap text-center cursor-pointer">Reset</a>
+            <a href="{{ url('/superadmin/manajemen-admin') }}" class="px-6 py-2.5 bg-gray-500 text-white rounded-lg font-semibold hover:bg-gray-600 transition text-sm whitespace-nowrap text-center cursor-pointer">Reset</a>
         </div>
     </div>
 
@@ -50,11 +50,17 @@
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $admin->email }}</td>
                             <td class="px-6 py-4 text-sm text-center">
                                 <div class="flex justify-center gap-2">
-                                    <button type="button" data-action="edit" data-id="{{ $admin->id }}" data-username="{{ $admin->name }}" data-email="{{ $admin->email }}" class="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition font-medium text-xs cursor-pointer">
+                                    <button type="button" 
+                                        data-action="edit" 
+                                        data-id="{{ $admin->id }}" 
+                                        data-username="{{ $admin->name }}" 
+                                        data-email="{{ $admin->email }}"
+                                        data-role="{{ $admin->role }}"
+                                        class="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200 transition font-medium text-xs cursor-pointer">
                                         Edit
                                     </button>
 
-                                    <form id="deleteForm-{{ $admin->id }}" action="{{ url('/admin/manajemen-admin/' . $admin->id) }}" method="POST" class="inline">
+                                    <form id="deleteForm-{{ $admin->id }}" action="{{ url('/superadmin/manajemen-admin/' . $admin->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" data-action="delete" data-id="{{ $admin->id }}" data-username="{{ $admin->name }}" class="px-3 py-1 bg-red-100 text-red-600 rounded hover:bg-red-200 transition font-medium text-xs cursor-pointer">
@@ -89,7 +95,7 @@
                 <button type="button" onclick="closeModal()" class="text-gray-400 hover:text-gray-600 cursor-pointer">✕</button>
             </div>
 
-            <form id="adminForm" class="p-6 space-y-4" method="POST" action="{{ url('/admin/manajemen-admin') }}">
+            <form id="adminForm" class="p-6 space-y-4" method="POST" action="{{ url('/superadmin/manajemen-admin') }}">
                 @csrf
                 <input type="hidden" name="_method" id="formMethod" value="POST">
                 <input type="hidden" id="adminId">
@@ -102,6 +108,14 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
                     <input type="email" name="email" id="email" placeholder="Masukkan email" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" required>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                    <select name="role" id="role" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm" required>
+                        <option value="1">Admin Biasa</option>
+                        <option value="0">Super Admin</option>
+                    </select>
                 </div>
 
                 <div id="passwordGroup">
@@ -120,5 +134,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('assets/js/admin/manage-admin.js') }}"></script>
+    <script src="{{ asset('assets/js/superadmin/manajemen-admin.js') }}"></script>
 @endpush

@@ -21,25 +21,65 @@
         {{-- Welcome --}}
         <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg shadow p-8 text-white">
             <h2 class="text-3xl font-bold mb-2">Selamat Datang, {{ explode(' ', Auth::user()->name)[0] }}! 👋</h2>
-            <p class="text-blue-100">Kelola dan upload karya PPLG mu dengan mudah</p>
+            <p class="text-blue-100">Kelola dan kirim karyamu dengan mudah</p>
         </div>
 
-        {{-- Stats --}}
+        {{-- Stats (3 Card) --}}
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white rounded-lg shadow p-6">
+            {{-- Card 1: Total Karya --}}
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-gray-600 text-sm font-medium">Total Karya</p>
-                        <p class="text-3xl font-bold text-gray-900 mt-2">{{ $totalProject }}</p>
+                        <p class="text-gray-500 text-sm font-medium">Total Karya</p>
+                        <p class="text-3xl font-bold text-gray-900 mt-2">{{ $totalProject ?? 0 }}</p>
                     </div>
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center font-bold text-blue-600">📊</div>
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl">
+                        📊
+                    </div>
                 </div>
             </div>
-            {{-- ... stats lainnya --}}
+
+            {{-- Card 2: Karya Disetujui --}}
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">Karya Disetujui</p>
+                        <p class="text-3xl font-bold text-green-600 mt-2">{{ $approvedProject ?? 0 }}</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-lg font-bold">
+                        ✓
+                    </div>
+                </div>
+            </div>
+
+            {{-- Card 3: Menunggu Review --}}
+            <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">Menunggu Review</p>
+                        <p class="text-3xl font-bold text-amber-500 mt-2">{{ $pendingProject ?? 0 }}</p>
+                    </div>
+                    <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center text-xl">
+                        ⏳
+                    </div>
+                </div>
+            </div>
         </div>
 
         {{-- Aksi Cepat --}}
-        {{-- ... --}}
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+            <h3 class="text-lg font-bold text-gray-900 mb-4">Aksi Cepat</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <a href="{{ url('/siswa/upload') }}" class="block p-5 bg-blue-50/50 hover:bg-blue-50 rounded-xl border border-blue-100 transition">
+                    <p class="font-bold text-gray-900">Upload Project Baru</p>
+                    <p class="text-sm text-gray-500 mt-1">Mulai upload karya terbaru mu</p>
+                </a>
+                <a href="{{ url('/siswa/karya') }}" class="block p-5 bg-emerald-50/40 hover:bg-emerald-50/70 rounded-xl border border-emerald-100 transition">
+                    <p class="font-bold text-gray-900">Lihat Karya Ku</p>
+                    <p class="text-sm text-gray-500 mt-1">Cek status semua karya yang sudah diupload</p>
+                </a>
+            </div>
+        </div>
     </div>
 @endsection
 

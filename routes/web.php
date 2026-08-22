@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\AdminInvitationCodeController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\Admin\AdminManagementController;
 use App\Http\Controllers\KaryaController;
+use App\Http\Controllers\Siswa\ProfilController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\ArticlePageController;
 
@@ -43,12 +44,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/siswa/karya/{project}', [ProjectController::class, 'destroy']);
     Route::get('/siswa/upload', [ProjectController::class, 'upload']);
     Route::post('/siswa/upload', [ProjectController::class, 'store']);
-    Route::get('/siswa/profil', function() {
-        return view('siswa.profil-siswa');
-    });
-    Route::get('/siswa/profil/edit', function() {
-        return view('siswa.edit-profil');
-    });
+    Route::get('/siswa/profil', [ProfilController::class, 'index'])->name('siswa.profil');
+    Route::get('/siswa/profil/edit', [ProfilController::class, 'edit'])->name('siswa.profil.edit');
+    Route::put('/siswa/profil', [ProfilController::class, 'update'])->name('siswa.profil.update');
     // manajemen karya siswa
     Route::get('/admin/karya', [AdminProjectController::class,'index']);
     Route::get('/admin/karya/{project}', [AdminProjectController::class,'show']);
@@ -57,6 +55,7 @@ Route::middleware('auth')->group(function () {
     // manajemen siswa
     Route::get('/admin/siswa', [AdminSiswaController::class,'index']);
     Route::put('/admin/siswa/{user}/update', [AdminSiswaController::class,'update']);
+    Route::delete('/admin/siswa/{user}', [AdminSiswaController::class, 'destroy']);
     // manajemen kategori
     Route::get('/admin/kategori', [AdminCategoryController::class,'index']);
     Route::post('/admin/kategori/store', [AdminCategoryController::class,'store']);
@@ -82,3 +81,13 @@ Route::get('/artikel/{slug}', [ArticlePageController::class, 'show'])
     ->name('artikel.show');
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+// ==================== SUPER ADMIN ONLY ====================
+// ==================== SUPER ADMIN ====================
+Route::middleware(['auth', 'superadmin'])->prefix('superadmin')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\SuperAdmin\DashboardController::class, 'index']);
+    
+    Route::get('/manajemen-admin', [\App\Http\Controllers\SuperAdmin\AdminManagementController::class, 'index']);
+    Route::post('/manajemen-admin', [\App\Http\Controllers\SuperAdmin\AdminManagementController::class, 'store']);
+    Route::put('/manajemen-admin/{user}', [\App\Http\Controllers\SuperAdmin\AdminManagementController::class, 'update']);
+    Route::delete('/manajemen-admin/{user}', [\App\Http\Controllers\SuperAdmin\AdminManagementController::class, 'destroy']);
+});

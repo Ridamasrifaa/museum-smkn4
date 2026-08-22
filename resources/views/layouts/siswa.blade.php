@@ -9,10 +9,10 @@
     @stack('styles')
 </head>
 <body class="bg-gray-100">
-    <div class="flex h-screen bg-gray-100">
+    <div class="flex h-screen bg-gray-100 overflow-hidden">
 
         {{-- ================= SIDEBAR ================= --}}
-        <div class="w-64 bg-gray-900 text-white shadow-lg flex flex-col">
+        <div class="w-64 bg-gray-900 text-white shadow-lg flex flex-col shrink-0">
             <div class="p-6 border-b border-gray-700">
                 <div class="flex items-center gap-3">
                     @if(Auth::user()->avatar)
@@ -28,9 +28,9 @@
                 </div>
             </div>
 
-            <nav class="mt-6 flex-1">
+            <nav class="mt-6 flex-1 space-y-2 px-4">
                 <a href="{{ url('/siswa/dashboard') }}"
-                   class="w-full flex items-center gap-3 px-6 py-3 {{ request()->is('siswa/dashboard') ? 'bg-blue-600 text-white border-l-4 border-blue-500' : 'hover:bg-gray-800 text-gray-400 hover:text-white' }} transition">
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->is('siswa/dashboard*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'hover:bg-gray-800 text-gray-400 hover:text-white' }}">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                     </svg>
@@ -38,7 +38,7 @@
                 </a>
 
                 <a href="{{ url('/siswa/profil') }}"
-                   class="w-full flex items-center gap-3 px-6 py-3 {{ request()->is('siswa/profil*') ? 'bg-blue-600 text-white border-l-4 border-blue-500' : 'hover:bg-gray-800 text-gray-400 hover:text-white' }} transition text-left">
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->is('siswa/profil*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'hover:bg-gray-800 text-gray-400 hover:text-white' }} text-left">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
                     </svg>
@@ -46,22 +46,21 @@
                 </a>
 
                 <a href="{{ url('/siswa/karya') }}"
-                   class="w-full flex items-center gap-3 px-6 py-3 {{ request()->is('siswa/karya*') ? 'bg-blue-600 text-white border-l-4 border-blue-500' : 'hover:bg-gray-800 text-gray-400 hover:text-white' }} transition text-left">
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->is('siswa/karya*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'hover:bg-gray-800 text-gray-400 hover:text-white' }} text-left">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.3A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z" />
                     </svg>
-                    <span>My Karya</span>
+                    <span>My Karya Gue</span>
                 </a>
 
                 <a href="{{ url('/siswa/upload') }}"
-                   class="w-full flex items-center gap-3 px-6 py-3 {{ request()->is('siswa/upload') ? 'bg-blue-600 text-white border-l-4 border-blue-500' : 'hover:bg-gray-800 text-gray-400 hover:text-white' }} transition text-left">
+                class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->is('siswa/upload*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'hover:bg-gray-800 text-gray-400 hover:text-white' }} text-left">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.293a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
                     </svg>
-                    <span>Submit Project</span>
+                    <span>Kirim Project</span>
                 </a>
             </nav>
-
             <div class="border-t border-gray-700 px-6 py-4">
                 <button type="button" onclick="openLogoutModal()"
                     class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold cursor-pointer">
@@ -70,8 +69,8 @@
             </div>
         </div>
 
-        {{-- ================= KONTEN ================= --}}
-        <div class="flex-1 flex flex-col overflow-hidden">
+        {{-- ================= KONTEN (Diizinkan Scroll Vertikal) ================= --}}
+        <div class="flex-1 flex flex-col overflow-y-auto">
             @yield('content')
         </div>
     </div>
@@ -98,15 +97,15 @@
 
                 <div class="flex gap-3">
                     <button type="button" onclick="closeLogoutModal()"
-                        class="flex-1 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-semibold transition">
-                        Batal
+                        class="flex-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-medium transition leading-snug">
+                        Tidak
                     </button>
 
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="flex-1">
                         @csrf
                         <button type="submit"
-                            class="w-full px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition">
-                            Ya, Logout
+                            class="w-full px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-medium transition leading-snug">
+                            Yaa
                         </button>
                     </form>
                 </div>
@@ -129,14 +128,12 @@
             document.body.style.overflow = 'auto';
         }
 
-        // Tutup modal kalau klik di luar card
         document.getElementById('logoutModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeLogoutModal();
             }
         });
 
-        // Tutup dengan tombol Escape
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeLogoutModal();

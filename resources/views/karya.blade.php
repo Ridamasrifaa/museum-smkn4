@@ -98,12 +98,6 @@
                         PPLG
                     </button>
 
-                    <button data-filter="tkj"
-                        class="filter-pill flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
-                        <img src="{{ asset('assets/img/tkj.jpeg') }}" alt="Logo TKJ"
-                            class="w-4 h-4 rounded-full object-cover">
-                        TKJ
-                    </button>
 
                     <button data-filter="dkv"
                         class="filter-pill flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
@@ -117,13 +111,6 @@
                         <img src="{{ asset('assets/img/toi.jpeg') }}" alt="Logo TOI"
                             class="w-4 h-4 rounded-full object-cover">
                         TOI
-                    </button>
-
-                    <button data-filter="tsm"
-                        class="filter-pill flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
-                        <img src="{{ asset('assets/img/tsm.jpeg') }}" alt="Logo TSM"
-                            class="w-4 h-4 rounded-full object-cover">
-                        TSM
                     </button>
                 </div>
 

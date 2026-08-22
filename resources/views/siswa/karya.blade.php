@@ -5,7 +5,7 @@
 @section('content')
     <header class="bg-white shadow-sm z-10">
         <div class="px-8 py-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-gray-900">Karya Saya</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Karya gue</h1>
         </div>
     </header>
 
@@ -21,7 +21,7 @@
         <div class="bg-white rounded-lg shadow overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-200">
                 <h2 class="text-xl font-bold text-gray-900">My Karya Gue</h2>
-                <p class="text-sm text-gray-500 mt-1">Kelola dan pantau status karya yang telah dikirim</p>
+                <p class="text-sm text-gray-500 mt-1">Kelola dan pantau status karya kamu yang telah dikirim</p>
             </div>
 
             <div class="overflow-x-auto">
@@ -31,7 +31,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Judul Karya</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Jurusan</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Tanggal Upload</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Tanggal Dikirim</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase">Aksi</th>
                         </tr>
                     </thead>
@@ -74,7 +74,7 @@
                         @empty
                             <tr>
                                 <td colspan="5" class="text-center py-10 text-gray-500 text-sm">
-                                    Belum ada karya yang diupload.
+                                    Belum ada nich karya yang dikirim.
                                 </td>
                             </tr>
                         @endforelse
