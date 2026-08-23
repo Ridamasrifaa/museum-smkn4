@@ -9,12 +9,15 @@
     <link rel="stylesheet" href="{{ asset('assets/css/admin/style.css') }}">
 </head>
 <body class="bg-gray-100">
-    <div class="flex h-screen bg-gray-100">
+    {{-- h-screen + overflow-hidden di wrapper utama = halaman TIDAK ikut scroll,
+         jadi sidebar otomatis terasa "fixed" karena dia bagian dari flex container
+         yang tingginya dikunci sama tinggi layar --}}
+    <div class="flex h-screen bg-gray-100 overflow-hidden">
 
-        {{-- SIDEBAR SUPER ADMIN --}}
-        <div class="w-64 custom-nav-bg text-white shadow-lg flex flex-col justify-between">
-            <div>
-                <div class="p-6 border-b border-gray-700">
+        {{-- SIDEBAR SUPER ADMIN (fixed, tidak ikut scroll bareng konten) --}}
+        <div class="w-64 shrink-0 h-screen custom-nav-bg text-white shadow-lg flex flex-col justify-between">
+            <div class="flex flex-col overflow-hidden">
+                <div class="p-6 border-b border-gray-700 shrink-0">
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center font-bold text-md">SA</div>
                         <div>
@@ -24,53 +27,55 @@
                     </div>
                 </div>
 
-                <nav class="mt-6 space-y-2 px-4">
+                {{-- kalau menu makin banyak dan lebih tinggi dari layar,
+                     nav ini yang scroll sendiri, bukan seluruh sidebar --}}
+                <nav class="mt-6 space-y-2 px-4 overflow-y-auto">
                     {{-- Dashboard --}}
-                    <a href="{{ url('/superadmin/dashboard') }}" 
+                    <a href="{{ url('/superadmin/dashboard') }}"
                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('superadmin/dashboard*') ? 'bg-purple-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
                         <span>Dashboard</span>
                     </a>
 
                     {{-- Manajemen Admin (khusus Super Admin) --}}
-                    <a href="{{ url('/superadmin/manajemen-admin') }}" 
+                    <a href="{{ url('/superadmin/manajemen-admin') }}"
                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('superadmin/manajemen-admin*') ? 'bg-purple-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
                         <span>Manajemen Admin</span>
                     </a>
 
                     {{-- Karya (bisa kelola semua) --}}
-                    <a href="{{ url('/admin/karya') }}" 
+                    <a href="{{ url('/admin/karya') }}"
                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/karya*') ? 'bg-purple-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
                         <span>Karya</span>
                     </a>
 
                     {{-- Siswa --}}
-                    <a href="{{ url('/admin/siswa') }}" 
+                    <a href="{{ url('/admin/siswa') }}"
                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/siswa*') ? 'bg-purple-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
                         <span>Siswa</span>
                     </a>
 
                     {{-- Kategori --}}
-                    <a href="{{ url('/admin/kategori') }}" 
+                    <a href="{{ url('/admin/kategori') }}"
                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/kategori*') ? 'bg-purple-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
                         <span>Kategori</span>
                     </a>
 
                     {{-- Artikel --}}
-                    <a href="{{ url('/admin/artikel') }}" 
+                    <a href="{{ url('/admin/artikel') }}"
                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/artikel*') ? 'bg-purple-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
                         <span>Artikel</span>
                     </a>
 
                     {{-- Kode Unik --}}
-                    <a href="{{ route('admin.kode-undangan.index') }}" 
+                    <a href="{{ route('admin.kode-undangan.index') }}"
                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('admin.kode-undangan.*') ? 'bg-purple-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
                         <span>Kode Unik</span>
                     </a>
                 </nav>
             </div>
-            
+
             {{-- TOMBOL LOGOUT --}}
-            <div class="p-6 border-t border-gray-700">
+            <div class="p-6 border-t border-gray-700 shrink-0">
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                     @csrf
                 </form>
@@ -80,9 +85,9 @@
             </div>
         </div>
 
-        {{-- AREA KONTEN UTAMA --}}
+        {{-- AREA KONTEN UTAMA (ini yang scroll, sidebar di sebelah kiri tetap diam) --}}
         <div class="flex-1 flex flex-col overflow-hidden">
-            <header class="bg-white shadow-sm z-10">
+            <header class="bg-white shadow-sm z-10 shrink-0">
                 <div class="px-8 py-4 flex justify-between items-center">
                     <h1 class="text-2xl font-bold text-gray-900">@yield('page_title', 'Dashboard')</h1>
                     <div class="flex items-center gap-4">
@@ -95,7 +100,7 @@
                 </div>
             </header>
 
-            <div class="flex-1 overflow-auto p-8 relative">
+            <div class="flex-1 overflow-y-auto p-8 relative">
                 @yield('content')
             </div>
         </div>

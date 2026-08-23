@@ -42,9 +42,8 @@
                 class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/kategori*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
                     <span>Kategori</span>
                 </a>
-
-                <a href="{{ url('/admin/manajemen-admin') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/manajemen-admin*') ? 'bg-gray-800 text-white font-semibold' : 'text-gray-300 hover:bg-gray-800' }}">
+                <a href="{{ url('/admin/kategori') }}" 
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/manajemen-admin*') ?'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
                     <span>Users</span>
                 </a>
 
@@ -57,6 +56,12 @@
                 class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('admin.kode-undangan.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
                     <span>Kode Unik</span>
                 </a>
+                @if(auth()->check() && auth()->user()->role === 0)
+                    <a href="{{ url('/superadmin/dashboard') }}" 
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('superadmin.dashboard*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
+                        <span>kembali ke super admin</span>
+                    </a>
+                @endif
             </nav>
             </div>
             

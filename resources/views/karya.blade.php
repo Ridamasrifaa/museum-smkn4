@@ -38,7 +38,7 @@
             <div class="flex lg:flex-1 items-center gap-2">
                 <div
                     class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                    🏛️</div>
+                    <img src="{{ asset('images/smk4.png') }}" alt="Logo Museum"></div>
                 <span class="text-2xl font-bold text-blue-600">Museum Karya</span>
             </div>
             <div class="flex flex-wrap items-center justify-center gap-3 lg:gap-x-8 lg:justify-end lg:items-center">
@@ -111,6 +111,12 @@
                         <img src="{{ asset('assets/img/toi.jpeg') }}" alt="Logo TOI"
                             class="w-4 h-4 rounded-full object-cover">
                         TOI
+                    </button>
+                    <button data-filter="alumni"
+                        class="filter-pill flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
+                        <img src="" alt="Alumni"
+                            class="w-4 h-4 rounded-full object-cover">
+                        Alumni
                     </button>
                 </div>
 

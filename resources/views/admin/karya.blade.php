@@ -64,7 +64,7 @@
                                 <form action="{{ url('/admin/karya/' . $project->id) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Hapus karya ini?')" class="text-red-600 hover:underline text-sm font-semibold">Hapus</button>
+                                    <button type="submit" onclick="return confirm('Hapus karya ini?')" class="text-red-600 hover:underline text-sm font-semibold cursor-pointer">Hapus</button>
                                 </form>
                             </td>
                         </tr>
