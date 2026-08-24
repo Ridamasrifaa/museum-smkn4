@@ -120,7 +120,7 @@
 
             <div class="p-6 text-center">
                 <p class="text-gray-700 font-medium leading-relaxed text-base">
-                    Yakin mau logout sebagai Super Admin?
+                    Yakin mau logout?
                 </p>
             </div>
 

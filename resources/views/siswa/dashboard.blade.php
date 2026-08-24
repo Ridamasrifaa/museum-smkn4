@@ -57,7 +57,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-500 text-sm font-medium">Menunggu Review</p>
-                        <p class="text-3xl font-bold text-amber-500 mt-2">{{ $pendingProject ?? 0 }}</p>
+                        <p class="text-3xl font-bold text-amber-500 mt-2">{{ $pending ?? 0 }}</p>
                     </div>
                     <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-xl flex items-center justify-center text-xl">
                         ⏳

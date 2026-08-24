@@ -9,68 +9,120 @@ function toggleTheme() {
     localStorage.setItem("theme", next);
     applyTheme(next);
 }
+
 (function initTheme() {
     const saved = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)",
-    ).matches;
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     applyTheme(saved || (prefersDark ? "dark" : "light"));
 })();
 
-// ===== Modal (baca data langsung dari atribut data-* card, tanpa array JS) =====
+// ===== Modal =====
 function openModal(card) {
     if (!card) return;
+
     const d = card.dataset;
+
+    // Elements
     const modalTitle = document.getElementById("modalTitle");
     const modalCategory = document.getElementById("modalCategory");
     const modalEvent = document.getElementById("modalEvent");
     const modalDescription = document.getElementById("modalDescription");
     const modalSiswa = document.getElementById("modalSiswa");
+    const modalBiodata = document.getElementById("modalBiodata");
     const modalGuru = document.getElementById("modalGuru");
     const modalKategoriDetail = document.getElementById("modalKategoriDetail");
     const modalTahun = document.getElementById("modalTahun");
-    const modalViews = document.getElementById("modalViews");
-    const modalLikes = document.getElementById("modalLikes");
     const modalTech = document.getElementById("modalTech");
     const modalAvatar = document.getElementById("modalAvatar");
     const liveBtn = document.getElementById("liveBtn");
-    const downloadBtn = document.getElementById("downloadBtn");
     const previewImage = document.getElementById("modalImagePreview");
     const previewIframe = document.getElementById("modalIframePreview");
     const previewEmpty = document.getElementById("modalPreviewEmpty");
-    const filePath = d.filePath || "";
-    const fileType = d.fileType || "";
 
-    if (modalTitle) modalTitle.textContent = d.title;
-    if (modalCategory) modalCategory.textContent = d.category;
-    if (modalEvent) modalEvent.textContent = "🎉 " + d.event;
-    if (modalDescription) modalDescription.textContent = d.desc;
-    if (modalSiswa) modalSiswa.textContent = d.siswa;
-    if (modalGuru) modalGuru.textContent = "👨‍🏫 " + d.guru;
-    if (modalKategoriDetail) modalKategoriDetail.textContent = d.category;
-    if (modalTahun) modalTahun.textContent = d.tahun;
-    if (modalViews) modalViews.textContent = d.views;
-    if (modalLikes) modalLikes.textContent = d.likes;
-    if (modalTech) modalTech.textContent = d.tech;
-    if (modalAvatar) modalAvatar.textContent = d.avatar;
-    if (downloadBtn) downloadBtn.href = d.download;
-    if (liveBtn) liveBtn.href = d.live;
+    // Title, category, event, description
+    if (modalTitle) modalTitle.textContent = d.title || "";
+    if (modalCategory) modalCategory.textContent = d.category || "";
+    if (modalEvent) modalEvent.textContent = d.event || "";
+    if (modalDescription) modalDescription.textContent = d.desc || "";
+    if (modalKategoriDetail) modalKategoriDetail.textContent = d.category || "";
+    if (modalTahun) modalTahun.textContent = d.tahun || "";
+    if (modalTech) modalTech.textContent = d.tech || "";
 
+    // ===== Avatar (foto atau inisial) =====
+    if (modalAvatar) {
+        modalAvatar.innerHTML = "";
+
+        if (d.avatar) {
+            const img = document.createElement("img");
+            img.src = d.avatar;
+            img.alt = d.siswa || "Avatar";
+            img.className = "w-full h-full object-cover";
+
+            // Kalau foto gagal load → fallback ke huruf
+            img.onerror = function () {
+                modalAvatar.innerHTML = "";
+                modalAvatar.textContent =
+                    d.avatarLetter ||
+                    (d.siswa ? d.siswa.charAt(0).toUpperCase() : "U");
+                modalAvatar.classList.add("bg-blue-600", "text-white");
+            };
+
+            modalAvatar.appendChild(img);
+            modalAvatar.classList.remove("bg-blue-600", "text-white");
+        } else {
+            // Tidak ada foto → tampilkan inisial
+            modalAvatar.textContent =
+                d.avatarLetter ||
+                (d.siswa ? d.siswa.charAt(0).toUpperCase() : "U");
+            modalAvatar.classList.add("bg-blue-600", "text-white");
+        }
+    }
+
+    // ===== Nama siswa =====
+    if (modalSiswa) modalSiswa.textContent = d.siswa || "-";
+
+    // ===== Biodata (kelas • jurusan • angkatan) =====
+    if (modalBiodata) {
+        const parts = [];
+        if (d.kelas && d.kelas !== "-") parts.push(d.kelas);
+        if (d.jurusanSiswa && d.jurusanSiswa !== "-") parts.push(d.jurusanSiswa);
+        if (d.angkatan && d.angkatan !== "-") parts.push("Angkatan " + d.angkatan);
+        modalBiodata.textContent = parts.length ? parts.join(" • ") : "-";
+    }
+
+    // ===== Guru =====
+    if (modalGuru) {
+        modalGuru.textContent =
+            d.guru && d.guru !== "-" ? "Guru: " + d.guru : "";
+    }
+
+    // ===== Live button =====
+    if (liveBtn) {
+        liveBtn.href = d.live || "#";
+        // Optional: sembunyikan tombol kalau tidak ada live link
+        // liveBtn.style.display = d.live ? "block" : "none";
+    }
+
+    // ===== Preview (gambar / iframe / empty) =====
     if (previewImage && previewIframe && previewEmpty) {
+        const filePath = d.filePath || "";
+        const fileType = d.fileType || "";
         const isImage = filePath && fileType.startsWith("image/");
+
+        // Reset dulu
+        previewImage.classList.add("hidden");
+        previewIframe.classList.add("hidden");
+        previewEmpty.classList.add("hidden");
+        previewIframe.src = "";
+        previewImage.src = "";
+
         if (isImage) {
             previewImage.src = filePath;
             previewImage.classList.remove("hidden");
-            previewIframe.classList.add("hidden");
-            previewEmpty.classList.add("hidden");
         } else if (d.live) {
             previewIframe.src = d.live;
             previewIframe.classList.remove("hidden");
-            previewImage.classList.add("hidden");
-            previewEmpty.classList.add("hidden");
         } else {
-            previewImage.classList.add("hidden");
-            previewIframe.classList.add("hidden");
             previewEmpty.classList.remove("hidden");
         }
     }
@@ -79,12 +131,19 @@ function openModal(card) {
 }
 
 function closeModal() {
-    document.getElementById("detailModal").classList.add("hidden");
+    const modal = document.getElementById("detailModal");
+    if (modal) modal.classList.add("hidden");
+
+    // Optional: bersihkan iframe supaya video/audio berhenti
+    const previewIframe = document.getElementById("modalIframePreview");
+    if (previewIframe) previewIframe.src = "";
 }
 
-document.getElementById("detailModal").addEventListener("click", (e) => {
+document.getElementById("detailModal")?.addEventListener("click", (e) => {
     if (e.target.id === "detailModal") closeModal();
 });
+
+// ===== Counter Animation =====
 document.addEventListener("DOMContentLoaded", () => {
     const counters = document.querySelectorAll(".counter");
 
@@ -94,44 +153,33 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (!entry.isIntersecting) return;
 
                 const counter = entry.target;
-
-                const target = parseInt(counter.dataset.target);
-
+                const target = parseInt(counter.dataset.target) || 0;
                 let current = 0;
-
-                const duration = 1800; // 1.8 detik
-
+                const duration = 1800;
                 const increment = target / (duration / 16);
 
                 function update() {
                     current += increment;
-
                     if (current >= target) {
                         counter.innerText = target.toLocaleString();
                     } else {
-                        counter.innerText =
-                            Math.floor(current).toLocaleString();
-
+                        counter.innerText = Math.floor(current).toLocaleString();
                         requestAnimationFrame(update);
                     }
                 }
 
                 update();
-
                 observer.unobserve(counter);
             });
         },
-        {
-            threshold: 0.5,
-        },
+        { threshold: 0.5 }
     );
 
-    counters.forEach((counter) => {
-        observer.observe(counter);
-    });
+    counters.forEach((counter) => observer.observe(counter));
 });
-const cards = document.querySelectorAll(".counter-card");
 
+// ===== Counter Card Animation =====
+const cards = document.querySelectorAll(".counter-card");
 const cardObserver = new IntersectionObserver(
     (entries) => {
         entries.forEach((entry) => {
@@ -140,9 +188,6 @@ const cardObserver = new IntersectionObserver(
             }
         });
     },
-    {
-        threshold: 0.2,
-    },
+    { threshold: 0.2 }
 );
-
 cards.forEach((card) => cardObserver.observe(card));

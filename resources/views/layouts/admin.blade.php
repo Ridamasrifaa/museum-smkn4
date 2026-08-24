@@ -42,7 +42,7 @@
                 class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/kategori*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
                     <span>Kategori</span>
                 </a>
-                <a href="{{ url('/admin/kategori') }}" 
+                <a href="{{ url('/admin/manajemen-admin') }}" 
                 class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/manajemen-admin*') ?'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
                     <span>Users</span>
                 </a>
@@ -112,7 +112,7 @@
 
             <div class="p-6 text-center">
                 <p class="text-gray-700 font-medium leading-relaxed text-base">
-                    "kamu mau keluar? Periksa dulu karya siswa, kalau belum cek dulu setuju atau tidak.<br>
+                    "kamu mau keluar? Periksa dulu karya siswanya<br>
                     <!-- <span class="font-semibold text-amber-600 block mt-2">Kalau sudah siip, mantapp kawann....."</span> -->
                 </p>
             </div>
