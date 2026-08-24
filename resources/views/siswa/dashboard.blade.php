@@ -44,7 +44,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-gray-500 text-sm font-medium">Karya Disetujui</p>
-                        <p class="text-3xl font-bold text-green-600 mt-2">{{ $approvedProject ?? 0 }}</p>
+                        <p class="text-3xl font-bold text-green-600 mt-2">{{ $approved ?? 0 }}</p>
                     </div>
                     <div class="w-12 h-12 bg-green-100 text-green-600 rounded-xl flex items-center justify-center text-lg font-bold">
                         ✓
