@@ -27,14 +27,16 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
-            if ($user->role == 0) {
-                return redirect('/superadmin/dashboard');
-            } 
-            else if ($user->role == 1) {
-                return redirect('/admin/dashboard');
-            } 
-            else {
-                return redirect('/siswa/dashboard');
+            switch ((int) $user->role) {
+                case 0:
+                    return redirect('/superadmin/dashboard');
+                case 1:
+                    return redirect('/admin/dashboard');
+                case 2:
+                    return redirect('/siswa/dashboard');
+                default:
+                    Auth::logout();
+                    return back()->withErrors(['email' => 'Role tidak dikenali.']);
             }
         }
 

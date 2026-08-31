@@ -19,8 +19,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             
-            // ROLE: 1 = Admin, 2 = Siswa
-            $table->tinyInteger('role')->default(2); // Default siswa
+            // Database Migration
+            // ROLE: 0 = Superadmin, 1 = Admin, 2 = Siswa
+            $table->tinyInteger('role')->default(2); 
             
             $table->rememberToken();
             $table->timestamps();

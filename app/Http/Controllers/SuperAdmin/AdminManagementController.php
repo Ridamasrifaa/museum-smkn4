@@ -30,18 +30,19 @@ class AdminManagementController extends Controller
         $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            'role'     => 'required|in:0,1', // Hanya boleh 0 atau 1
+            'password' => 'required|string|min:6',
+            'role'     => 'required|in:0,1,2', // Memastikan role bernilai 0, 1, atau 2
         ]);
 
         User::create([
             'name'     => $request->name,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => $request->role,
+            'role'     => (int) $request->role, // Pastikan dikonversi ke Integer
+            'status'   => 'approved',
         ]);
 
-        return back()->with('success', 'Admin berhasil ditambahkan');
+        return redirect()->back()->with('success', 'User berhasil ditambahkan!');
     }
 
     public function update(Request $request, User $user)

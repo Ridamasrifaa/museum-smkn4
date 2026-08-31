@@ -37,6 +37,7 @@
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider w-16">No</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Username</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Role</th>
                         <th class="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase tracking-wider w-32">Aksi</th>
                     </tr>
                 </thead>
@@ -48,6 +49,7 @@
                             </td>
                             <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $admin->name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600">{{ $admin->email }}</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">{{ $admin->role }}</td>
                             <td class="px-6 py-4 text-sm text-center">
                                 <div class="flex justify-center gap-2">
                                     <button type="button" 

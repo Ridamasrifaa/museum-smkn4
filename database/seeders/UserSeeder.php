@@ -15,6 +15,13 @@ class UserSeeder extends Seeder
     {
         // Create Admin User
         User::create([
+            'name' => 'Super Admin',
+            'email' => 'superadmin@gmail.com',
+            'password' => Hash::make('superadmin123'),
+            'role' => 0, // Super Admin
+        ]);
+        // Create Admin User
+        User::create([
             'name' => 'Admin PPLG',
             'email' => 'admin@gmail.com',
             'password' => Hash::make('admin123'),
@@ -40,6 +47,7 @@ class UserSeeder extends Seeder
         $this->command->info('✓ Admin dan 2 test students berhasil di-seed!');
         $this->command->info('');
         $this->command->info('Login Credentials:');
+        $this->command->info('Super Admin:   superadmin@gmail.com / superadmin123');
         $this->command->info('Admin:   admin@gmail.com / admin123');
         $this->command->info('Siswa 1: siswa1@gmail.com / siswa123');
         $this->command->info('Siswa 2: siswa2@gmail.com / siswa123');
