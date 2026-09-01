@@ -71,7 +71,7 @@
                         <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
-
+                <!-- untuk kelas -->
                 <div>
                     <label for="kelas" class="block text-sm font-medium text-gray-700 mb-1.5">Kelas</label>
                     <input type="text" name="kelas" id="kelas" placeholder="Contoh: XII PPLG 1"
@@ -82,7 +82,9 @@
                     @enderror
                 </div>
 
-                <div>
+                <!-- untuk jurusan  -->
+
+                <!-- <div>
                     <label for="jurusan" class="block text-sm font-medium text-gray-700 mb-1.5">Jurusan</label>
                     <select name="jurusan" id="jurusan"
                         class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -95,7 +97,7 @@
                     @error('jurusan')
                         <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                     @enderror
-                </div>
+                </div> -->
 
                 <div>
                     <label for="angkatan" class="block text-sm font-medium text-gray-700 mb-1.5">Angkatan</label>

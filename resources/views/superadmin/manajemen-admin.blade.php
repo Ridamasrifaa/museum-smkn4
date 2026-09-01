@@ -31,6 +31,13 @@
 
     <div class="bg-white rounded-lg shadow overflow-hidden">
         <div class="overflow-x-auto">
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-between items-center text-sm text-gray-600">
+                <span>Catatan Untuk Role</span>
+                <div>
+                    Untuk Role 0 itu = super admin ,
+                    untuk role 1 itu = admin biasa / Admin
+                </div>
+            </div>
             <table class="w-full">
                 <thead class="bg-gray-50 border-b border-gray-200">
                     <tr>

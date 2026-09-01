@@ -26,6 +26,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kode</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kelas</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jurusan</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Deskripsi</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pemakaian</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Expires</th>
@@ -41,6 +42,7 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $code->kelas }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $code->jurusan }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $code->description}}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                             <span class="{{ $code->used_count >= $code->max_uses ? 'text-red-600 font-semibold' : 'text-gray-700' }}">
                                 {{ $code->used_count }} / {{ $code->max_uses }}
