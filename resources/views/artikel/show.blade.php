@@ -296,14 +296,14 @@
                     </div>
                 </div>
 
-                <div class="rounded-xl my-bg text-white p-6">
+                <!-- <div class="rounded-xl my-bg text-white p-6">
                     <h3 class="font-bold mb-2">Punya kabar dari kelas?</h3>
                     <p class="text-sm text-gray-100 mb-4">Kirimkan liputan kegiatan Tefa untuk ditampilkan di sini.</p>
                     <a href="#"
                         class="inline-block px-4 py-2 bg-white text-blue-700 rounded-lg font-semibold text-sm hover:bg-gray-100 transition">
                         Kirim Artikel
                     </a>
-                </div>
+                </div> -->
             </aside>
         </div>
     </section>

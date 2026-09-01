@@ -21,18 +21,17 @@ class Article extends Model
     ];
 
     protected $casts = [
-        'published_at'=>'datetime',
-        'is_featured'=>'boolean'
+        'published_at' => 'datetime',
+        'is_featured'  => 'boolean',
     ];
 
     public function author()
     {
-        return $this->belongsTo(User::class,'author_id');
+        return $this->belongsTo(User::class, 'author_id');
     }
 
     public function category()
     {
-        return $this->belongsTo(ArticleCategory::class,'category_id');
+        return $this->belongsTo(Category::class, 'category_id'); // <-- diganti ke Category
     }
-    
 }

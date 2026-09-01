@@ -44,6 +44,11 @@ class Category extends Model
         return $this->hasMany(Project::class);
     }
 
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
+
     /**
      * Get jumlah approved projects dalam kategori ini
      */
