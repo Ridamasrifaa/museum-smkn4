@@ -18,7 +18,6 @@
 </head>
 <body class="bg-slate-50 dark:bg-gray-950 text-slate-800 dark:text-gray-100 transition-colors duration-300 antialiased min-h-screen flex flex-col justify-between">
 
-    <!-- ===== MAIN WRAPPER ===== -->
     <div>
         <!-- ===== HEADER ===== -->
         <header class="navbar shadow-xs sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md transition-colors duration-300 border-b border-slate-100 dark:border-gray-800">
@@ -78,7 +77,6 @@
                         </p>
                     </div>
 
-                    <!-- Callout Bridge -->
                     <div class="mt-8 p-5 rounded-2xl bg-gradient-to-r from-blue-50/80 to-indigo-50/50 dark:from-blue-950/30 dark:to-indigo-950/20 border border-blue-100 dark:border-blue-900/40 flex flex-col sm:flex-row items-center justify-between gap-4">
                         <div class="text-center sm:text-left">
                             <p class="text-sm font-bold text-slate-900 dark:text-white">Penasaran siapa saja yang membangun platform ini?</p>
@@ -137,8 +135,12 @@
                                 class="w-full h-full rounded-full object-cover ring-2 ring-white dark:ring-gray-900" />
                         </div>
                         <h3 class="font-bold text-base text-slate-900 dark:text-white">Rida Masrifa Hasbian</h3>
-                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5">XII PPLG 1</p>
-                        <p class="text-sm text-slate-500 dark:text-gray-400 mt-2">Backend Developer</p>
+                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5 mb-3">XII PPLG 1</p>
+                        
+                        <!-- Badge Role -->
+                        <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                            Backend Developer
+                        </span>
 
                         <div class="grid grid-cols-2 gap-2 mt-5 pt-5 border-t border-slate-100 dark:border-gray-800/80">
                             <a href="https://github.com/Ridamasrifaa" target="_blank"
@@ -164,8 +166,17 @@
                                 class="w-full h-full rounded-full object-cover ring-2 ring-white dark:ring-gray-900" />
                         </div>
                         <h3 class="font-bold text-base text-slate-900 dark:text-white">Zaki Nur Faizi</h3>
-                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5">XII PPLG 2</p>
-                        <p class="text-sm text-slate-500 dark:text-gray-400 mt-2">Frontend &middot; Backend</p>
+                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5 mb-3">XII PPLG 2</p>
+
+                        <!-- Badge Role -->
+                        <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                            <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300 border border-sky-200 dark:border-sky-800">
+                                Frontend
+                            </span>
+                            <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                                Backend
+                            </span>
+                        </div>
 
                         <div class="grid grid-cols-2 gap-2 mt-5 pt-5 border-t border-slate-100 dark:border-gray-800/80">
                             <a href="https://github.com/faizinurzaki12" target="_blank"
@@ -191,8 +202,12 @@
                                 class="w-full h-full rounded-full object-cover ring-2 ring-white dark:ring-gray-900" />
                         </div>
                         <h3 class="font-bold text-base text-slate-900 dark:text-white">Salsa Cantika</h3>
-                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5">XII PPLG 1</p>
-                        <p class="text-sm text-slate-500 dark:text-gray-400 mt-2">Frontend Developer</p>
+                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5 mb-3">XII PPLG 1</p>
+
+                        <!-- Badge Role -->
+                        <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
+                            Frontend Developer
+                        </span>
 
                         <div class="grid grid-cols-2 gap-2 mt-5 pt-5 border-t border-slate-100 dark:border-gray-800/80">
                             <a href="#" target="_blank"
@@ -218,8 +233,12 @@
                                 class="w-full h-full rounded-full object-cover ring-2 ring-white dark:ring-gray-900" />
                         </div>
                         <h3 class="font-bold text-base text-slate-900 dark:text-white">Zahra Afifah Hifdillah</h3>
-                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5">XII PPLG 2</p>
-                        <p class="text-sm text-slate-500 dark:text-gray-400 mt-2">Frontend Developer</p>
+                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5 mb-3">XII PPLG 2</p>
+
+                        <!-- Badge Role -->
+                        <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900/50 dark:text-pink-300 border border-pink-200 dark:border-pink-800">
+                            Frontend Developer
+                        </span>
 
                         <div class="grid grid-cols-2 gap-2 mt-5 pt-5 border-t border-slate-100 dark:border-gray-800/80">
                             <a href="#" target="_blank"
@@ -245,8 +264,12 @@
                                 class="w-full h-full rounded-full object-cover ring-2 ring-white dark:ring-gray-900" />
                         </div>
                         <h3 class="font-bold text-base text-slate-900 dark:text-white">All Raffi Ghani Iskandar</h3>
-                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5">XII PPLG 2</p>
-                        <p class="text-sm text-slate-500 dark:text-gray-400 mt-2">Backend Developer</p>
+                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5 mb-3">XII PPLG 2</p>
+
+                        <!-- Badge Role -->
+                        <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300 border border-orange-200 dark:border-orange-800">
+                            Backend Developer
+                        </span>
 
                         <div class="grid grid-cols-2 gap-2 mt-5 pt-5 border-t border-slate-100 dark:border-gray-800/80">
                             <a href="#" target="_blank"
