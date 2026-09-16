@@ -50,6 +50,11 @@ Route::post('/karya/{project}/like', [KaryaController::class, 'like']);
 Route::get('/artikel', [ArticlePageController::class, 'index'])->name('artikel.index');
 Route::get('/artikel/{slug}', [ArticlePageController::class, 'show'])->name('artikel.show');
 
+// tentang / about developer
+Route::get('/tentang', function() {
+    return view('tentang');
+});
+
 
 /*
 |--------------------------------------------------------------------------
