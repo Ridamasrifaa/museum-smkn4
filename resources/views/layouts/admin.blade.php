@@ -23,46 +23,57 @@
                     </div>
                 </div>
                 <nav class="mt-6 space-y-2 px-4">
-                <a href="{{ url('/admin/dashboard') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/dashboard*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Dashboard</span>
-                </a>
-
-                <a href="{{ url('/admin/karya') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/karya*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Karya</span>
-                </a>
-
-                <a href="{{ url('/admin/siswa') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/siswa*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Siswa</span>
-                </a>
-
-                <a href="{{ url('/admin/kategori') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/kategori*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Kategori</span>
-                </a>
-                <a href="{{ url('/admin/manajemen-admin') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/manajemen-admin*') ?'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Users</span>
-                </a>
-
-                <a href="{{ url('/admin/artikel') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/artikel*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Artikel</span>
-                </a>
-
-                <a href="{{ route('admin.kode-undangan.index') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('admin.kode-undangan.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Kode Unik</span>
-                </a>
-                @if(auth()->check() && auth()->user()->role === 0)
-                    <a href="{{ url('/superadmin/dashboard') }}" 
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('superadmin.dashboard*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                        <span>kembali ke super admin</span>
+                    <a href="{{ url('/admin/dashboard') }}" 
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/dashboard*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
+                        <span>Dashboard</span>
                     </a>
-                @endif
-            </nav>
+
+                    <a href="{{ url('/admin/karya') }}" 
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/karya*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
+                        <span>Karya</span>
+                    </a>
+
+                    <a href="{{ url('/admin/siswa') }}" 
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/siswa*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
+                        <span>Siswa</span>
+                    </a>
+
+                    <a href="{{ url('/admin/kategori') }}" 
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/kategori*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
+                        <span>Kategori</span>
+                    </a>
+
+                    {{-- MENU USERS KHUSUS SUPER ADMIN --}}
+                    @if(auth()->check() && auth()->user()->isSuperAdmin())
+                        <a href="{{ url('/superadmin/manajemen-admin') }}" 
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('superadmin/manajemen-admin*') || Request::is('admin/manajemen-admin*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
+                            <span>Users</span>
+                        </a>
+                    @endif
+
+                    <a href="{{ url('/admin/artikel') }}" 
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/artikel*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
+                        <span>Artikel</span>
+                    </a>
+
+                    <a href="{{ route('admin.kode-undangan.index') }}" 
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('admin.kode-undangan.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
+                        <span>Kode Unik</span>
+                    </a>
+
+                    {{-- MENU PENGATURAN PROFIL UNTUK ADMIN JURUSAN & SUPER ADMIN --}}
+                    <a href="{{ url('/admin/profile') }}" 
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/profile*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
+                        <span>Profil Saya</span>
+                    </a>
+
+                    @if(auth()->check() && auth()->user()->isSuperAdmin())
+                        <a href="{{ url('/superadmin/dashboard') }}" 
+                        class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('superadmin.dashboard*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
+                            <span>Kembali ke Super Admin</span>
+                        </a>
+                    @endif
+                </nav>
             </div>
             
             {{-- TOMBOL LOGOUT --}}
@@ -83,10 +94,16 @@
                     <h1 class="text-2xl font-bold text-gray-900">@yield('page_title', 'Dashboard')</h1>
                     <div class="flex items-center gap-4">
                         @yield('header_action')
+
+                        {{-- GANTI DENGAN KODE INI --}}
                         <div class="text-right">
-                            <p class="font-semibold text-gray-900">{{ Auth::user()->name ?? 'Admin' }}</p>
-                            <p class="text-sm text-gray-500">Login sebagai admin</p>
+                            <p class="font-semibold text-gray-900">{{ Auth::user()->name }}</p>
+                            <p class="text-sm text-gray-500">
+                                {{ Auth::user()->isSuperAdmin() ? 'Super Admin' : 'Admin ' . (Auth::user()->jurusan ?? 'Jurusan') }}
+                            </p>
                         </div>
+                        {{-- END GANTI --}}
+
                     </div>
                 </div>
             </header>

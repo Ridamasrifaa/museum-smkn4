@@ -25,6 +25,7 @@ class Project extends Model
         'file_size',
         'guru_pengampu',
         'live_link',
+        'github_link',
         'technology_stack',
         'status',
         'rejection_reason',

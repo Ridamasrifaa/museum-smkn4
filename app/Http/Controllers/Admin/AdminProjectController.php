@@ -8,62 +8,61 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-
 class AdminProjectController extends Controller
 {
-public function index(Request $request)
-{
-    $search = $request->search;
+    public function index(Request $request)
+    {
+        $search = $request->search;
+        $user = Auth::user();
 
-    $projects = Project::with('user')
+        $projects = Project::with('user')
+            // Filter Jurusan: Jika BUKAN Super Admin, filter berdasarkan jurusan Admin
+            ->when(!$user->isSuperAdmin() && $user->jurusan, function ($query) use ($user) {
+                $query->where('jurusan', $user->jurusan);
+            })
+            // Filter Pencarian
+            ->when($search, function ($query) use ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('title', 'like', "%{$search}%")
+                      ->orWhereHas('user', function ($u) use ($search) {
+                          $u->where('name', 'like', "%{$search}%");
+                      })
+                      ->orWhere('jurusan', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
-        ->when($search, function ($query) use ($search) {
-
-            $query->where('title', 'like', "%{$search}%")
-
-                ->orWhereHas('user', function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%");
-                })
-
-                ->orWhere('jurusan', 'like', "%{$search}%");
-        })
-
-        ->latest()
-        ->simplePaginate(10)
-        ->withQueryString();
-
-    return view('admin.karya', compact('projects'));
-}
-    public function updateStatus(Request $request, Project $project)
-{
-    $request->validate([
-        'status' => 'required|in:approved,rejected',
-        'catatan' => 'nullable|string'
-    ]);
-
-    if ($request->status == 'approved') {
-
-        $project->update([
-            'status' => 'approved',
-            'approval_note' => $request->catatan,
-            'reviewed_by' => Auth::id(),
-            'reviewed_at' => now(),
-        ]);
-
-    } else {
-
-        $project->update([
-            'status' => 'rejected',
-            'rejection_reason' => $request->catatan,
-            'reviewed_by' => Auth::id(),
-            'reviewed_at' => now(),
-        ]);
-
+        return view('admin.karya', compact('projects'));
     }
 
-    return redirect('/admin/karya')
-        ->with('success','Status berhasil diperbarui');
-}
+    public function updateStatus(Request $request, Project $project)
+    {
+        $request->validate([
+            'status' => 'required|in:approved,rejected',
+            'catatan' => 'nullable|string'
+        ]);
+
+        if ($request->status == 'approved') {
+            $project->update([
+                'status' => 'approved',
+                'approval_note' => $request->catatan,
+                'reviewed_by' => Auth::id(),
+                'reviewed_at' => now(),
+            ]);
+        } else {
+            $project->update([
+                'status' => 'rejected',
+                'rejection_reason' => $request->catatan,
+                'reviewed_by' => Auth::id(),
+                'reviewed_at' => now(),
+            ]);
+        }
+
+        return redirect('/admin/karya')
+            ->with('success', 'Status berhasil diperbarui');
+    }
 
     public function show(Project $project)
     {

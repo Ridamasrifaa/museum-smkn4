@@ -155,7 +155,21 @@
                                                 @endif
                                             </td>
                                         </tr>
-
+                                        <!-- Link Github -->
+                                        @if(strtoupper($project->jurusan) === 'PPLG')
+                                        <tr>
+                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 font-semibold text-gray-900">Link GitHub</td>
+                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4">
+                                                @if($project->github_link)
+                                                    <a href="{{ $project->github_link }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium underline inline-flex items-center gap-1 break-all"> 
+                                                        {{ $project->github_link }} ↗
+                                                    </a>
+                                                @else
+                                                    <span class="text-gray-500">-</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endif
                                         <tr>
                                             <td class="px-3.5 py-3 sm:px-6 sm:py-4 font-semibold text-gray-900">Dokumentasi project</td>
                                             <td class="px-3.5 py-3 sm:px-6 sm:py-4">
