@@ -71,43 +71,35 @@
                         <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
-                <!-- untuk kelas -->
-                <div>
-                    <label for="kelas" class="block text-sm font-medium text-gray-700 mb-1.5">Kelas</label>
-                    <input type="text" name="kelas" id="kelas" placeholder="Contoh: XII PPLG 1"
-                        value="{{ old('kelas', $siswa->kelas ?? '') }}"
-                        class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:border-blue-500 focus:ring-blue-500">
-                    @error('kelas')
-                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
 
-                <!-- untuk jurusan  -->
-
-                <!-- <div>
+                {{-- Pilihan Jurusan --}}
+                <div class="md:col-span-2">
                     <label for="jurusan" class="block text-sm font-medium text-gray-700 mb-1.5">Jurusan</label>
                     <select name="jurusan" id="jurusan"
                         class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        @php $jurusanTerpilih = old('jurusan', $siswa->jurusan ?? ''); @endphp
+                        @php $jurusanTerpilih = old('jurusan', $user->jurusan ?? ''); @endphp
                         <option value="" disabled {{ $jurusanTerpilih == '' ? 'selected' : '' }}>Pilih Jurusan</option>
-                        <option value="PPLG" {{ $jurusanTerpilih == 'PPLG' ? 'selected' : '' }}>Pengembangan Perangkat Lunak dan Gim</option>
-                        <option value="DKV" {{ $jurusanTerpilih == 'DKV' ? 'selected' : '' }}>Desain Komunikasi Visual</option>
-                        <option value="TOI" {{ $jurusanTerpilih == 'TOI' ? 'selected' : '' }}>Teknik Otomasi Industri</option>
+                        <option value="PPLG" {{ $jurusanTerpilih == 'PPLG' ? 'selected' : '' }}>PPLG (Pengembangan Perangkat Lunak dan Gim)</option>
+                        <option value="TSM" {{ $jurusanTerpilih == 'TSM' ? 'selected' : '' }}>TSM (Teknik Bisnis Sepeda Motor)</option>
+                        <option value="DKV" {{ $jurusanTerpilih == 'DKV' ? 'selected' : '' }}>DKV (Desain Komunikasi Visual)</option>
+                        <option value="TOI" {{ $jurusanTerpilih == 'TOI' ? 'selected' : '' }}>TOI (Teknik Otomasi Industri)</option>
+                        <option value="TJKT" {{ $jurusanTerpilih == 'TJKT' ? 'selected' : '' }}>TJKT (Teknik Jaringan Komputer dan Telekomunikasi)</option>
                     </select>
                     @error('jurusan')
                         <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                     @enderror
-                </div> -->
+                </div>
 
-                <div>
-                    <label for="angkatan" class="block text-sm font-medium text-gray-700 mb-1.5">Angkatan</label>
-                    <input type="number" name="angkatan" id="angkatan" placeholder="Contoh: 2023"
-                        value="{{ old('angkatan', $siswa->angkatan ?? '') }}"
-                        class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    @error('angkatan')
+                {{-- Bio Singkat --}}
+                <div class="md:col-span-2">
+                    <label for="bio" class="block text-sm font-medium text-gray-700 mb-1.5">Bio / Deskripsi Singkat</label>
+                    <textarea name="bio" id="bio" rows="3" placeholder="Ceritakan sedikit tentang dirimu..."
+                        class="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">{{ old('bio', $user->bio ?? '') }}</textarea>
+                    @error('bio')
                         <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
                     @enderror
                 </div>
+
             </div>
 
             <div class="border-t border-gray-100 my-8"></div>

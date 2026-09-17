@@ -83,7 +83,7 @@ function openModal(card) {
     document.getElementById('modalTech').innerText = tech || '-';
     document.getElementById('modalSiswa').innerText = siswa || 'Siswa';
     document.getElementById('modalBiodata').innerText = `${kelas || '-'} • ${jurusanSiswa || '-'}`;
-    document.getElementById('modalGuru').innerText = `Guru Pengampu: ${guru || '-'}`;
+    
 
     // Set Avatar Siswa
     const avatarContainer = document.getElementById('modalAvatar');

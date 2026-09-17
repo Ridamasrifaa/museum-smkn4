@@ -27,6 +27,9 @@ use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\AdminManagementController as SuperAdminManagementController;
 
+use App\Http\Controllers\PublicProfileController;
+use App\Http\Controllers\InteractionController;
+
 Route::get('/', [PublicController::class, 'index']);
 
 // Auth Login & Register
@@ -44,8 +47,9 @@ Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallb
 Route::get('/auth/kode-undangan', [AuthController::class, 'showKodeUndangan'])->name('auth.kode-undangan');
 Route::post('/auth/kode-undangan', [AuthController::class, 'submitKodeUndangan'])->name('auth.kode-undangan.submit');
 
-// Public Karya & Artikel
+// Public Karya, Artikel & Detail Project Publik (Untuk Komentar / Interaksi Museum)
 Route::get('/karya', [KaryaController::class, 'index']);
+Route::get('/project/{project}', [KaryaController::class, 'show'])->name('project.detail'); 
 Route::post('/karya/{project}/like', [KaryaController::class, 'like']);
 Route::get('/artikel', [ArticlePageController::class, 'index'])->name('artikel.index');
 Route::get('/artikel/{slug}', [ArticlePageController::class, 'show'])->name('artikel.show');
@@ -66,7 +70,7 @@ Route::middleware('auth')->group(function () {
     // ==================== ROUTE SISWA ====================
     Route::get('/siswa/dashboard', [DashboardController::class, 'index']);
     Route::get('/siswa/karya', [ProjectController::class, 'index']);
-    Route::get('/siswa/karya/detail/{project}', [ProjectController::class, 'show']);
+    Route::get('/siswa/karya/detail/{project}', [ProjectController::class, 'show'])->name('siswa.detail-karya');
     Route::delete('/siswa/karya/{project}', [ProjectController::class, 'destroy']);
     Route::get('/siswa/upload', [ProjectController::class, 'upload']);
     Route::post('/siswa/upload', [ProjectController::class, 'store']);
@@ -109,7 +113,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
 });
 
-// khusus superadmin
+// Khusus Superadmin
 Route::middleware(['auth', 'superadmin'])->prefix('superadmin')->group(function () {
     Route::get('/dashboard', [SuperAdminDashboardController::class, 'index']);
 
@@ -118,4 +122,18 @@ Route::middleware(['auth', 'superadmin'])->prefix('superadmin')->group(function 
     Route::post('/manajemen-admin', [SuperAdminManagementController::class, 'store']);
     Route::put('/manajemen-admin/{user}', [SuperAdminManagementController::class, 'update']);
     Route::delete('/manajemen-admin/{user}', [SuperAdminManagementController::class, 'destroy']);
+});
+
+Route::get('/u/{id}', [PublicProfileController::class, 'show'])->name('profile.show');
+
+// ==================== INTERAKSI & KOMENTAR (AUTH REQUIRED) ====================
+Route::middleware(['auth'])->group(function () {
+    // Rute Like Project (DISESUAIKAN MENJADI /project/{project}/like agar cocok dengan fetch JS)
+    Route::post('/project/{project}/like', [InteractionController::class, 'toggleLike']);
+    
+    // Rute Kirim Komentar Project
+    Route::post('/project/{project}/comment', [InteractionController::class, 'storeComment']);
+    
+    // Rute Kirim Komentar Artikel
+    Route::post('/artikel/{article}/comment', [ArticlePageController::class, 'storeComment'])->name('artikel.comment');
 });

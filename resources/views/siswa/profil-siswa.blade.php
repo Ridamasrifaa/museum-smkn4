@@ -4,103 +4,141 @@
 
 @section('content')
 <div class="flex-1 p-6 md:p-10 overflow-y-auto">
-    <h1 class="text-2xl font-bold text-gray-900 mb-6">Profil Saya</h1>
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">Profil Saya</h1>
 
-    <section class="max-w-4xl mx-auto bg-white rounded-xl shadow-sm p-6 md:p-10">
-        {{-- Bagian Atas: Foto & Nama --}}
-        <div class="flex flex-col items-center text-center">
-            <div class="p-1 rounded-full" style="background: linear-gradient(135deg, #2563eb, #1e40af);">
-                @if ($user->avatar)
-                    <img src="{{ $user->avatar }}" alt="Foto Profil {{ $user->name }}"
-                        onclick="openModal('{{ $user->avatar }}')"
-                        class="w-28 h-28 md:w-32 md:h-32 rounded-full object-cover border-4 border-white cursor-pointer hover:opacity-90 transition">
-                @else
-                    <div class="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-white bg-blue-600 flex items-center justify-center text-white font-bold text-4xl">
-                        {{ strtoupper(substr($user->name, 0, 1)) }}
-                    </div>
-                @endif
-            </div>
-
-            <h2 class="mt-4 text-xl md:text-2xl font-bold text-gray-900">
-                {{ $user->name }}
-            </h2>
-
-            <div class="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-gray-500">
-                <span>{{ $user->kelas ?? '-' }}</span>
-                <span class="text-gray-300">•</span>
-                <span>{{ $user->jurusan ?? '-' }}</span>
-                <span class="text-gray-300">•</span>
-                <span>Angkatan {{ $user->angkatan ?? '-' }}</span>
-            </div>
-
-            <a href="{{ route('siswa.profil.edit') }}"
-               class="mt-5 inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg shadow-sm hover:shadow transition-all duration-200">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                </svg>
-                Edit Profil
-            </a>
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-10">
+            {{-- Bagian Header Profil --}}
+           <div class="w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden bg-blue-600 text-white flex items-center justify-center font-bold text-4xl shadow-md shrink-0 relative">
+    @if(!empty($user->avatar))
+        <img src="{{ str_starts_with($user->avatar, 'http') ? $user->avatar : (str_starts_with($user->avatar, '/storage') ? asset($user->avatar) : asset('storage/' . $user->avatar)) }}" 
+             alt="{{ $user->name }}" 
+             onclick="openModal('{{ str_starts_with($user->avatar, 'http') ? $user->avatar : (str_starts_with($user->avatar, '/storage') ? asset($user->avatar) : asset('storage/' . $user->avatar)) }}')"
+             class="w-full h-full object-cover cursor-pointer hover:opacity-90 transition absolute inset-0">
+    @else
+        <div class="w-full h-full flex items-center justify-center bg-gray-300 text-gray-700 text-2xl font-bold">
+            {{ strtoupper(substr($user->name, 0, 1)) }}
         </div>
+    @endif
+</div>
 
-        <div class="mt-8 mb-6 border-t border-gray-100"></div>
+                <div class="flex-1 text-center sm:text-left">
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-3">
+                        <h2 class="text-2xl font-bold text-gray-900">{{ $user->name }}</h2>
+                        <span class="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-full font-semibold self-center">
+                            {{ $user->jurusan ?? 'PPLG' }}
+                        </span>
+                    </div>
 
-        {{-- Bagian Bawah: Karya Siswa --}}
-        <div>
-            <h3 class="font-semibold text-lg text-gray-900 mb-4">
-                My Karya Gue
-            </h3>
+                    <div class="flex justify-center sm:justify-start gap-8 mb-4 text-sm">
+                        <div>
+                            <span class="font-bold text-lg text-gray-900">{{ $projects->count() }}</span> <span class="text-gray-500">Karya</span>
+                        </div>
+                    </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                @forelse ($projects as $project)
-                    <article class="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden cursor-pointer"
-                             onclick="openProfilModal(this)"
-                             data-title="{{ $project->title }}"
-                             data-desc="{{ $project->description }}"
-                             data-jurusan="{{ $project->jurusan ?? '-' }}"
-                             data-status="{{ $project->status }}"
-                             data-tech="{{ $project->technology_stack ?? '-' }}"
-                             data-live="{{ $project->live_link ?? '' }}"
-                             data-file-path="{{ $project->file_path ? asset('storage/' . $project->file_path) : '' }}"
-                             data-file-type="{{ $project->file_type ?? '' }}"
-                             data-tahun="{{ $project->created_at->format('Y') }}">
+                    <div class="text-sm text-gray-700 space-y-1 mb-6">
+                        <p class="font-medium"> {{ $user->bio ?? 'Belum ada bio.' }}</p>
+                        
+                    </div>
 
-                        <div class="h-36 flex items-center justify-center bg-blue-50">
-                            @if ($project->file_path)
-                                <img src="{{ asset('storage/' . $project->file_path) }}"
-                                     alt="{{ $project->title }}"
-                                     class="w-full h-full object-cover">
+                    <a href="{{ route('siswa.profil.edit') }}"
+                       class="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-xl shadow-sm transition-all duration-200 cursor-pointer">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                        Edit Profil
+                    </a>
+                </div>
+            </div>
+
+            {{-- Bagian Bawah: Karya Siswa dengan Tombol Like, Komentar, & Share --}}
+            <div class="pt-8">
+                <h3 class="text-xs uppercase tracking-widest text-gray-400 font-bold mb-6">
+                    Karya yang Di-upload
+                </h3>
+
+          @if($projects->count() > 0)
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        @foreach ($projects as $project)
+            <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col justify-between">
+                <div>
+                    <div class="h-48 bg-gray-100 overflow-hidden flex items-center justify-center relative">
+                        @php
+                            $extension = $project->file_path ? strtolower(pathinfo($project->file_path, PATHINFO_EXTENSION)) : '';
+                            $isImage = in_array($extension, ['jpg', 'jpeg', 'png', 'webp', 'gif']);
+                            $isVideo = in_array($extension, ['mp4', 'webm', 'ogg', 'mov']);
+                        @endphp
+
+                        @if ($project->file_path)
+                            @if ($isImage)
+                                {{-- Tampilan Jika Foto/Gambar --}}
+                                <img src="{{ asset('storage/' . $project->file_path) }}" alt="{{ $project->title }}" class="w-full h-full object-cover">
+                            @elseif ($isVideo)
+                                {{-- Tampilan Jika Video --}}
+                                <video class="w-full h-full object-cover" controls>
+                                    <source src="{{ asset('storage/' . $project->file_path) }}" type="video/{{ $extension }}">
+                                    Browser kamu tidak mendukung pemutar video.
+                                </video>
                             @else
-                                <svg class="w-10 h-10 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                </svg>
+                                {{-- Tampilan Jika Web / File Lain --}}
+                                <div class="flex flex-col items-center justify-center text-gray-500 p-4 text-center">
+                                    <svg class="w-10 h-10 mb-1 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                                    </svg>
+                                    <span class="text-xs font-semibold text-gray-700">Preview Web / Aplikasi</span>
+                                </div>
                             @endif
-                        </div>
-
-                        <div class="p-4">
-                            <div class="flex items-start justify-between gap-2">
-                                <h4 class="font-medium text-gray-900 text-sm leading-snug">
-                                    {{ $project->title }}
-                                </h4>
-                                @if($project->status == 'approved')
-                                    <span class="shrink-0 text-[11px] font-medium bg-green-50 text-green-600 px-2 py-0.5 rounded-full">Disetujui</span>
-                                @elseif($project->status == 'pending')
-                                    <span class="shrink-0 text-[11px] font-medium bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full">Menunggu</span>
-                                @else
-                                    <span class="shrink-0 text-[11px] font-medium bg-red-50 text-red-600 px-2 py-0.5 rounded-full">Ditolak</span>
-                                @endif
-                            </div>
-                            <p class="mt-1 text-xs text-gray-400">{{ $project->jurusan ?? '-' }}</p>
-                        </div>
-                    </article>
-                @empty
-                    <div class="col-span-full text-center text-gray-400 text-sm py-8">
-                        Belum ada karya yang diupload.
+                        @else
+                            <div class="text-xs text-gray-400">Preview Karya</div>
+                        @endif
                     </div>
-                @endforelse
+                    <div class="p-4">
+                        <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+                            {{ $project->jurusan ?? 'PPLG' }}
+                        </span>
+                        <h3 class="font-semibold text-sm mt-2 truncate text-gray-900">{{ $project->title }}</h3>
+                    </div>
+                </div>
+
+                {{-- Bagian Interaksi Ala Instagram (Like, Komentar, Share) --}}
+                <div class="px-4 py-3 border-t border-gray-100 flex items-center justify-between text-sm">
+                    <div class="flex items-center gap-4">
+                        {{-- Tombol Like --}}
+                        <button type="button" onclick="toggleLike({{ $project->id }})" class="flex items-center gap-1.5 text-gray-600 hover:text-red-500 transition group cursor-pointer">
+                            <svg id="like-icon-{{ $project->id }}" class="w-5 h-5 transition transform group-active:scale-125 {{ $project->likes->isNotEmpty() ? 'text-red-500' : '' }}" fill="{{ $project->likes->isNotEmpty() ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                            <span id="like-count-{{ $project->id }}" class="font-semibold text-xs">{{ $project->likes_count ?? 0 }}</span>
+                        </button>
+
+                        {{-- Tombol Komentar --}}
+                        <a href="{{ route('project.detail', $project->id) }}" class="flex items-center gap-1.5 text-gray-600 hover:text-blue-500 transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            <span class="font-semibold text-xs">{{ $project->comments_count ?? 0 }}</span>
+                        </a>
+                    </div>
+
+                    {{-- Tombol Bagikan / Share Link --}}
+                    <button type="button" onclick="shareProject('{{ route('project.detail', $project->id) }}')" class="text-gray-600 hover:text-green-500 transition cursor-pointer">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
+                        </svg>
+                    </button>
+                </div>
             </div>
-        </div>
-    </section>
+        @endforeach
+    </div>
+@else
+    <div class="text-center py-16 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
+        <p class="text-gray-500 text-sm">Belum ada karya yang di-upload.</p>
+    </div>
+@endif
+            </div>
+        </section>
+    </div>
 </div>
 
 {{-- Modal Lightbox Foto Profil --}}
@@ -110,75 +148,15 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
         </svg>
     </button>
-    <img id="modalImage" src="" alt="Foto Profil"
-         class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain">
-</div>
-
-{{-- Modal Detail Karya --}}
-<div id="profilDetailModal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div class="sticky top-0 px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-white rounded-t-xl">
-            <h3 id="profilModalTitle" class="text-xl font-bold text-gray-900"></h3>
-            <button onclick="closeProfilModal()" class="text-gray-400 hover:text-gray-600 transition">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                </svg>
-            </button>
-        </div>
-
-        <div class="p-6 space-y-5">
-            {{-- Preview --}}
-            <div>
-                <img id="profilModalImage" class="hidden w-full rounded-lg object-contain max-h-72" />
-                <iframe id="profilModalIframe" class="hidden w-full h-64 rounded-lg border" allowfullscreen></iframe>
-                <div id="profilModalEmpty" class="hidden w-full h-64 flex items-center justify-center rounded-lg bg-gray-100 text-gray-500 border border-dashed">
-                    Tidak ada preview
-                </div>
-            </div>
-
-            {{-- Status & Jurusan --}}
-            <div class="flex gap-2 flex-wrap">
-                <span id="profilModalStatus" class="px-3 py-1 rounded-full text-sm font-semibold"></span>
-                <span id="profilModalJurusan" class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold"></span>
-            </div>
-
-            {{-- Deskripsi --}}
-            <div>
-                <h4 class="font-semibold text-gray-900 mb-1">Deskripsi</h4>
-                <p id="profilModalDesc" class="text-gray-700 text-sm leading-relaxed"></p>
-            </div>
-
-            {{-- Info tambahan --}}
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-gray-50 p-3 rounded-lg">
-                    <p class="text-xs text-gray-500 mb-1">Tahun</p>
-                    <p id="profilModalTahun" class="font-semibold text-gray-900"></p>
-                </div>
-                <div class="bg-gray-50 p-3 rounded-lg">
-                    <p class="text-xs text-gray-500 mb-1">Teknologi</p>
-                    <p id="profilModalTech" class="font-semibold text-gray-900 text-sm"></p>
-                </div>
-            </div>
-
-            {{-- Tombol Live --}}
-            <div id="profilLiveWrapper" class="pt-2 hidden">
-                <a id="profilLiveBtn" href="#" target="_blank"
-                   class="inline-block px-5 py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-sm">
-                    Buka Live Demo
-                </a>
-            </div>
-        </div>
-    </div>
+    <img id="modalImage" src="" alt="Foto Profil" class="max-w-full max-h-[85vh] rounded-lg shadow-2xl object-contain">
 </div>
 @endsection
 
 @push('scripts')
 <script>
-    // ================= LIGHTBOX FOTO PROFIL =================
     function openModal(imageSrc) {
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImage');
-
         modalImg.src = imageSrc;
         modal.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
@@ -186,89 +164,53 @@
 
     function closeModal() {
         const modal = document.getElementById('imageModal');
-
         modal.classList.add('hidden');
         document.body.style.overflow = 'auto';
     }
 
-    // ================= MODAL DETAIL KARYA =================
-    function openProfilModal(card) {
-        const title = card.dataset.title;
-        const desc = card.dataset.desc;
-        const jurusan = card.dataset.jurusan;
-        const status = card.dataset.status;
-        const tech = card.dataset.tech;
-        const live = card.dataset.live;
-        const filePath = card.dataset.filePath;
-        const fileType = card.dataset.fileType || '';
-        const tahun = card.dataset.tahun;
-
-        // Isi data dasar
-        document.getElementById('profilModalTitle').textContent = title;
-        document.getElementById('profilModalDesc').textContent = desc || '-';
-        document.getElementById('profilModalJurusan').textContent = jurusan;
-        document.getElementById('profilModalTahun').textContent = tahun;
-        document.getElementById('profilModalTech').textContent = tech;
-
-        // Status badge
-        const statusEl = document.getElementById('profilModalStatus');
-        if (status === 'approved') {
-            statusEl.textContent = 'Disetujui';
-            statusEl.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-700';
-        } else if (status === 'pending') {
-            statusEl.textContent = 'Menunggu';
-            statusEl.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-amber-100 text-amber-700';
-        } else {
-            statusEl.textContent = 'Ditolak';
-            statusEl.className = 'px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-700';
-        }
-
-        // Preview
-        const img = document.getElementById('profilModalImage');
-        const iframe = document.getElementById('profilModalIframe');
-        const empty = document.getElementById('profilModalEmpty');
-
-        img.classList.add('hidden');
-        iframe.classList.add('hidden');
-        empty.classList.add('hidden');
-
-        if (filePath && fileType.startsWith('image/')) {
-            img.src = filePath;
-            img.classList.remove('hidden');
-        } else if (live) {
-            iframe.src = live;
-            iframe.classList.remove('hidden');
-        } else if (filePath) {
-            // Fallback: tampilkan gambar meskipun file_type tidak image
-            img.src = filePath;
-            img.classList.remove('hidden');
-        } else {
-            empty.classList.remove('hidden');
-        }
-
-        // Live button
-        const liveWrapper = document.getElementById('profilLiveWrapper');
-        const liveBtn = document.getElementById('profilLiveBtn');
-        if (live) {
-            liveBtn.href = live;
-            liveWrapper.classList.remove('hidden');
-        } else {
-            liveWrapper.classList.add('hidden');
-        }
-
-        document.getElementById('profilDetailModal').classList.remove('hidden');
+    function toggleLike(projectId) {
+        fetch(`/project/${projectId}/like`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                if (response.status === 401) {
+                    alert('Silakan login terlebih dahulu untuk menyukai karya!');
+                }
+                throw new Error('Gagal memproses like');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                const countSpan = document.getElementById(`like-count-${projectId}`);
+                const likeIcon = document.getElementById(`like-icon-${projectId}`);
+                
+                countSpan.textContent = data.likes_count;
+                
+                if (data.liked) {
+                    likeIcon.setAttribute('fill', 'currentColor');
+                    likeIcon.classList.add('text-red-500');
+                } else {
+                    likeIcon.setAttribute('fill', 'none');
+                    likeIcon.classList.remove('text-red-500');
+                }
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
 
-    function closeProfilModal() {
-        document.getElementById('profilDetailModal').classList.add('hidden');
-        document.getElementById('profilModalIframe').src = '';
+    function shareProject(url) {
+        navigator.clipboard.writeText(url).then(() => {
+            alert("Link karya berhasil disalin! Silakan bagikan ke temanmu.");
+        }).catch(err => {
+            console.error('Gagal menyalin:', err);
+        });
     }
-
-    // Tutup modal jika klik di luar konten
-    document.getElementById('profilDetailModal')?.addEventListener('click', function (e) {
-        if (e.target === this) {
-            closeProfilModal();
-        }
-    });
 </script>
 @endpush
