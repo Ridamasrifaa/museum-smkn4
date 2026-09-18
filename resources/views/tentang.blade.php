@@ -31,7 +31,25 @@
                     <a href="{{ url('/karya') }}" class="text-sm font-medium text-slate-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition">Karya</a>
                     <a href="{{ url('/artikel') }}" class="text-sm font-medium text-slate-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition">Artikel</a>
                     <a href="{{ url('/tentang') }}" class="text-sm font-semibold text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 pb-0.5">Tentang</a>
-                    <a href="{{ route('login') }}" class="text-sm font-medium text-slate-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition">Login</a>
+                    @auth
+                        @php
+                            $dashboardUrl = match((int) auth()->user()->role) {
+                                0 => '/superadmin/dashboard',
+                                1 => '/admin/dashboard',
+                                2 => '/siswa/dashboard',
+                                default => '/'
+                            };
+                        @endphp
+                        <a href="{{ $dashboardUrl }}"
+                            class="text-sm font-semibold px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                            Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}"
+                            class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
+                            Login
+                        </a>
+                    @endauth
                     <button id="themeToggle" onclick="toggleTheme()" aria-label="Ganti mode terang/gelap"
                         class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-yellow-400 hover:bg-slate-200 dark:hover:bg-gray-700 transition cursor-pointer">
                         <svg class="icon-sun w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -128,9 +146,9 @@
                     </p>
                 </div>
 
-                <!-- CARD GRID -->
+                <!-- CARD GRID (Rendered via dev.js / Static markup) -->
                 <div id="team-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
-                    <!-- team developer (render via dev.js) -->
+                    <!-- Placeholder untuk dynamic dev grid atau komponen statis -->
                 </div>
             </section>
 
@@ -147,14 +165,17 @@
     <!-- ===== AVATAR MODAL PREVIEW ===== -->
     <div id="avatarModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
         <div id="modalContent" class="relative max-w-md w-full mx-4 bg-white dark:bg-gray-900 rounded-3xl p-8 border border-slate-200 dark:border-gray-800 shadow-2xl transform scale-95 transition-all duration-300 text-center">
+            
             <button onclick="closeAvatarModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-full bg-slate-100 dark:bg-gray-800 transition cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
+
             <div class="w-64 h-64 sm:w-72 sm:h-72 mx-auto mb-4 rounded-full overflow-hidden ring-4 ring-blue-500/30 shadow-lg">
                 <img id="modalImage" src="" alt="" class="w-full h-full object-cover object-top" />
             </div>
+
             <h4 id="modalName" class="text-xl font-bold text-slate-900 dark:text-white"></h4>
             <p class="text-xs text-slate-500 dark:text-gray-400 mt-1">Foto Profil</p>
         </div>
@@ -196,6 +217,7 @@
             }
         }
 
+        // Auto load saved theme preference
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {

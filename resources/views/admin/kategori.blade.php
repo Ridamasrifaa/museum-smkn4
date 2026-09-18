@@ -14,12 +14,13 @@
     <div class="neubrutal-card overflow-hidden">
         <div class="px-4 py-3 sm:px-6 sm:py-4 border-b-3 border-black bg-gray-50 flex justify-between items-center">
             <h2 class="text-base sm:text-xl font-black text-gray-900">Kategori Artikel</h2>
-            <button type="button" onclick="openKategoriModal('tambah')" class="px-4 py-2 sm:px-6 sm:py-2.5 bg-[#ffcc00] text-black rounded-xl btn-neubrutal text-xs sm:text-sm cursor-pointer">
+            <button type="button" onclick="openKategoriModal('tambah')" class="px-4 py-2 sm:px-6 sm:py-2.5 bg-[#ffcc00] text-black rounded-xl btn-neubrutal text-xs sm:text-sm cursor-pointer whitespace-nowrap">
                 Tambah Kategori
             </button>
         </div>
 
-        <div class="w-full overflow-x-auto">
+        <!-- TAMPILAN TABEL (Khusus Desktop / Layar Besar) -->
+        <div class="hidden lg:block w-full overflow-x-auto">
             <table class="w-full border-collapse min-w-[500px] table-neubrutal">
                 <thead>
                     <tr>
@@ -37,8 +38,8 @@
                                     {{ $category->name }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-sm">
-                                <button type="button" onclick="openKategoriModal('edit', this)" data-id="{{ $category->id }}" data-name="{{ $category->name }}" class="px-3 py-1.5 bg-blue-400 text-black border-2 border-black rounded-lg font-black text-xs shadow-[2px_2px_0px_#000] btn-neubrutal cursor-pointer mr-2">
+                            <td class="px-6 py-4 text-sm space-x-2">
+                                <button type="button" onclick="openKategoriModal('edit', this)" data-id="{{ $category->id }}" data-name="{{ $category->name }}" class="px-3 py-1.5 bg-blue-400 text-black border-2 border-black rounded-lg font-black text-xs shadow-[2px_2px_0px_#000] btn-neubrutal cursor-pointer">
                                     Edit
                                 </button>
                                 <form action="{{ url('/admin/kategori/'.$category->id) }}" method="POST" class="inline">
@@ -59,6 +60,39 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- TAMPILAN CARD VERTIKAL (Khusus Mobile / HP) -->
+        <div class="lg:hidden divide-y-2 divide-gray-200">
+            @forelse($categories as $category)
+                <div class="p-4 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs font-black px-2.5 py-1 bg-gray-200 border-2 border-black rounded-md shadow-[1px_1px_0px_#000]">
+                            #{{ $loop->iteration }}
+                        </span>
+                        <span class="badge-neubrutal bg-blue-100 text-blue-800 text-xs px-3 py-1">
+                            {{ $category->name }}
+                        </span>
+                    </div>
+
+                    <div class="flex gap-2 pt-1">
+                        <button type="button" onclick="openKategoriModal('edit', this)" data-id="{{ $category->id }}" data-name="{{ $category->name }}" class="flex-1 text-center px-3 py-2 bg-blue-400 text-black border-2 border-black rounded-lg font-black text-xs shadow-[2px_2px_0px_#000] btn-neubrutal cursor-pointer">
+                            Edit
+                        </button>
+                        <form action="{{ url('/admin/kategori/'.$category->id) }}" method="POST" class="flex-1">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" onclick="return confirm('Hapus kategori ini?')" class="w-full text-center px-3 py-2 bg-red-400 text-black border-2 border-black rounded-lg font-black text-xs shadow-[2px_2px_0px_#000] btn-neubrutal cursor-pointer">
+                                Hapus
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            @empty
+                <div class="text-center py-12 text-gray-500 font-bold text-sm px-4">
+                    Belum ada kategori Artikel ditemukan.
+                </div>
+            @endforelse
         </div>
 
         @if(method_exists($categories, 'links'))

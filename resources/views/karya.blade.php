@@ -15,6 +15,7 @@
         .icon-sun { display: none; }
         .dark .icon-moon { display: none; }
         .dark .icon-sun { display: block; }
+        .card-filtered-out { display: none !important; }
     </style>
 </head>
 <body class="scroll-smooth bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
@@ -35,8 +36,27 @@
                     class="text-sm font-semibold text-blue-600 border-b-2 border-blue-600 pb-1">Karya</a>
                 <a href="{{ url('/artikel') }}"
                     class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Artikel</a>
-                <a href="{{ url('/login') }}"
-                    class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Login</a>
+                <a href="{{ url('/tentang') }}"
+                    class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Tentang</a>
+                @auth
+                    @php
+                        $dashboardUrl = match((int) auth()->user()->role) {
+                            0 => '/superadmin/dashboard',
+                            1 => '/admin/dashboard',
+                            2 => '/siswa/dashboard',
+                            default => '/'
+                        };
+                    @endphp
+                    <a href="{{ $dashboardUrl }}"
+                        class="text-sm font-semibold px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        Dashboard
+                    </a>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
+                        Login
+                    </a>
+                @endauth
                 <button id="themeToggle" onclick="toggleTheme()" aria-label="Ganti mode terang/gelap"
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-yellow-300">
                     <svg class="icon-sun w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,7 +65,7 @@
                     </svg>
                     <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                     </svg>
                 </button>
             </div>
@@ -98,10 +118,6 @@
                             class="w-4 h-4 rounded-full object-cover">
                         TOI
                     </button>
-                    <button data-filter="alumni"
-                        class="filter-pill flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold border-2 transition">
-                        Alumni
-                    </button>
                 </div>
 
                 <p id="resultCounter" class="text-center text-sm text-gray-500 dark:text-gray-400"></p>
@@ -110,58 +126,77 @@
             {{-- Grid Karya --}}
             <div id="allKaryaGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 @forelse($karyas as $karya)
-                    <div class="karya-card bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md card-hover transition-colors duration-300"
+                    <div class="karya-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group"
                         data-title="{{ $karya->title }}"
                         data-desc="{{ $karya->description }}"
                         data-category="{{ $karya->jurusan ?? '-' }}"
                         data-event="Museum Karya"
                         data-siswa="{{ $karya->user->name ?? '-' }}"
+                        data-id="{{ $karya->user->id ?? '' }}"
                         data-guru="{{ $karya->guru_pengampu ?? '-' }}"
                         data-avatar="{{ $karya->user->avatar ?? '' }}"
                         data-avatar-letter="{{ strtoupper(substr($karya->user->name ?? '-', 0, 1)) }}"
                         data-kelas="{{ $karya->user->kelas ?? '-' }}"
                         data-jurusan-siswa="{{ $karya->user->jurusan ?? '-' }}"
                         data-angkatan="{{ $karya->user->angkatan ?? '-' }}"
-                        data-tahun="{{ $karya->created_at->format('Y') }}"
+                        data-tahun="{{ $karya->created_at ? $karya->created_at->format('Y') : '-' }}"
                         data-tech="{{ $karya->technology_stack ?? '-' }}"
                         data-live="{{ $karya->live_link ?? '' }}"
+                        data-github="{{ $karya->github_link ?? '' }}"
                         data-file-path="{{ $karya->file_path ? asset('storage/' . $karya->file_path) : '' }}"
                         data-file-type="{{ $karya->file_type ?? '' }}"
                         data-views="{{ $karya->views_count ?? 0 }}"
                         data-likes="{{ $karya->likes_count ?? 0 }}">
 
-                        <div class="iframe-container" onclick="openModal(this.closest('.karya-card'))">
-                            @php
-                                $isImage = $karya->file_path && str_starts_with($karya->file_type ?? '', 'image/');
-                            @endphp
-                            @if ($isImage)
+                        {{-- Preview Media --}}
+                        <div class="relative h-48 w-full overflow-hidden bg-gray-100 dark:bg-gray-700 cursor-pointer" onclick="openModal(this.closest('.karya-card'))">
+                            @if ($karya->file_path)
                                 <img src="{{ asset('storage/' . $karya->file_path) }}" alt="{{ $karya->title }}"
-                                    class="w-full h-full object-cover" />
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                             @elseif ($karya->live_link)
-                                <iframe src="{{ $karya->live_link }}" loading="lazy"></iframe>
+                                <iframe src="{{ $karya->live_link }}" loading="lazy" class="w-full h-full pointer-events-none border-0"></iframe>
                             @else
-                                <div class="flex items-center justify-center h-full bg-gray-200 dark:bg-gray-700">
+                                <div class="flex items-center justify-center h-full text-gray-400 dark:text-gray-500 text-sm">
                                     Tidak ada Preview
                                 </div>
                             @endif
-                            <div class="overlay"></div>
+                            <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </div>
 
-                        <div class="p-6">
-                            <span class="badge-custom mb-3">{{ $karya->jurusan ?? '-' }}</span>
-                            <p class="text-gray-600 dark:text-gray-300 text-sm mt-2">
-                                <strong>{{ $karya->user->name ?? '-' }}</strong>
+                        {{-- Konten Card --}}
+                        <div class="p-5 flex flex-col flex-grow">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-semibold rounded-full uppercase tracking-wider">
+                                    {{ $karya->jurusan ?? 'Umum' }}
+                                </span>
+                            </div>
+
+                            <h3 class="font-bold text-lg text-gray-900 dark:text-white mb-1 line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                                {{ $karya->title }}
+                            </h3>
+
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-1">
+                                Oleh: 
+@if($karya->user)
+    <a href="{{ route('profile.show', $karya->user->id) }}" class="font-medium text-blue-600 dark:text-blue-400 hover:underline">
+        {{ $karya->user->name }}
+    </a>
+@else
+    <span class="font-medium text-gray-700 dark:text-gray-300">Anonim</span>
+@endif
                             </p>
-                            <p class="font-semibold mb-4">{{ $karya->title }}</p>
-                            <button onclick="openModal(this.closest('.karya-card'))"
-                                class="w-full py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
-                                Lihat Detail
-                            </button>
+
+                            <div class="mt-auto">
+                                <button onclick="openModal(this.closest('.karya-card'))"
+                                    class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200">
+                                    Lihat Detail
+                                </button>
+                            </div>
                         </div>
                     </div>
                 @empty
-                    <div class="col-span-4 text-center py-20">
-                        <h2 class="text-2xl font-bold">Belum ada karya.</h2>
+                    <div class="col-span-full text-center py-20">
+                        <h2 class="text-2xl font-bold text-gray-500 dark:text-gray-400">Belum ada karya.</h2>
                     </div>
                 @endforelse
             </div>
@@ -172,6 +207,10 @@
                 <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Tidak ada karya ditemukan</h3>
                 <p class="text-gray-600 dark:text-gray-400">Coba ubah kata kunci atau filter kategori Anda</p>
             </div>
+
+            {{-- ===== PAGINATION ===== --}}
+            <div id="paginationContainer" class="mt-12 flex justify-center items-center gap-2"></div>
+
         </div>
     </section>
 
@@ -186,12 +225,12 @@
     </footer>
 
     {{-- ===== MODAL DETAIL ===== --}}
-    <div id="detailModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+    <div id="detailModal" class="fixed inset-0 bg-black/60 z-50 hidden backdrop-blur-sm">
         <div class="flex items-center justify-center min-h-screen p-4 w-full">
-            <div class="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transition-colors duration-300">
+            <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transition-colors duration-300 border border-gray-100 dark:border-gray-800">
                 <div class="sticky top-0 px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-white dark:bg-gray-900 z-10">
                     <h3 id="modalTitle" class="text-xl font-bold text-gray-900 dark:text-white"></h3>
-                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M6 18L18 6M6 6l12 12"></path>
@@ -200,31 +239,37 @@
                 </div>
 
                 <div class="p-6 space-y-6">
+                    {{-- Preview Media --}}
+                    <div id="modalMediaPreview" class="w-full h-64 sm:h-80 rounded-xl overflow-hidden bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center">
+                    </div>
+
                     {{-- Badge --}}
                     <div class="flex gap-2 flex-wrap">
-                        <span class="inline-block bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-semibold">
+                        <span class="inline-block bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300 px-3 py-1 rounded-full text-xs font-semibold">
                             Disetujui
                         </span>
                         <span id="modalCategory"
-                            class="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-semibold"></span>
+                            class="inline-block bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 px-3 py-1 rounded-full text-xs font-semibold"></span>
                         <span id="modalEvent"
-                            class="inline-block bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm font-semibold"></span>
+                            class="inline-block bg-purple-100 dark:bg-purple-900/50 text-purple-800 dark:text-purple-300 px-3 py-1 rounded-full text-xs font-semibold"></span>
                     </div>
 
                     {{-- Deskripsi --}}
                     <div>
                         <h4 class="font-semibold text-gray-900 dark:text-white mb-2">Deskripsi</h4>
-                        <p id="modalDescription" class="text-gray-700 dark:text-gray-300 leading-relaxed"></p>
+                        <p id="modalDescription" class="text-gray-700 dark:text-gray-300 leading-relaxed text-sm"></p>
                     </div>
 
-                    {{-- ===== AVATAR + BIODATA SISWA ===== --}}
-                    <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                    {{-- AVATAR + BIODATA SISWA --}}
+                    <div class="bg-gray-50 dark:bg-gray-800/60 p-4 rounded-xl border border-gray-100 dark:border-gray-700/50">
                         <div class="flex items-center gap-3">
                             <div id="modalAvatar"
                                 class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg overflow-hidden shrink-0">
                             </div>
                             <div class="min-w-0">
-                                <p id="modalSiswa" class="font-semibold text-gray-900 dark:text-white truncate"></p>
+                                <div id="modalSiswaContainer">
+                                    <p id="modalSiswa" class="font-semibold text-gray-900 dark:text-white truncate"></p>
+                                </div>
                                 <p id="modalBiodata" class="text-sm text-gray-600 dark:text-gray-400"></p>
                                 <p id="modalGuru" class="text-sm text-gray-500 dark:text-gray-500 mt-0.5"></p>
                             </div>
@@ -233,28 +278,24 @@
 
                     {{-- Info tambahan --}}
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                            <p class="text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Kategori</p>
-                            <p id="modalKategoriDetail" class="font-semibold text-gray-900 dark:text-white"></p>
+                        <div class="bg-gray-50 dark:bg-gray-800/60 p-4 rounded-xl border border-gray-100 dark:border-gray-700/50">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-1">Kategori</p>
+                            <p id="modalKategoriDetail" class="font-semibold text-gray-900 dark:text-white text-sm"></p>
                         </div>
-                        <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                            <p class="text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Tahun</p>
-                            <p id="modalTahun" class="font-semibold text-gray-900 dark:text-white"></p>
+                        <div class="bg-gray-50 dark:bg-gray-800/60 p-4 rounded-xl border border-gray-100 dark:border-gray-700/50">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-1">Tahun</p>
+                            <p id="modalTahun" class="font-semibold text-gray-900 dark:text-white text-sm"></p>
                         </div>
                     </div>
 
-                    {{-- Teknologi (opsional) --}}
-                    <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                        <p class="text-sm text-gray-600 dark:text-gray-400 font-medium mb-1">Teknologi</p>
-                        <p id="modalTech" class="font-semibold text-gray-900 dark:text-white"></p>
+                    {{-- Teknologi --}}
+                    <div class="bg-gray-50 dark:bg-gray-800/60 p-4 rounded-xl border border-gray-100 dark:border-gray-700/50">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-1">Teknologi</p>
+                        <p id="modalTech" class="font-semibold text-gray-900 dark:text-white text-sm"></p>
                     </div>
 
-                    {{-- Tombol Live --}}
-                    <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
-                        <a id="liveBtn" href="#" target="_blank"
-                            class="block w-full px-4 py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-center">
-                            Buka Live
-                        </a>
+                    {{-- Container Tombol Dinamis --}}
+                    <div id="actionButtonsContainer" class="pt-4 border-t border-gray-200 dark:border-gray-700 flex flex-wrap gap-3">
                     </div>
                 </div>
             </div>
@@ -285,7 +326,6 @@
             if (!card) return;
             const d = card.dataset;
 
-            // Data dasar
             if (document.getElementById("modalTitle")) document.getElementById("modalTitle").textContent = d.title || "";
             if (document.getElementById("modalCategory")) document.getElementById("modalCategory").textContent = d.category || "";
             if (document.getElementById("modalEvent")) document.getElementById("modalEvent").textContent = d.event || "";
@@ -293,9 +333,54 @@
             if (document.getElementById("modalKategoriDetail")) document.getElementById("modalKategoriDetail").textContent = d.category || "";
             if (document.getElementById("modalTahun")) document.getElementById("modalTahun").textContent = d.tahun || "";
             if (document.getElementById("modalTech")) document.getElementById("modalTech").textContent = d.tech || "";
-            if (document.getElementById("liveBtn")) document.getElementById("liveBtn").href = d.live || "#";
+            
+            // ===== Render Tombol Aksi =====
+            const actionContainer = document.getElementById("actionButtonsContainer");
+            if (actionContainer) {
+                actionContainer.innerHTML = "";
+                let hasButton = false;
 
-            // ===== Avatar (foto atau inisial) =====
+                if (d.github) {
+                    hasButton = true;
+                    actionContainer.innerHTML += `
+                        <a href="${d.github}" target="_blank" class="flex-1 min-w-[140px] px-4 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-xl font-semibold transition text-center text-sm shadow-md flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                            Repository GitHub
+                        </a>`;
+                }
+
+                if (d.live) {
+                    hasButton = true;
+                    actionContainer.innerHTML += `
+                        <a href="${d.live}" target="_blank" class="flex-1 min-w-[140px] px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition text-center text-sm shadow-md">
+                            Buka Live
+                        </a>`;
+                }
+
+                if (!d.github && !d.live && d.filePath) {
+                    hasButton = true;
+                    actionContainer.innerHTML += `
+                        <a href="${d.filePath}" target="_blank" class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition text-center text-sm shadow-md">
+                            Lihat Berkas / Karya Full
+                        </a>`;
+                }
+
+                actionContainer.classList.toggle("hidden", !hasButton);
+            }
+
+            // ===== Render Preview Media =====
+            const mediaPreview = document.getElementById("modalMediaPreview");
+            if (mediaPreview) {
+                if (d.filePath) {
+                    mediaPreview.innerHTML = `<img src="${d.filePath}" alt="${d.title}" class="w-full h-full object-contain bg-black/10" />`;
+                } else if (d.live) {
+                    mediaPreview.innerHTML = `<iframe src="${d.live}" class="w-full h-full border-0 rounded-xl" loading="lazy"></iframe>`;
+                } else {
+                    mediaPreview.innerHTML = `<span class="text-gray-400 dark:text-gray-500 text-sm">Tidak ada preview media</span>`;
+                }
+            }
+
+            // ===== Avatar =====
             const modalAvatar = document.getElementById("modalAvatar");
             if (modalAvatar) {
                 modalAvatar.innerHTML = "";
@@ -317,12 +402,19 @@
                 }
             }
 
-            // ===== Nama siswa =====
-            if (document.getElementById("modalSiswa")) {
-                document.getElementById("modalSiswa").textContent = d.siswa || "-";
-            }
+           // Tangkap data-id
+data-id="${d.id || ''}"
 
-            // ===== Biodata (kelas • jurusan • angkatan) =====
+// Pada bagian render nama siswa di modal:
+const siswaContainer = document.getElementById("modalSiswaContainer");
+if (siswaContainer) {
+    if (d.id) {
+        siswaContainer.innerHTML = `<a href="/u/${d.id}" class="font-semibold text-blue-600 dark:text-blue-400 hover:underline truncate">${d.siswa || "-"}</a>`;
+    } else {
+        siswaContainer.innerHTML = `<p class="font-semibold text-gray-900 dark:text-white truncate">${d.siswa || "-"}</p>`;
+    }
+}
+
             const modalBiodata = document.getElementById("modalBiodata");
             if (modalBiodata) {
                 const parts = [];
@@ -332,33 +424,39 @@
                 modalBiodata.textContent = parts.length ? parts.join(" • ") : "-";
             }
 
-            // ===== Guru =====
             if (document.getElementById("modalGuru")) {
-                document.getElementById("modalGuru").textContent =
-                    d.guru && d.guru !== "-" ? "Guru: " + d.guru : "";
+                document.getElementById("modalGuru").textContent = d.guru && d.guru !== "-" ? "Guru: " + d.guru : "";
             }
 
-            // Tampilkan modal
             const modal = document.getElementById("detailModal");
             if (modal) modal.classList.remove("hidden");
         }
 
         function closeModal() {
             const modal = document.getElementById("detailModal");
-            if (modal) modal.classList.add("hidden");
+            if (modal) {
+                modal.classList.add("hidden");
+                const mediaPreview = document.getElementById("modalMediaPreview");
+                if (mediaPreview) mediaPreview.innerHTML = "";
+            }
         }
 
         document.getElementById("detailModal")?.addEventListener("click", (e) => {
             if (e.target.id === "detailModal") closeModal();
         });
 
-        // ===== Pencarian & Filter Kategori =====
+        // ===== Pencarian, Filter Kategori, & Pagination =====
         const searchInput = document.getElementById("searchInput");
         const filterPills = document.querySelectorAll(".filter-pill");
-        const allCards = document.querySelectorAll(".karya-card");
+        const allCards = Array.from(document.querySelectorAll(".karya-card"));
         const resultCounter = document.getElementById("resultCounter");
         const emptyState = document.getElementById("emptyState");
+        const paginationContainer = document.getElementById("paginationContainer");
+
         let activeCategory = "all";
+        let currentPage = 1;
+        const itemsPerPage = 16; 
+        let filteredCards = [];
 
         function normalize(text) {
             return (text || "").toLowerCase();
@@ -366,28 +464,74 @@
 
         function runFilter() {
             const query = normalize(searchInput?.value.trim() || "");
-            let visibleCount = 0;
 
-            allCards.forEach((card) => {
+            filteredCards = allCards.filter((card) => {
                 const d = card.dataset;
                 const haystack = normalize(`${d.title} ${d.siswa} ${d.tech} ${d.category} ${d.desc}`);
                 const matchesQuery = query === "" || haystack.includes(query);
                 const matchesCategory = activeCategory === "all" || normalize(d.category) === normalize(activeCategory);
-                const isMatch = matchesQuery && matchesCategory;
-
-                card.classList.toggle("card-filtered-out", !isMatch);
-                if (isMatch) visibleCount++;
+                return matchesQuery && matchesCategory;
             });
 
+            currentPage = 1;
+            renderPage();
+        }
+
+        function renderPage() {
+            const totalItems = filteredCards.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+
+            allCards.forEach(card => card.classList.add("card-filtered-out"));
+
+            const currentSlice = filteredCards.slice(startIndex, endIndex);
+            currentSlice.forEach(card => card.classList.remove("card-filtered-out"));
+
             if (resultCounter) {
-                resultCounter.textContent = visibleCount === allCards.length
-                    ? `Menampilkan semua ${allCards.length} karya`
-                    : `Menampilkan ${visibleCount} dari ${allCards.length} karya`;
+                resultCounter.textContent = totalItems === allCards.length
+                    ? `Menampilkan ${currentSlice.length} dari ${totalItems} karya`
+                    : `Ditemukan ${totalItems} karya (${currentSlice.length} ditampilkan)`;
             }
 
             if (emptyState) {
-                emptyState.classList.toggle("hidden", visibleCount > 0);
+                emptyState.classList.toggle("hidden", totalItems > 0);
             }
+
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            if (!paginationContainer) return;
+            paginationContainer.innerHTML = "";
+
+            if (totalPages <= 1) return;
+
+            const prevBtn = document.createElement("button");
+            prevBtn.textContent = "«";
+            prevBtn.className = `px-3.5 py-2 rounded-lg text-sm font-semibold border transition ${currentPage === 1 ? 'opacity-40 cursor-not-allowed border-gray-300' : 'hover:bg-blue-600 hover:text-white border-gray-300 dark:border-gray-700'}`;
+            prevBtn.disabled = currentPage === 1;
+            prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderPage(); window.scrollTo({top: 400, behavior: 'smooth'}); } };
+            paginationContainer.appendChild(prevBtn);
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement("button");
+                pageBtn.textContent = i;
+                const isActive = i === currentPage;
+                pageBtn.className = `px-3.5 py-2 rounded-lg text-sm font-semibold border transition ${isActive ? 'bg-blue-600 text-white border-blue-600' : 'hover:bg-blue-50 dark:hover:bg-gray-800 border-gray-300 dark:border-gray-700'}`;
+                pageBtn.onclick = () => { currentPage = i; renderPage(); window.scrollTo({top: 400, behavior: 'smooth'}); };
+                paginationContainer.appendChild(pageBtn);
+            }
+
+            const nextBtn = document.createElement("button");
+            nextBtn.textContent = "»";
+            nextBtn.className = `px-3.5 py-2 rounded-lg text-sm font-semibold border transition ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed border-gray-300' : 'hover:bg-blue-600 hover:text-white border-gray-300 dark:border-gray-700'}`;
+            nextBtn.disabled = currentPage === totalPages;
+            nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; renderPage(); window.scrollTo({top: 400, behavior: 'smooth'}); } };
+            paginationContainer.appendChild(nextBtn);
         }
 
         if (searchInput) searchInput.addEventListener("input", runFilter);
@@ -401,7 +545,6 @@
             });
         });
 
-        // Jalankan sekali di awal
         runFilter();
     </script>
 </body>

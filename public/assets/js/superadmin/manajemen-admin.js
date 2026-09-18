@@ -1,114 +1,154 @@
-let editingId = null;
-let deleteIdHolder = null;
+let selectedAdminId = null;
 
-// Efek loading page
-window.addEventListener("load", function () {
-    const loadingContent = document.getElementById("loading-content");
-    if (loadingContent) {
-        setTimeout(() => {
-            loadingContent.classList.add("opacity-0");
-            setTimeout(() => {
-                loadingContent.classList.add("hidden");
-            }, 300);
-        }, 1000);
-    }
-});
+// Mengatur visibilitas field jurusan berdasarkan role
+function toggleJurusanField() {
+    const roleSelect = document.getElementById('role');
+    const jurusanGroup = document.getElementById('jurusanGroup');
+    const jurusanInput = document.getElementById('jurusan');
 
-// Event delegation
-document.addEventListener("click", function (e) {
-    const btn = e.target.closest("[data-action]");
-    if (!btn) return;
+    if (!roleSelect || !jurusanGroup || !jurusanInput) return;
 
-    const id = btn.dataset.id;
-    const username = btn.dataset.username;
-
-    if (btn.dataset.action === "edit") {
-        editAdmin(id, username, btn.dataset.email, btn.dataset.role);
-    }
-
-    if (btn.dataset.action === "delete") {
-        openDeleteModal(id, username);
-    }
-});
-
-function openCreateModal() {
-    editingId = null;
-    deleteIdHolder = null;
-    
-    document.getElementById("modalTitle").textContent = "Tambah Admin Baru";
-    document.getElementById("passwordHelp").classList.add("hidden");
-    document.getElementById("password").required = true;
-    
-    document.getElementById("adminForm").reset();
-    document.getElementById("adminId").value = "";
-    document.getElementById("formMethod").value = "POST";
-    document.getElementById("adminForm").action = "/superadmin/manajemen-admin";
-    document.getElementById("role").value = "1"; // default Admin Biasa
-    
-    document.getElementById("adminModal").classList.remove("hidden");
-}
-
-function editAdmin(id, username, email, role) {
-    editingId = id;
-    
-    document.getElementById("modalTitle").textContent = "Edit Admin";
-    document.getElementById("passwordHelp").classList.remove("hidden");
-    document.getElementById("password").required = false;
-    
-    document.getElementById("username").value = username;
-    document.getElementById("email").value = email;
-    document.getElementById("role").value = role;
-    document.getElementById("adminId").value = id;
-    document.getElementById("formMethod").value = "PUT";
-    document.getElementById("adminForm").action = "/superadmin/manajemen-admin/" + id;
-    
-    document.getElementById("adminModal").classList.remove("hidden");
-}
-
-function closeModal() {
-    document.getElementById("adminModal").classList.add("hidden");
-    editingId = null;
-}
-
-function openDeleteModal(id, username) {
-    deleteIdHolder = id;
-    
-    const usernameElement = document.getElementById("deleteAdminUsername");
-    if (usernameElement) {
-        usernameElement.textContent = `@${username}`;
-    }
-    
-    const deleteModal = document.getElementById("deleteModal");
-    if (deleteModal) {
-        deleteModal.classList.remove("hidden");
+    if (roleSelect.value === '1') {
+        jurusanGroup.style.display = 'block';
+        jurusanInput.setAttribute('required', 'required');
     } else {
-        // Fallback jika tidak ada modal delete
-        if (confirm(`Yakin ingin menghapus admin @${username}?`)) {
-            const form = document.getElementById("deleteForm-" + id);
-            if (form) form.submit();
-        }
+        jurusanGroup.style.display = 'none';
+        jurusanInput.removeAttribute('required');
+        jurusanInput.value = '';
     }
 }
 
-function closeDeleteModal() {
-    deleteIdHolder = null;
-    const deleteModal = document.getElementById("deleteModal");
-    if (deleteModal) {
-        deleteModal.classList.add("hidden");
-    }
-}
+// Membuka modal untuk Tambah Admin
+function openCreateModal() {
+    const form = document.getElementById('adminForm');
+    const modalTitle = document.getElementById('modalTitle');
+    const formMethod = document.getElementById('formMethod');
+    const adminId = document.getElementById('adminId');
+    const passwordGroup = document.getElementById('passwordGroup');
+    const passwordInput = document.getElementById('password');
+    const passwordHelp = document.getElementById('passwordHelp');
+    const adminModal = document.getElementById('adminModal');
 
-function confirmDelete() {
-    if (!deleteIdHolder) return;
-    
-    const form = document.getElementById("deleteForm-" + deleteIdHolder);
     if (form) {
-        form.submit();
+        form.reset();
+        form.action = '/superadmin/manajemen-admin';
+    }
+    if (modalTitle) modalTitle.innerText = 'Tambah Admin Baru';
+    if (formMethod) formMethod.value = 'POST';
+    if (adminId) adminId.value = '';
+    if (passwordGroup) passwordGroup.style.display = 'block';
+    if (passwordInput) passwordInput.setAttribute('required', 'required');
+    if (passwordHelp) passwordHelp.classList.add('hidden');
+    
+    toggleJurusanField();
+    if (adminModal) adminModal.classList.remove('hidden');
+}
+
+// Membuka modal untuk Edit Admin
+function openEditModal(data) {
+    const form = document.getElementById('adminForm');
+    const modalTitle = document.getElementById('modalTitle');
+    const formMethod = document.getElementById('formMethod');
+    const adminId = document.getElementById('adminId');
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const roleSelect = document.getElementById('role');
+    const jurusanInput = document.getElementById('jurusan');
+    const passwordGroup = document.getElementById('passwordGroup');
+    const passwordInput = document.getElementById('password');
+    const passwordHelp = document.getElementById('passwordHelp');
+    const adminModal = document.getElementById('adminModal');
+
+    if (form) {
+        form.action = `/superadmin/manajemen-admin/${data.id}`;
+    }
+    if (modalTitle) modalTitle.innerText = 'Edit Akun Admin';
+    if (formMethod) formMethod.value = 'PUT';
+    if (adminId) adminId.value = data.id;
+    if (usernameInput) usernameInput.value = data.username;
+    if (emailInput) emailInput.value = data.email;
+    if (roleSelect) roleSelect.value = data.role;
+    
+    toggleJurusanField();
+    
+    if (jurusanInput && data.role == '1') {
+        jurusanInput.value = data.jurusan || '';
+    }
+
+    if (passwordGroup) passwordGroup.style.display = 'block';
+    if (passwordInput) passwordInput.removeAttribute('required');
+    if (passwordHelp) passwordHelp.classList.remove('hidden');
+    if (adminModal) adminModal.classList.remove('hidden');
+}
+
+// Menutup modal form admin
+function closeModal() {
+    const adminModal = document.getElementById('adminModal');
+    if (adminModal) adminModal.classList.add('hidden');
+}
+
+// Memunculkan modal konfirmasi hapus
+function confirmDelete(id, name) {
+    selectedAdminId = id;
+    const deleteAdminName = document.getElementById('deleteAdminName');
+    const deleteModal = document.getElementById('deleteModal');
+
+    if (deleteAdminName) {
+        deleteAdminName.innerText = `Admin "${name}" akan dihapus permanen.`;
+    }
+    if (deleteModal) {
+        deleteModal.classList.remove('hidden');
     }
 }
 
-function handleLogout() {
-    if (confirm("Anda yakin ingin logout?")) {
-        document.getElementById("logout-form").submit();
-    }
+// Menutup modal konfirmasi hapus
+function closeDeleteModal() {
+    selectedAdminId = null;
+    const deleteModal = document.getElementById('deleteModal');
+    if (deleteModal) deleteModal.classList.add('hidden');
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Sembunyikan loading screen setelah halaman siap
+    const loadingContent = document.getElementById('loading-content');
+    if (loadingContent) {
+        loadingContent.style.opacity = '0';
+        setTimeout(() => loadingContent.style.display = 'none', 300);
+    }
+
+    toggleJurusanField();
+
+    // Event listener untuk tombol edit dinamis berdasarkan atribut data-action="edit"
+    document.addEventListener('click', function(e) {
+        const editBtn = e.target.closest('[data-action="edit"]');
+        if (editBtn) {
+            const data = {
+                id: editBtn.getAttribute('data-id'),
+                username: editBtn.getAttribute('data-username'),
+                email: editBtn.getAttribute('data-email'),
+                role: editBtn.getAttribute('data-role'),
+                jurusan: editBtn.getAttribute('data-jurusan')
+            };
+            openEditModal(data);
+        }
+    });
+
+    // Eksekusi hapus saat tombol konfirmasi pada modal hapus diklik
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function() {
+            if (selectedAdminId) {
+                const deleteForm = document.getElementById(`delete-form-${selectedAdminId}`);
+                if (deleteForm) deleteForm.submit();
+            }
+        });
+    }
+
+    // Auto-hide alert sukses/error setelah 4 detik
+    setTimeout(function() {
+        const successAlert = document.getElementById('successAlert');
+        const errorAlert = document.getElementById('errorAlert');
+        if (successAlert) successAlert.style.display = 'none';
+        if (errorAlert) errorAlert.style.display = 'none';
+    }, 4000);
+});

@@ -111,36 +111,6 @@
                     </button>
                 </div>
 
-<<<<<<< Updated upstream
-<header class="navbar shadow-sm sticky top-0 z-50 bg-white dark:bg-gray-900 transition-colors duration-300">
-        <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
-            <div class="flex lg:flex-1 items-center gap-2">
-                <div
-                    class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                    🏛️</div>
-                <span class="text-2xl font-bold text-blue-600">Museum Karya</span>
-            </div>
-            <div class="flex flex-wrap items-center justify-center gap-3 lg:gap-x-8 lg:justify-end lg:items-center">
-                <a href="{{ url('/') }}"
-                    class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Beranda</a>
-                <a href="{{ url('/karya') }}"
-                    class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Karya</a>
-                <a href="{{ url('/artikel')}}" class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Artikel</a>
-                <a href="{{ url('/login') }}"
-                    class="text-sm font-semibold text-blue-600 border-b-2 border-blue-600 pb-1">Login</a>
-                <button id="themeToggle" onclick="toggleTheme()" aria-label="Ganti mode terang/gelap"
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-yellow-300">
-                    <svg class="icon-sun w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                    </svg>
-                    <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                    </svg>
-                </button>
-=======
->>>>>>> Stashed changes
             </div>
         </nav>
     </header>

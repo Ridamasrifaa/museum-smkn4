@@ -47,9 +47,7 @@
           box-shadow: 2px 2px 0px #000000;
         }
 
-        /* ============ DESAIN SISTEM NEUBRUTALISM (dipakai di semua halaman admin) ============ */
-
-        /* Kartu dasar bergaya neubrutalism, statis (tanpa animasi fade-in) */
+        /* ============ DESAIN SISTEM NEUBRUTALISM ============ */
         .neubrutal-card {
             background: #ffffff;
             border: 3px solid #000000;
@@ -57,7 +55,6 @@
             box-shadow: 4px 4px 0px #000000;
         }
 
-        /* Kartu yang fade-in saat halaman selesai loading (dipakai dashboard) */
         .counter-card,
         .stats-section-card {
             opacity: 0;
@@ -103,7 +100,6 @@
             box-shadow: 1px 1px 0px #000000;
         }
 
-        /* Input field bergaya neubrutalism, dipakai di semua form pencarian/modal */
         .input-neubrutal {
             border: 2px solid #000000;
             box-shadow: 2px 2px 0px #000000;
@@ -115,7 +111,6 @@
             background-color: #fffdf9;
         }
 
-        /* Badge/status pill bergaya neubrutalism */
         .badge-neubrutal {
             display: inline-block;
             border: 2px solid #000000;
@@ -126,7 +121,6 @@
             padding: 0.25rem 0.75rem;
         }
 
-        /* Tabel bergaya neubrutalism */
         .table-neubrutal thead {
             background-color: #f3f4f6;
             border-bottom: 3px solid #000000;
@@ -138,7 +132,6 @@
             background-color: #fffbea;
         }
 
-        /* Modal bergaya neubrutalism (overlay + kartu) */
         .modal-overlay {
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(2px);
@@ -182,49 +175,7 @@
                     <div class="w-10 h-10 bg-[#ffcc00] border-2 border-black rounded-full flex items-center justify-center font-black text-black shadow-[2px_2px_0px_#000]">M</div>
                     <p class="font-extrabold text-gray-900 text-sm">Museum Karya SMKN 4</p>
                 </div>
-<<<<<<< Updated upstream
-                <nav class="mt-6 space-y-2 px-4">
-                <a href="{{ url('/admin/dashboard') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/dashboard*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Dashboard</span>
-                </a>
-
-                <a href="{{ url('/admin/karya') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/karya*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Karya</span>
-                </a>
-
-                <a href="{{ url('/admin/siswa') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/siswa*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Siswa</span>
-                </a>
-
-                <a href="{{ url('/admin/kategori') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/kategori*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Kategori</span>
-                </a>
-                <a href="{{ url('/admin/manajemen-admin') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/manajemen-admin*') ?'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Users</span>
-                </a>
-
-                <a href="{{ url('/admin/artikel') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/artikel*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Artikel</span>
-                </a>
-
-                <a href="{{ route('admin.kode-undangan.index') }}" 
-                class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('admin.kode-undangan.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                    <span>Kode Unik</span>
-                </a>
-                @if(auth()->check() && auth()->user()->role === 0)
-                    <a href="{{ url('/superadmin/dashboard') }}" 
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('superadmin.dashboard*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                        <span>kembali ke super admin</span>
-                    </a>
-                @endif
-            </nav>
-=======
+                
                 <nav class="mt-6 space-y-2 px-4 overflow-y-auto max-h-[calc(100vh-200px)]">
                     <a href="{{ url('/admin/dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl {{ Request::is('admin/dashboard*') ? 'nav-link-active' : 'nav-link-idle' }}">
                         <span>Dashboard</span>
@@ -260,8 +211,17 @@
                             <span>Kembali ke Super Admin</span>
                         </a>
                     @endif
+                    <div class="pt-4 mt-4 border-t border-gray-800">
+                        <a href="{{ url('/karya') }}"
+                            class="w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 hover:bg-blue-600/20 text-blue-400 hover:text-blue-300 text-left font-medium">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
+                            </svg>
+                            <span>Lihat Karya Siswa lain</span>
+                        </a>
+                    </div>
                 </nav>
->>>>>>> Stashed changes
             </div>
 
             <div class="p-6 sidebar-logout bg-[#fffdf9]">
@@ -285,15 +245,11 @@
                     </div>
                     <div class="flex items-center gap-4">
                         @yield('header_action')
+
                         <div class="text-right">
-<<<<<<< Updated upstream
-                            <p class="font-semibold text-gray-900">{{ Auth::user()->name ?? 'Admin' }}</p>
-                            <p class="text-sm text-gray-500">Login sebagai admin</p>
-                        </div>
-=======
-                            <p class="font-extrabold text-gray-900 text-sm sm:text-base">{{ Auth::user()->name }}</p>
+                            <p class="font-extrabold text-gray-900 text-sm sm:text-base">{{ Auth::user()->name ?? 'Admin' }}</p>
                             <p class="text-[10px] sm:text-xs text-gray-500 font-bold">
-                                {{ Auth::user()->isSuperAdmin() ? 'Super Admin' : 'Admin ' . (Auth::user()->jurusan ?? 'Museum PPLG / TIK') }}
+                                {{ Auth::check() && Auth::user()->isSuperAdmin() ? 'Super Admin' : 'Admin ' . (Auth::user()->jurusan ?? 'Jurusan') }}
                             </p>
                         </div>
                     </div>
@@ -342,7 +298,6 @@
                         <button type="button" onclick="openLogoutModal()" class="w-full px-4 py-2 bg-red-500 text-white rounded-xl btn-neubrutal cursor-pointer text-sm">
                             Logout
                         </button>
->>>>>>> Stashed changes
                     </div>
                 </div>
             </header>

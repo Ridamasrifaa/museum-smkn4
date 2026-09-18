@@ -3,8 +3,11 @@
 @section('title', 'Kirim Project')
 
 @section('content')
-<!-- Data penanda session success untuk ditangkap file JS eksternal -->
-<div id="pageData" data-success="{{ session('success') ? 'true' : 'false' }}" class="hidden"></div>
+<!-- Penanda session success dan jurusan aktif jika terjadi error validasi -->
+<div id="pageData" 
+     data-success="{{ session('success') ? 'true' : 'false' }}" 
+     data-active-jurusan="{{ session('active_jurusan', old('jurusan')) }}" 
+     class="hidden"></div>
 
 <div class="p-6 md:p-8 w-full flex justify-center items-start my-auto">
     <div class="max-w-2xl w-full bg-white rounded-2xl shadow-lg p-6 md:p-8 my-6">
@@ -42,22 +45,26 @@
 
                 <div class="text-center mb-4">
                     <span class="inline-block text-sm font-semibold px-4 py-1.5 rounded-full text-white {{ $jurusanBadge[$jurusan] }}">
-                        Form Kirim karya - {{ $jurusan }}
+                        Form Kirim Karya - {{ $jurusan }}
                     </span>
                 </div>
 
                 <input type="hidden" name="jurusan" value="{{ $jurusan }}" />
 
+                {{-- Judul Karya --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Judul Karya *</label>
-                    <input type="text" name="title" required value="{{ old('title') }}"
+                    <input type="text" name="title" required value="{{ old('jurusan') == $jurusan ? old('title') : '' }}"
                         placeholder="Contoh: Aplikasi Kasir Berbasis Web"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
-                    @error('title')
-                        <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
-                    @enderror
+                    @if(old('jurusan') == $jurusan)
+                        @error('title')
+                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                        @enderror
+                    @endif
                 </div>
 
+                {{-- Technology Stack / Tools --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         @switch($jurusan)
@@ -66,66 +73,111 @@
                             @case('TOI') Jenis Alat / Mesin Otomasi * @break
                         @endswitch
                     </label>
-                    <input type="text" name="technology_stack" required value="{{ old('technology_stack') }}"
+                    <input type="text" name="technology_stack" required value="{{ old('jurusan') == $jurusan ? old('technology_stack') : '' }}"
                         placeholder="@switch($jurusan)
                             @case('PPLG') Contoh: Laravel, React, Flutter @break
                             @case('DKV') Contoh: Adobe Photoshop, Figma, CorelDRAW @break
                             @case('TOI') Contoh: PLC, Arduino, Sensor IoT @break
                         @endswitch"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
-                    @error('technology_stack')
-                        <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
-                    @enderror
+                    @if(old('jurusan') == $jurusan)
+                        @error('technology_stack')
+                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                        @enderror
+                    @endif
                 </div>
 
+                {{-- Deskripsi --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Deskripsi Karya *</label>
                     <textarea name="description" required rows="4"
                         placeholder="Jelaskan fitur dan cara kerja karya yang kamu buat....."
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">{{ old('description') }}</textarea>
-                    @error('description')
-                        <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
-                    @enderror
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">{{ old('jurusan') == $jurusan ? old('description') : '' }}</textarea>
+                    @if(old('jurusan') == $jurusan)
+                        @error('description')
+                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                        @enderror
+                    @endif
                 </div>
 
+                {{-- KHUSUS PPLG WAJIB ISI LINK GITHUB --}}
+                @if($jurusan === 'PPLG')
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            Link Repository GitHub <span class="text-red-500">* (Wajib Khusus PPLG)</span>
+                        </label>
+                        <input type="url" name="github_link" required value="{{ old('jurusan') == $jurusan ? old('github_link') : '' }}"
+                            placeholder="https://github.com/username/repository-kamu"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                        @if(old('jurusan') == $jurusan)
+                            @error('github_link')
+                                <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                            @enderror
+                        @endif
+                    </div>
+                @endif
+
+                {{-- Live Demo / Link Portfolio Umum --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         @switch($jurusan)
-                            @case('PPLG') Link Repository (GitHub/GitLab) * @break
-                            @case('DKV') Link Portfolio (Behance/Dribbble/Drive) * @break
-                            @case('TOI') Link Video Demo Alat (YouTube/Drive) * @break
+                            @case('PPLG') Link Live Demo / Preview (Opsional) @break
+                            @case('DKV') Link Portfolio (Behance/Dribbble/Drive) @break
+                            @case('TOI') Link Video Demo Alat (YouTube/Drive) @break
                         @endswitch
                     </label>
-                    <input type="url" name="live_link" required value="{{ old('live_link') }}"
+                    <input type="url" name="live_link" value="{{ old('jurusan') == $jurusan ? old('live_link') : '' }}"
                         placeholder="https://"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
-                    @error('live_link')
-                        <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
-                    @enderror
+                    @if(old('jurusan') == $jurusan)
+                        @error('live_link')
+                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                        @enderror
+                    @endif
                 </div>
 
+                {{-- LINK IFRAME (OPSIONAL / WAJIB JIKA TIDAK UPLOAD FOTO) --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Link Embed / Iframe <span class="text-xs text-gray-500 font-normal">(Opsional jika mengunggah foto)</span>
+                    </label>
+                    <input type="url" name="iframe_link" value="{{ old('jurusan') == $jurusan ? old('iframe_link') : '' }}"
+                        placeholder="https://www.youtube.com/embed/xxxxx"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+                    @if(old('jurusan') == $jurusan)
+                        @error('iframe_link')
+                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                        @enderror
+                    @endif
+                </div>
+
+                {{-- FOTO KARYA --}}
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         @switch($jurusan)
-                            @case('PPLG') Screenshot Tampilan Aplikasi * @break
-                            @case('DKV') File Hasil Desain * @break
-                            @case('TOI') Foto Alat / Mesin * @break
+                            @case('PPLG') Screenshot Tampilan Aplikasi @break
+                            @case('DKV') File Hasil Desain @break
+                            @case('TOI') Foto Alat / Mesin @break
                         @endswitch
+                        <span class="text-xs text-gray-500 font-normal">(Wajib diisi jika tidak menyertakan link iframe)</span>
                     </label>
-                    <input type="file" name="file_path" accept="image/*" required
+                    <input type="file" name="file_path" accept="image/*"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
-                    @error('file_path')
-                        <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
-                    @enderror
+                    @if(old('jurusan') == $jurusan)
+                        @error('file_path')
+                            <p class="text-sm text-red-600 mt-2">{{ $message }}</p>
+                        @enderror
+                    @endif
                 </div>
 
+                {{-- Syarat & Ketentuan --}}
                 <div class="border border-gray-200 rounded-lg bg-gray-50 p-4 space-y-3">
                     <h4 class="text-sm font-bold text-gray-800">Syarat & Ketentuan Upload Karya:</h4>
                     <ul class="text-xs text-gray-600 list-disc list-inside space-y-1">
                         <li>Karya atau kode program harus asli hasil buatan sendiri/tim kelompok (bukan plagiat).</li>
                         <li>Link yang dicantumkan harus bersifat publik agar bisa diperiksa oleh Admin.</li>
                         <li>Karya yang melanggar hak cipta atau mengandung konten negatif akan langsung dihapus.</li>
-                        <li>Karya adalah buatan siswa SMK 4 aktif dan alumni.</li>
+                        <li>Karya adalah buatan siswa SMKN 4 Tasikmalaya aktif dan alumni.</li>
                         <li>Karya tidak mengandung SARA.</li>
                     </ul>
 
@@ -153,7 +205,7 @@
     </div>
 </div>
 
-{{-- ================= MODAL SUCCESS SUDAH KIRIM KARYA ================= --}}
+{{-- MODAL SUCCESS --}}
 <div id="successModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm">
     <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden transform transition-all p-6 text-center">
         <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -163,13 +215,21 @@
         </div>
 
         <h3 class="text-xl font-bold text-gray-900 mb-2">Berhasil Kirim Karya!</h3>
-        <p class="text-gray-600 text-sm leading-relaxed mb-6">
-            {{ session('success', 'Karya kamu berhasil di-upload! Mantapp siip kawann...') }}
+        <p class="text-gray-600 text-sm leading-relaxed mb-4">
+            {{ session('success') }}
         </p>
 
-        <a href="{{ url('/siswa/dashboard') }}"
+        @if(session('foto_original_size') && session('foto_compressed_size'))
+            <div class="bg-blue-50 border border-blue-200 text-blue-800 text-xs rounded-lg p-3 mb-4 space-y-1">
+                <p><strong>Info Kompresi Gambar:</strong></p>
+                <p>Ukuran Asli: {{ round(session('foto_original_size') / 1024, 2) }} KB</p>
+                <p>Setelah Dikompres: {{ round(session('foto_compressed_size') / 1024, 2) }} KB</p>
+            </div>
+        @endif
+
+        <a href="{{ url('/siswa/karya') }}"
             class="block w-full px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition">
-            Ke Dashboard Sekarang
+            Lihat Karya Saya
         </a>
     </div>
 </div>
@@ -189,23 +249,9 @@
         outline-offset: 2px;
         transform: scale(1.03);
     }
-
-    .was-validated input:invalid,
-    .was-validated textarea:invalid,
-    .was-validated select:invalid {
-        border-color: #dc2626;
-    }
-
-    .was-validated input:invalid:focus,
-    .was-validated textarea:invalid:focus,
-    .was-validated select:invalid:focus {
-        border-color: #dc2626;
-        box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.25);
-    }
 </style>
 @endpush
 
 @push('scripts')
-    {{-- Panggil file JS eksternal kamu di sini --}}
     <script src="{{ asset('assets/js/siswa/upload-project.js') }}"></script>
 @endpush

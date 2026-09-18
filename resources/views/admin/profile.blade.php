@@ -8,14 +8,14 @@
 
     {{-- ALERT SUCCESS --}}
     @if(session('success'))
-        <div class="mb-6 neubrutal-card bg-green-100 px-4 py-3 font-bold text-green-900">
+        <div class="mb-6 neubrutal-card bg-green-100 px-4 py-3 font-bold text-green-900 border-2 border-black rounded-xl shadow-[4px_4px_0px_#000]">
             {{ session('success') }}
         </div>
     @endif
 
     {{-- ALERT ERROR --}}
     @if ($errors->any())
-        <div class="mb-6 neubrutal-card bg-red-100 px-4 py-3">
+        <div class="mb-6 neubrutal-card bg-red-100 px-4 py-3 border-2 border-black rounded-xl shadow-[4px_4px_0px_#000]">
             <ul class="list-disc list-inside font-bold text-red-800 text-sm">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
@@ -24,7 +24,7 @@
         </div>
     @endif
 
-    <div class="neubrutal-card overflow-hidden">
+    <div class="neubrutal-card overflow-hidden bg-white border-3 border-black rounded-xl shadow-[6px_6px_0px_#000]">
 
         {{-- CARD HEADER INFORMASI AKUN --}}
         <div class="p-6 sm:p-8 border-b-3 border-black bg-[#fffdf9] flex items-center gap-4 sm:gap-5">
@@ -34,7 +34,7 @@
             <div>
                 <h2 class="text-lg sm:text-xl font-black text-gray-900">{{ $user->name }}</h2>
                 <p class="text-xs sm:text-sm mt-1">
-                    <span class="badge-neubrutal bg-white text-gray-900">
+                    <span class="inline-block px-2.5 py-1 bg-white border-2 border-black rounded-md text-xs font-black text-gray-900 shadow-[2px_2px_0px_#000]">
                         {{ $user->isSuperAdmin() ? 'Super Admin' : 'Admin ' . ($user->jurusan ?? 'Jurusan') }}
                     </span>
                 </p>
@@ -52,21 +52,21 @@
                 <div>
                     <label class="block text-sm font-black text-gray-900 mb-2">Nama Pengurus</label>
                     <input type="text" name="name" value="{{ old('name', $user->name) }}" required
-                        class="w-full px-4 py-2.5 rounded-xl input-neubrutal text-sm text-gray-900">
+                        class="w-full px-4 py-2.5 rounded-xl border-2 border-black font-bold text-sm text-gray-900 bg-gray-50 focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000]">
                 </div>
 
                 {{-- EMAIL --}}
                 <div>
                     <label class="block text-sm font-black text-gray-900 mb-2">Email Akun</label>
                     <input type="email" name="email" value="{{ old('email', $user->email) }}" required
-                        class="w-full px-4 py-2.5 rounded-xl input-neubrutal text-sm text-gray-900">
+                        class="w-full px-4 py-2.5 rounded-xl border-2 border-black font-bold text-sm text-gray-900 bg-gray-50 focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000]">
                 </div>
 
                 {{-- JURUSAN (READONLY / DISABLED) --}}
                 <div>
                     <label class="block text-sm font-black text-gray-900 mb-2">Jurusan Tanggung Jawab</label>
                     <input type="text" value="{{ $user->jurusan ?? 'Semua Jurusan (Super Admin)' }}" disabled
-                        class="w-full px-4 py-2.5 rounded-xl border-2 border-black bg-gray-100 text-gray-500 font-bold text-sm cursor-not-allowed">
+                        class="w-full px-4 py-2.5 rounded-xl border-2 border-black bg-gray-100 text-gray-500 font-bold text-sm cursor-not-allowed shadow-[2px_2px_0px_#000]">
                     <p class="text-xs font-bold text-gray-500 mt-1">*Jurusan hanya bisa diganti oleh Super Admin.</p>
                 </div>
 
@@ -83,21 +83,21 @@
                     <div>
                         <label class="block text-sm font-black text-gray-900 mb-2">Password Baru</label>
                         <input type="password" name="password" placeholder="Minimal 6 karakter"
-                            class="w-full px-4 py-2.5 rounded-xl input-neubrutal text-sm text-gray-900">
+                            class="w-full px-4 py-2.5 rounded-xl border-2 border-black font-bold text-sm text-gray-900 bg-gray-50 focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000]">
                     </div>
 
                     {{-- KONFIRMASI PASSWORD --}}
                     <div>
                         <label class="block text-sm font-black text-gray-900 mb-2">Konfirmasi Password Baru</label>
                         <input type="password" name="password_confirmation" placeholder="Ulangi password baru"
-                            class="w-full px-4 py-2.5 rounded-xl input-neubrutal text-sm text-gray-900">
+                            class="w-full px-4 py-2.5 rounded-xl border-2 border-black font-bold text-sm text-gray-900 bg-gray-50 focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000]">
                     </div>
                 </div>
             </div>
 
             <div class="flex justify-end pt-3 border-t-3 border-black">
                 <button type="submit"
-                    class="px-6 py-2.5 bg-[#ffcc00] text-black rounded-xl btn-neubrutal font-black text-sm cursor-pointer">
+                    class="px-6 py-2.5 bg-[#ffcc00] hover:bg-[#e6b800] text-black rounded-xl font-black text-sm border-2 border-black shadow-[3px_3px_0px_#000] cursor-pointer transition">
                     Simpan Perubahan
                 </button>
             </div>

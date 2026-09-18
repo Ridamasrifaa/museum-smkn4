@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AdminDashboardController extends Controller
 {
@@ -22,13 +23,39 @@ class AdminDashboardController extends Controller
 
     public function index()
     {
-        $totalProject = Project::count();
+        $user = Auth::user();
 
-        $pending = Project::pending()->count();
+        // Query Utama
+        $projectQuery = Project::query();
+        $siswaQuery = User::where('role', 2); // Role 2 = Siswa
 
-        $approved = Project::approved()->count();
+        // Filter Jurusan jika BUKAN Super Admin
+        if (!$user->isSuperAdmin() && $user->jurusan) {
+            $projectQuery->where('jurusan', $user->jurusan);
+            $siswaQuery->where('jurusan', $user->jurusan);
+        }
 
-        $totalSiswa = User::where('role', 2)->count();
+        // Hitung Statistik
+        $totalProject = (clone $projectQuery)->count();
+        $pending      = (clone $projectQuery)->pending()->count();
+        $approved     = (clone $projectQuery)->approved()->count();
+        $totalSiswa   = $siswaQuery->count();
+
+        // Overview 1: Karya Menunggu Moderasi (Max 5)
+        $pendingProjects = (clone $projectQuery)
+            ->with('user')
+            ->pending()
+            ->latest()
+            ->take(5)
+            ->get();
+
+        // Overview 2: Karya Terbaru yang Sudah Disetujui (Max 5)
+        $approvedProjects = (clone $projectQuery)
+            ->with('user')
+            ->approved()
+            ->latest()
+            ->take(5)
+            ->get();
 
         // Statistik & Aktivitas per 5 Jurusan (PPLG, TJKT, TOI, DKV, TSM)
         $jurusanStats = [];
@@ -51,15 +78,11 @@ class AdminDashboardController extends Controller
             'totalProject',
             'pending',
             'approved',
-<<<<<<< Updated upstream
-            'totalSiswa'
-=======
             'totalSiswa',
             'pendingProjects',
             'approvedProjects',
             'jurusanStats',
             'user'
->>>>>>> Stashed changes
         ));
     }
 }

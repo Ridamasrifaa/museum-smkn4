@@ -3,12 +3,8 @@
 @section('title', 'Kelola Artikel')
 @section('page_title', 'Kelola Artikel')
 
+{{-- Kosongkan header_action agar tidak tampil ganda di navbar atas layout admin --}}
 @section('header_action')
-    <a href="{{ route('articles.create') }}" class="px-3 py-2 sm:px-4 sm:py-2 bg-[#ffcc00] text-black rounded-xl btn-neubrutal flex items-center gap-1.5 text-xs sm:text-sm">
-        <span class="font-black text-base leading-none">+</span>
-        <span class="hidden sm:inline">Tambah Artikel</span>
-        <span class="sm:hidden">Tambah</span>
-    </a>
 @endsection
 
 @section('content')
@@ -19,6 +15,14 @@
             <div class="w-5 h-5 border-3 border-black border-t-[#ffcc00] rounded-full animate-spin"></div>
             <p class="text-gray-900 font-extrabold text-sm tracking-wide">Memuat daftar artikel...</p>
         </div>
+    </div>
+
+    <!-- TOMBOL TAMBAH (POSISI BARU DI ATAS KARTU STATISTIK) -->
+    <div class="mb-5 flex justify-end">
+        <a href="{{ route('articles.create') }}" class="px-3.5 py-2 sm:px-4 sm:py-2.5 bg-[#ffcc00] text-black rounded-xl btn-neubrutal flex items-center gap-2 text-xs sm:text-sm font-black">
+            <span class="text-base leading-none">+</span>
+            <span>Tambah Artikel</span>
+        </a>
     </div>
 
     <!-- KARTU STATISTIK RINGKAS -->
@@ -57,7 +61,7 @@
                 </select>
             </div>
 
-            <button type="button" onclick="runFilter()" class="w-full md:w-auto px-5 py-2.5 bg-[#ffcc00] text-black rounded-xl btn-neubrutal text-sm cursor-pointer">Terapkan</button>
+            <button type="button" onclick="runFilter()" class="w-full md:w-auto px-5 py-2.5 bg-[#ffcc00] text-black rounded-xl btn-neubrutal text-sm cursor-pointer font-black">Terapkan</button>
         </div>
     </div>
 

@@ -133,10 +133,66 @@
             @endforelse
         </div>
 
-        <!-- Footer Pagination -->
-        @if(method_exists($projects, 'links'))
-            <div class="px-4 py-3 sm:px-6 sm:py-4 border-t-3 border-black bg-gray-50">
-                {{ $projects->withQueryString()->links() }}
+        <!-- Footer Pagination Neobrutalism Kustom (1 Baris Rapi) -->
+        @if($projects->hasPages())
+            <div class="px-4 py-3 sm:px-6 sm:py-4 border-t-3 border-black bg-gray-50 flex flex-col items-center justify-between gap-4">
+                
+                <!-- Teks Informasi 1 Baris dengan Wrapper Flex -->
+                <div class="text-[11px] sm:text-sm font-black text-gray-900 text-center overflow-x-auto w-full py-1">
+                    @if($projects->total() > 0)
+                        <div class="inline-flex items-center gap-1 whitespace-nowrap justify-center">
+                            <span>Menampilkan karya siswa</span> 
+                            <span class="px-1.5 py-0.5 bg-[#ffcc00] border-2 border-black rounded shadow-[1px_1px_0px_#000]">{{ $projects->firstItem() }}</span>
+                            <span>-</span>
+                            <span class="px-1.5 py-0.5 bg-[#ffcc00] border-2 border-black rounded shadow-[1px_1px_0px_#000]">{{ $projects->lastItem() }}</span> 
+                            <span>dari total</span> 
+                            <span class="px-1.5 py-0.5 bg-[#74B9FF] border-2 border-black rounded shadow-[1px_1px_0px_#000]">{{ $projects->total() }}</span> 
+                            <span>karya</span>
+                        </div>
+                    @else
+                        <span>Tidak ada karya siswa yang ditampilkan.</span>
+                    @endif
+                </div>
+
+                <!-- Tombol Navigasi Pagination Neobrutalism -->
+                <div class="flex items-center gap-1.5 flex-wrap justify-center">
+                    
+                    <!-- Tombol Sebelumnya (Previous) -->
+                    @if ($projects->onFirstPage())
+                        <span class="px-3 py-1.5 text-xs font-black bg-gray-200 text-gray-400 border-2 border-black rounded-lg cursor-not-allowed opacity-60 shadow-[2px_2px_0px_#000]">
+                            &laquo; Prev
+                        </span>
+                    @else
+                        <a href="{{ $projects->previousPageUrl() }}" class="px-3 py-1.5 text-xs font-black bg-white text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] hover:bg-[#ffcc00] transition active:translate-y-[1px]">
+                            &laquo; Prev
+                        </a>
+                    @endif
+
+                    <!-- Nomor Halaman -->
+                    @foreach ($projects->getUrlRange(1, $projects->lastPage()) as $page => $url)
+                        @if ($page == $projects->currentPage())
+                            <span class="px-3 py-1.5 text-xs font-black bg-[#ffcc00] text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000]">
+                                {{ $page }}
+                            </span>
+                        @else
+                            <a href="{{ $url }}" class="px-3 py-1.5 text-xs font-black bg-white text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] hover:bg-gray-100 transition active:translate-y-[1px]">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endforeach
+
+                    <!-- Tombol Selanjutnya (Next) -->
+                    @if ($projects->hasMorePages())
+                        <a href="{{ $projects->nextPageUrl() }}" class="px-3 py-1.5 text-xs font-black bg-white text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] hover:bg-[#ffcc00] transition active:translate-y-[1px]">
+                            Next &raquo;
+                        </a>
+                    @else
+                        <span class="px-3 py-1.5 text-xs font-black bg-gray-200 text-gray-400 border-2 border-black rounded-lg cursor-not-allowed opacity-60 shadow-[2px_2px_0px_#000]">
+                            Next &raquo;
+                        </span>
+                    @endif
+
+                </div>
             </div>
         @endif
     </div>

@@ -14,6 +14,21 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
+        // Jika user sudah login, jangan tampilkan halaman login, tapi lempar ke dashboard sesuai rolenya
+        if (Auth::check()) {
+            $user = Auth::user();
+            switch ((int) $user->role) {
+                case 0:
+                    return redirect('/superadmin/dashboard');
+                case 1:
+                    return redirect('/admin/dashboard');
+                case 2:
+                    return redirect('/siswa/dashboard');
+                default:
+                    return redirect('/');
+            }
+        }
+
         return view('auth.login');
     }
 
@@ -29,11 +44,11 @@ class AuthController extends Controller
 
             switch ((int) $user->role) {
                 case 0:
-                    return redirect('/superadmin/dashboard');
+                    return redirect()->intended('/superadmin/dashboard');
                 case 1:
-                    return redirect('/admin/dashboard');
+                    return redirect()->intended('/admin/dashboard');
                 case 2:
-                    return redirect('/siswa/dashboard');
+                    return redirect()->intended('/siswa/dashboard');
                 default:
                     Auth::logout();
                     return back()->withErrors(['email' => 'Role tidak dikenali.']);
@@ -86,7 +101,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/siswa/dashboard');
+        return redirect()->intended('/siswa/dashboard');
     }
 
     /**
@@ -147,7 +162,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect('/siswa/dashboard');
+        return redirect()->intended('/siswa/dashboard');
     }
 
     public function logout(Request $request)

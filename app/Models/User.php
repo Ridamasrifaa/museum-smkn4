@@ -20,9 +20,8 @@ class User extends Authenticatable
         'avatar',
         'google_id',
         'role',
-        'kelas',
         'jurusan',
-        'angkatan',
+        'bio',
         'status',
         'invitation_code_id',
     ];
@@ -61,18 +60,43 @@ class User extends Authenticatable
 
     // ====================== HELPER METHODS ======================
 
+    /**
+     * Cek apakah Super Admin (role 0)
+     */
+    public function isSuperAdmin(): bool
+    {
+        return (int) $this->role === 0;
+    }
+
+    /**
+     * Cek apakah Admin Jurusan (role 1)
+     */
     public function isAdmin(): bool
     {
-        return $this->role === 1;
+        return (int) $this->role === 1;
     }
 
+    /**
+     * Cek apakah Siswa (role 2)
+     */
     public function isSiswa(): bool
     {
-        return $this->role === 2;
+        return (int) $this->role === 2;
     }
 
+    /**
+     * Mengambil nama label role/jurusan secara dinamis
+     */
     public function getRoleName(): string
     {
-        return $this->role === 1 ? 'Admin' : 'Siswa';
+        if ($this->isSuperAdmin()) {
+            return 'Super Admin';
+        }
+
+        if ($this->isAdmin()) {
+            return 'Admin ' . ($this->jurusan ?? 'Jurusan');
+        }
+
+        return 'Siswa';
     }
 }

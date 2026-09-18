@@ -15,7 +15,7 @@
     <div class="neubrutal-card p-4 sm:p-6 mb-4 sm:mb-6">
         <h2 class="text-base sm:text-xl font-black text-gray-900 mb-3">Cari Siswa</h2>
         <form action="{{ url('/admin/siswa') }}" method="GET" class="flex flex-col sm:flex-row gap-3">
-            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama, kelas, atau email siswa..." class="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl input-neubrutal text-xs sm:text-sm text-gray-800" />
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama, kelas, email, atau bio siswa..." class="flex-1 px-3 py-2 sm:px-4 sm:py-2.5 rounded-xl input-neubrutal text-xs sm:text-sm text-gray-800" />
             <div class="flex gap-2">
                 <button type="submit" class="flex-1 sm:flex-none px-4 py-2 sm:px-6 sm:py-2.5 bg-[#ffcc00] text-black rounded-xl btn-neubrutal text-xs sm:text-sm cursor-pointer whitespace-nowrap">
                     Cari Siswa
@@ -27,19 +27,21 @@
         </form>
     </div>
 
-    <!-- Kartu Konten Tabel -->
+    <!-- Kartu Konten Tabel / List -->
     <div class="neubrutal-card overflow-hidden mb-6">
         <div class="px-4 py-3 sm:px-6 sm:py-4 border-b-3 border-black bg-gray-50">
             <h2 class="text-base sm:text-xl font-black text-gray-900">Daftar Siswa</h2>
         </div>
-        <div class="w-full overflow-x-auto overflow-y-auto max-h-[500px]">
+
+        <!-- TAMPILAN TABEL (Khusus Desktop / lg ke atas) -->
+        <div class="hidden lg:block w-full overflow-x-auto overflow-y-auto max-h-[500px]">
             <table class="w-full border-collapse min-w-[700px] table-neubrutal">
                 <thead>
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Nama</th>
                         <th class="px-6 py-3 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Email</th>
                         <th class="px-6 py-3 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Kelas</th>
-                        <th class="px-6 py-3 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Angkatan</th>
+                        <th class="px-6 py-3 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Bio</th>
                         <th class="px-6 py-3 text-left text-xs font-black text-gray-900 uppercase tracking-wider">Aksi</th>
                     </tr>
                 </thead>
@@ -52,7 +54,7 @@
                                 {{ $siswa->invitationCode->kelas ?? $siswa->kelas ?? '-' }}
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600 font-semibold">
-                                {{ $siswa->angkatan ?? '-' }}
+                                {{ $siswa->bio ?? '-' }}
                             </td>
                             <td class="px-6 py-4 text-sm space-x-2">
                                 <button type="button"
@@ -61,6 +63,7 @@
                                         data-nama="{{ $siswa->name }}"
                                         data-kelas="{{ $siswa->invitationCode->kelas ?? $siswa->kelas }}"
                                         data-email="{{ $siswa->email }}"
+                                        data-bio="{{ $siswa->bio }}"
                                         class="px-3 py-1.5 bg-blue-400 text-black border-2 border-black rounded-lg font-black text-xs shadow-[2px_2px_0px_#000] btn-neubrutal cursor-pointer">
                                     Edit
                                 </button>
@@ -89,12 +92,119 @@
                 </tbody>
             </table>
         </div>
-        <div class="px-4 py-3 sm:px-6 sm:py-4 border-t-3 border-black bg-gray-50 flex flex-col sm:flex-row justify-between items-center gap-3 text-sm text-gray-700 font-bold">
-            <span>Total: <span class="font-black">{{ $totalSiswa }}</span> Siswa</span>
-            <div>
-                {{ $siswas->withQueryString()->links() }}
-            </div>
+
+        <!-- TAMPILAN KARTU / CARD (Khusus Mobile / di bawah lg) -->
+        <div class="lg:hidden divide-y-2 divide-gray-200">
+            @forelse($siswas as $siswa)
+                <div class="p-4 space-y-3 relative">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[10px] font-black uppercase tracking-wider text-gray-400">Nama Siswa</span>
+                            <h3 class="font-black text-gray-900 text-base leading-snug">{{ $siswa->name }}</h3>
+                        </div>
+                        <span class="badge-neubrutal bg-[#ffcc00] text-black text-[11px] px-2.5 py-1">
+                            {{ $siswa->invitationCode->kelas ?? $siswa->kelas ?? '-' }}
+                        </span>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 pt-1 text-xs">
+                        <div>
+                            <span class="block text-[10px] font-black uppercase tracking-wider text-gray-400">Email</span>
+                            <span class="font-semibold text-gray-700 break-all">{{ $siswa->email }}</span>
+                        </div>
+                        <div>
+                            <span class="block text-[10px] font-black uppercase tracking-wider text-gray-400">Bio</span>
+                            <span class="font-semibold text-gray-700">{{ $siswa->bio ?? '-' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 pt-2">
+                        <button type="button"
+                                onclick="openSiswaModal(this)"
+                                data-id="{{ $siswa->id }}"
+                                data-nama="{{ $siswa->name }}"
+                                data-kelas="{{ $siswa->invitationCode->kelas ?? $siswa->kelas }}"
+                                data-email="{{ $siswa->email }}"
+                                data-bio="{{ $siswa->bio }}"
+                                class="flex-1 text-center px-3 py-2 bg-blue-400 text-black border-2 border-black rounded-lg font-black text-xs shadow-[2px_2px_0px_#000] btn-neubrutal cursor-pointer">
+                            Edit
+                        </button>
+
+                        <button type="button"
+                                onclick="confirmDeleteSiswa(this)"
+                                data-id="{{ $siswa->id }}"
+                                data-nama="{{ $siswa->name }}"
+                                class="flex-1 text-center px-3 py-2 bg-red-400 text-black border-2 border-black rounded-lg font-black text-xs shadow-[2px_2px_0px_#000] btn-neubrutal cursor-pointer">
+                            Hapus
+                        </button>
+                    </div>
+                </div>
+            @empty
+                <div class="text-center py-12 font-bold px-4">
+                    @if(request()->filled('search'))
+                        <h2 class="text-lg text-gray-800">Data tidak ditemukan</h2>
+                        <p class="text-gray-500 text-sm font-semibold mt-1">Tidak ada siswa dengan kata kunci <strong>{{ request('search') }}</strong></p>
+                    @else
+                        <h2 class="text-lg text-gray-500">Belum ada data siswa</h2>
+                    @endif
+                </div>
+            @endforelse
         </div>
+
+        <!-- Footer Pagination -->
+        @if($siswas->hasPages())
+            <div class="px-4 py-3 sm:px-6 sm:py-4 border-t-3 border-black bg-gray-50 flex flex-col items-center justify-between gap-4">
+                <div class="text-[11px] sm:text-sm font-black text-gray-900 text-center overflow-x-auto w-full py-1">
+                    @if($siswas->total() > 0)
+                        <div class="inline-flex items-center gap-1 whitespace-nowrap justify-center">
+                            <span>Menampilkan data siswa</span> 
+                            <span class="px-1.5 py-0.5 bg-[#ffcc00] border-2 border-black rounded shadow-[1px_1px_0px_#000]">{{ $siswas->firstItem() }}</span>
+                            <span>-</span>
+                            <span class="px-1.5 py-0.5 bg-[#ffcc00] border-2 border-black rounded shadow-[1px_1px_0px_#000]">{{ $siswas->lastItem() }}</span> 
+                            <span>dari total</span> 
+                            <span class="px-1.5 py-0.5 bg-[#74B9FF] border-2 border-black rounded shadow-[1px_1px_0px_#000]">{{ $siswas->total() }}</span> 
+                            <span>siswa</span>
+                        </div>
+                    @else
+                        <span>Tidak ada data siswa yang ditampilkan.</span>
+                    @endif
+                </div>
+
+                <div class="flex items-center gap-1.5 flex-wrap justify-center">
+                    @if ($siswas->onFirstPage())
+                        <span class="px-3 py-1.5 text-xs font-black bg-gray-200 text-gray-400 border-2 border-black rounded-lg cursor-not-allowed opacity-60 shadow-[2px_2px_0px_#000]">
+                            &laquo; Prev
+                        </span>
+                    @else
+                        <a href="{{ $siswas->previousPageUrl() }}" class="px-3 py-1.5 text-xs font-black bg-white text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] hover:bg-[#ffcc00] transition active:translate-y-[1px]">
+                            &laquo; Prev
+                        </a>
+                    @endif
+
+                    @foreach ($siswas->getUrlRange(1, $siswas->lastPage()) as $page => $url)
+                        @if ($page == $siswas->currentPage())
+                            <span class="px-3 py-1.5 text-xs font-black bg-[#ffcc00] text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000]">
+                                {{ $page }}
+                            </span>
+                        @else
+                            <a href="{{ $url }}" class="px-3 py-1.5 text-xs font-black bg-white text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] hover:bg-gray-100 transition active:translate-y-[1px]">
+                                {{ $page }}
+                            </a>
+                        @endif
+                    @endforeach
+
+                    @if ($siswas->hasMorePages())
+                        <a href="{{ $siswas->nextPageUrl() }}" class="px-3 py-1.5 text-xs font-black bg-white text-black border-2 border-black rounded-lg shadow-[2px_2px_0px_#000] hover:bg-[#ffcc00] transition active:translate-y-[1px]">
+                            Next &raquo;
+                        </a>
+                    @else
+                        <span class="px-3 py-1.5 text-xs font-black bg-gray-200 text-gray-400 border-2 border-black rounded-lg cursor-not-allowed opacity-60 shadow-[2px_2px_0px_#000]">
+                            Next &raquo;
+                        </span>
+                    @endif
+                </div>
+            </div>
+        @endif
     </div>
 
     <!-- Modal Edit Siswa -->
@@ -118,6 +228,10 @@
                     <div>
                         <label class="block text-xs font-black text-gray-700 mb-1 uppercase">Email</label>
                         <input type="email" id="input-email" name="email" class="w-full px-3 py-2 rounded-lg input-neubrutal text-sm" required />
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black text-gray-700 mb-1 uppercase">Bio</label>
+                        <textarea id="input-bio" name="bio" rows="2" class="w-full px-3 py-2 rounded-lg input-neubrutal text-sm"></textarea>
                     </div>
                 </div>
 
@@ -148,7 +262,7 @@
             <form id="form-hapus-siswa" method="POST" class="pt-2 flex gap-3 justify-center">
                 @csrf
                 @method('DELETE')
-                <button type="button" onclick="closeHapusSiswaModal()" class="w-full py-2.5 bg-gray-200 text-black font-black rounded-xl btn-neubrutal text-sm cursor-pointer">
+                <button type="button" onclick="closeHapusSapusModal()" class="w-full py-2.5 bg-gray-200 text-black font-black rounded-xl btn-neubrutal text-sm cursor-pointer">
                     Batal
                 </button>
                 <button type="submit" class="w-full py-2.5 bg-red-500 text-white font-black rounded-xl btn-neubrutal text-sm cursor-pointer">

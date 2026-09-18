@@ -15,7 +15,7 @@
         </div>
 
         <!-- CARD DETAIL -->
-        <div class="neubrutal-card relative overflow-hidden">
+        <div class="neubrutal-card relative overflow-hidden bg-white border-3 border-black rounded-xl shadow-[6px_6px_0px_#000]">
 
             <!-- LOADING CONTENT -->
             <div id="loading-content" class="absolute inset-0 bg-[#fcfcfc]/90 z-40 flex flex-col items-center justify-center transition-opacity duration-300 ease-out">
@@ -50,7 +50,7 @@
                             <tr class="bg-gray-50">
                                 <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50">Jurusan</td>
                                 <td class="p-3 sm:p-4">
-                                    <span class="badge-neubrutal bg-blue-100 text-blue-800">{{ $project->jurusan }}</span>
+                                    <span class="px-2.5 py-1 bg-blue-100 border-2 border-black rounded-md text-xs font-black text-blue-800 shadow-[2px_2px_0px_#000]">{{ $project->jurusan }}</span>
                                 </td>
                             </tr>
 
@@ -59,128 +59,15 @@
                                 <td class="p-3 sm:p-4 leading-relaxed">{{ $project->description ?? 'Deskripsi project tidak tersedia.' }}</td>
                             </tr>
 
-<<<<<<< Updated upstream
-                                        <tr>
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 font-semibold text-gray-900">Deskripsi</td>
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 leading-relaxed text-gray-700">{{ $project->description }}</td>
-                                        </tr>
-
-                                        <tr class="bg-gray-50/50">
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 font-semibold text-gray-900">Link Project</td>
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4">
-                                                @if($project->live_link)
-                                                    <a href="{{ $project->live_link }}" target="_blank" class="text-blue-600 hover:text-blue-800 font-medium underline inline-flex items-center gap-1 break-all"> 
-                                                        {{ $project->live_link }} ↗
-                                                    </a>
-                                                @else
-                                                    <span class="text-gray-500">-</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 font-semibold text-gray-900">Dokumentasi project</td>
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4">
-                                                @if($project->file_path)
-                                                    <div class="relative inline-block">
-                                                        <img src="{{ asset('storage/' . $project->file_path) }}" 
-                                                             alt="Dokumentasi" 
-                                                             class="w-20 h-20 sm:w-28 sm:h-28 rounded-lg object-cover border border-gray-200 shadow-xs cursor-pointer hover:opacity-80 transition duration-200"
-                                                             onclick="openModal(this.src)">
-                                                    </div>
-
-                                                    {{-- MODAL PREVIEW GAMBAR --}}
-                                                    <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4" onclick="closeModal()">
-                                                        <div class="relative max-w-2xl max-h-[85vh] bg-white rounded-xl p-2 shadow-2xl" onclick="event.stopPropagation()">
-                                                            <button onclick="closeModal()" class="absolute -top-3 -right-3 bg-red-500 hover:bg-red-600 text-white rounded-full w-7 h-7 flex items-center justify-center text-xs font-bold shadow-lg cursor-pointer">
-                                                                ✕
-                                                            </button>
-                                                            <img id="modalImage" src="" alt="Preview" class="max-w-full max-h-[75vh] rounded-lg object-contain">
-                                                        </div>
-                                                    </div>
-                                                @else
-                                                    <span class="text-gray-500">-</span>
-                                                @endif
-                                            </td>
-                                        </tr>
-
-                                        <tr class="bg-gray-50/50">
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 font-semibold text-gray-900">Status</td>
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4">
-                                                @if($project->status=='pending')
-                                                    <span class="px-2.5 py-1 rounded-full bg-yellow-100 text-yellow-700 text-[11px] sm:text-xs font-semibold">
-                                                        Menunggu Review
-                                                    </span>
-                                                @elseif($project->status=='approved')
-                                                    <span class="px-2.5 py-1 rounded-full bg-green-100 text-green-700 text-[11px] sm:text-xs font-semibold">
-                                                        Disetujui
-                                                    </span>
-                                                @else
-                                                    <span class="px-2.5 py-1 rounded-full bg-red-100 text-red-700 text-[11px] sm:text-xs font-semibold">
-                                                        Ditolak
-                                                    </span>
-                                                @endif
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 font-semibold text-gray-900">Upload</td>
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 text-gray-700">
-                                                {{ $project->created_at->format('d F Y H:i') }}
-                                            </td>
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            {{-- FORM REVIEW (PENDING) --}}
-                            @if($project->status=='pending')
-                                <div class="border-t border-gray-200 pt-5">
-                                    <h2 class="text-base sm:text-lg font-bold text-gray-900 mb-3">Review Project</h2>
-                                    
-                                    <form action="{{ url('/admin/karya/'.$project->id.'/update-status') }}" method="POST" class="space-y-4">
-                                        @csrf
-                                        @method('PUT')
-
-                                        <div>
-                                            <label class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">Catatan Admin</label>
-                                            <textarea name="catatan" rows="3" class="w-full border border-gray-300 rounded-lg p-3 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700" placeholder="Tulis catatan atau alasan persetujuan/penolakan untuk siswa..."></textarea>
-                                        </div>
-
-                                        <div class="flex flex-wrap gap-2.5 sm:gap-3">
-                                            <button type="submit" name="status" value="approved" class="flex-1 sm:flex-none justify-center flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition shadow-xs cursor-pointer">
-                                                ✔ Approve
-                                            </button>
-                                            
-                                            <button type="submit" name="status" value="rejected" class="flex-1 sm:flex-none justify-center flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-xs sm:text-sm font-semibold transition shadow-xs cursor-pointer">
-                                                ✖ Reject
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            @endif
-
-                            {{-- HASIL REVIEW --}}
-                            @if($project->status!='pending')
-                                <div class="bg-amber-50/40 border border-amber-200 rounded-lg p-4 sm:p-5">
-                                    <h2 class="font-bold text-gray-900 text-sm sm:text-base mb-1.5">Hasil Review</h2>
-                                    
-                                    @if($project->status=='approved')
-                                        <p class="text-green-800 text-xs sm:text-sm italic font-medium leading-relaxed">
-                                            <strong>Catatan :</strong> "{{ $project->approval_note ?? 'Tidak ada catatan.' }}"
-                                        </p>
-=======
                             <tr class="bg-gray-50">
                                 <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50">Link Project</td>
                                 <td class="p-3 sm:p-4">
                                     @if(!empty($project->live_link))
-                                        <a href="{{ $project->live_link }}" target="_blank" class="bg-blue-100 px-2 py-1 rounded border-2 border-black hover:bg-blue-200 font-bold underline inline-flex items-center gap-1 break-all">
+                                        <a href="{{ $project->live_link }}" target="_blank" class="bg-blue-100 px-2.5 py-1 rounded border-2 border-black hover:bg-blue-200 font-bold underline inline-flex items-center gap-1 break-all shadow-[2px_2px_0px_#000]">
                                             {{ $project->live_link }} ↗
                                         </a>
->>>>>>> Stashed changes
                                     @else
-                                        <span>-</span>
+                                        <span class="text-gray-400">-</span>
                                     @endif
                                 </td>
                             </tr>
@@ -190,11 +77,11 @@
                                 <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50">Link GitHub</td>
                                 <td class="p-3 sm:p-4">
                                     @if(!empty($project->github_link))
-                                        <a href="{{ $project->github_link }}" target="_blank" class="bg-blue-100 px-2 py-1 rounded border-2 border-black hover:bg-blue-200 font-bold underline inline-flex items-center gap-1 break-all">
+                                        <a href="{{ $project->github_link }}" target="_blank" class="bg-blue-100 px-2.5 py-1 rounded border-2 border-black hover:bg-blue-200 font-bold underline inline-flex items-center gap-1 break-all shadow-[2px_2px_0px_#000]">
                                             {{ $project->github_link }} ↗
                                         </a>
                                     @else
-                                        <span>-</span>
+                                        <span class="text-gray-400">-</span>
                                     @endif
                                 </td>
                             </tr>
@@ -207,21 +94,21 @@
                                         <div class="relative inline-block">
                                             <img src="{{ asset('storage/' . $project->file_path) }}"
                                                  alt="Dokumentasi"
-                                                 class="w-20 h-20 sm:w-28 sm:h-28 object-cover rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] cursor-pointer hover:translate-x-1 hover:translate-y-1 transition"
+                                                 class="w-20 h-20 sm:w-28 sm:h-28 object-cover rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] cursor-pointer hover:translate-x-0.5 hover:translate-y-0.5 transition"
                                                  onclick="openModal(this.src)">
                                         </div>
 
                                         <!-- MODAL PREVIEW GAMBAR -->
-                                        <div id="imageModal" class="fixed inset-0 z-50 hidden modal-overlay flex items-center justify-center p-4" onclick="closeModal()">
-                                            <div class="relative max-w-2xl max-h-[85vh] modal-card p-3" onclick="event.stopPropagation()">
-                                                <button type="button" onclick="closeModal()" class="absolute -top-4 -right-4 bg-red-500 text-white rounded-full border-2 border-black w-8 h-8 flex items-center justify-center text-sm font-black cursor-pointer shadow-[2px_2px_0px_#000] btn-neubrutal">
+                                        <div id="imageModal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-xs flex items-center justify-center p-4" onclick="closeModal()">
+                                            <div class="relative max-w-2xl max-h-[85vh] bg-white border-3 border-black rounded-xl p-3 shadow-[6px_6px_0px_#000]" onclick="event.stopPropagation()">
+                                                <button type="button" onclick="closeModal()" class="absolute -top-3 -right-3 bg-red-500 text-white rounded-full border-2 border-black w-8 h-8 flex items-center justify-center text-sm font-black cursor-pointer shadow-[2px_2px_0px_#000]">
                                                     ✕
                                                 </button>
                                                 <img id="modalImage" src="" alt="Preview" class="max-w-full max-h-[75vh] rounded-lg border-2 border-black bg-white object-contain">
                                             </div>
                                         </div>
                                     @else
-                                        <span>-</span>
+                                        <span class="text-gray-400">-</span>
                                     @endif
                                 </td>
                             </tr>
@@ -230,11 +117,11 @@
                                 <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50">Status</td>
                                 <td class="p-3 sm:p-4">
                                     @if($project->status == 'pending')
-                                        <span class="badge-neubrutal bg-yellow-100 text-yellow-800">Menunggu Review</span>
+                                        <span class="px-2.5 py-1 rounded-md bg-yellow-100 border-2 border-black text-yellow-800 text-xs font-black shadow-[2px_2px_0px_#000]">Menunggu Review</span>
                                     @elseif($project->status == 'approved')
-                                        <span class="badge-neubrutal bg-green-100 text-green-800">Disetujui</span>
+                                        <span class="px-2.5 py-1 rounded-md bg-green-100 border-2 border-black text-green-800 text-xs font-black shadow-[2px_2px_0px_#000]">Disetujui</span>
                                     @else
-                                        <span class="badge-neubrutal bg-red-100 text-red-800">Ditolak</span>
+                                        <span class="px-2.5 py-1 rounded-md bg-red-100 border-2 border-black text-red-800 text-xs font-black shadow-[2px_2px_0px_#000]">Ditolak</span>
                                     @endif
                                 </td>
                             </tr>
@@ -260,19 +147,38 @@
                         @method('PUT')
                         <div>
                             <label class="block text-xs sm:text-sm font-black mb-2 uppercase">Catatan Admin</label>
-                            <textarea name="catatan" rows="3" class="w-full rounded-lg input-neubrutal p-3 text-xs sm:text-sm font-bold bg-gray-50 focus:bg-white focus:outline-none" placeholder="Tulis catatan persetujuan atau penolakan..."></textarea>
+                            <textarea name="catatan" rows="3" class="w-full rounded-lg border-2 border-black p-3 text-xs sm:text-sm font-bold bg-gray-50 focus:bg-white focus:outline-none shadow-[2px_2px_0px_#000]" placeholder="Tulis catatan persetujuan atau penolakan..."></textarea>
                         </div>
 
                         <div class="flex flex-wrap gap-3">
-                            <button type="submit" name="status" value="approved" class="flex-1 sm:flex-none bg-green-400 hover:bg-green-500 text-black px-5 py-2.5 rounded-xl font-black text-xs sm:text-sm btn-neubrutal cursor-pointer">
+                            <button type="submit" name="status" value="approved" class="flex-1 sm:flex-none bg-green-400 hover:bg-green-500 text-black px-5 py-2.5 rounded-xl font-black text-xs sm:text-sm border-2 border-black shadow-[3px_3px_0px_#000] cursor-pointer transition">
                                 ✔ APPROVE
                             </button>
 
-                            <button type="submit" name="status" value="rejected" class="flex-1 sm:flex-none bg-red-400 hover:bg-red-500 text-black px-5 py-2.5 rounded-xl font-black text-xs sm:text-sm btn-neubrutal cursor-pointer">
+                            <button type="submit" name="status" value="rejected" class="flex-1 sm:flex-none bg-red-400 hover:bg-red-500 text-black px-5 py-2.5 rounded-xl font-black text-xs sm:text-sm border-2 border-black shadow-[3px_3px_0px_#000] cursor-pointer transition">
                                 ✖ REJECT
                             </button>
                         </div>
                     </form>
+                </div>
+                @endif
+
+                <!-- HASIL REVIEW (JIKA SUDAH DIREVIEW) -->
+                @if($project->status != 'pending')
+                <div class="bg-amber-50 border-2 border-black rounded-lg p-4 sm:p-5 shadow-[3px_3px_0px_#000] space-y-3">
+                    <div>
+                        <h2 class="font-black text-gray-900 text-sm sm:text-base uppercase mb-1.5">Catatan Review Admin</h2>
+                        <p class="text-gray-800 text-xs sm:text-sm font-bold italic leading-relaxed">
+                            "{{ $project->approval_note ?: ($project->rejection_reason ?: 'Tidak ada catatan.') }}"
+                        </p>
+                    </div>
+
+                    <!-- Badge Reviewer di bawah catatan -->
+                    <div>
+                        <span class="inline-block text-xs font-black bg-[#ffcc00] border-2 border-black px-2.5 py-1 rounded-md shadow-[2px_2px_0px_#000]">
+                            Reviewer: {{ $project->reviewer->name ?? 'Admin' }}
+                        </span>
+                    </div>
                 </div>
                 @endif
 
