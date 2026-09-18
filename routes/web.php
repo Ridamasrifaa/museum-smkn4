@@ -67,8 +67,25 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/manajemen-admin/{user}',[AdminManagementController::class,'update']);
     Route::delete('/admin/manajemen-admin/{user}',[AdminManagementController::class,'destroy']);
 
+<<<<<<< Updated upstream
     // bagian artikel
    
+=======
+    // Manajemen Kategori
+    Route::get('/admin/kategori', [AdminCategoryController::class, 'index']);
+    Route::post('/admin/kategori/store', [AdminCategoryController::class, 'store']);
+    Route::put('/admin/kategori/{category}/update', [AdminCategoryController::class, 'update']);
+    Route::delete('/admin/kategori/{category}', [AdminCategoryController::class, 'destroy']);
+
+    // Manajemen Artikel
+    Route::resource('admin/artikel', ArticleController::class)
+        ->except(['show'])
+        ->names('articles');
+
+    // Profil Admin (Pengaturan Akun Mandiri)
+    Route::get('/admin/profile', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
+    Route::put('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+>>>>>>> Stashed changes
 });
 Route::get('/admin/artikel', [ArticleController::class,'index']);
 Route::resource('admin/articles', ArticleController::class);

@@ -1,143 +1,65 @@
-<!doctype html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
-    <title>Detail Karya Admin - Student Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link rel="stylesheet" href="{{ asset('assets/css/admin/style.css') }}">
-</head>
-<body class="bg-gray-100 font-sans antialiased">
-    <div class="flex h-screen overflow-hidden bg-gray-100">
+@extends('layouts.admin')
 
-        {{-- SIDEBAR UTAMA --}}
-        <div class="w-64 custom-nav-bg text-white shadow-lg flex flex-col justify-between shrink-0 hidden md:flex">
-            <div>
-                <div class="p-6 border-b border-gray-700">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center font-bold text-md">A</div>
-                        <div>
-                            <p class="font-bold">Museum Karya Smkn 4</p>
-                        </div>
-                    </div>
-                </div>
-                <nav class="mt-6 space-y-2 px-4">
-                    <a href="{{ url('/admin/dashboard') }}" 
-                       class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/dashboard*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                        <span>Dashboard</span>
-                    </a>
+@section('title', 'Detail Karya Admin - Museum Karya PPLG')
+@section('page_title', 'Detail Karya')
 
-                    <a href="{{ url('/admin/karya') }}" 
-                       class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/karya*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                        <span>Karya</span>
-                    </a>
+@section('content')
+    <!-- MAIN KONTEN -->
+    <div class="w-full max-w-2xl md:max-w-3xl my-auto mx-auto">
 
-                    <a href="{{ url('/admin/siswa') }}" 
-                       class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/siswa*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                        <span>Siswa</span>
-                    </a>
-
-                    <a href="{{ url('/admin/kategori') }}" 
-                       class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/kategori*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                        <span>Kategori</span>
-                    </a>
-
-                    <a href="{{ url('/admin/manajemen-admin') }}" 
-                       class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/manajemen-admin*') ? 'bg-gray-800 text-white font-semibold' : 'text-gray-300 hover:bg-gray-800' }}">
-                        <span>Users</span>
-                    </a>
-
-                    <a href="{{ url('/admin/artikel') }}" 
-                       class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ Request::is('admin/artikel*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                        <span>Artikel</span>
-                    </a>
-
-                    <a href="{{ route('admin.kode-undangan.index') }}" 
-                       class="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors duration-200 {{ request()->routeIs('admin.kode-undangan.*') ? 'bg-blue-600 text-white font-semibold shadow-sm' : 'text-gray-300 hover:bg-gray-800' }}">
-                        <span>Kode Unik</span>
-                    </a>
-                </nav>
-            </div>
-            
-            {{-- LOGOUT BUTTON --}}
-            <div class="p-6 border-t border-gray-700">
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                    @csrf
-                </form>
-                <button type="button" onclick="openLogoutModal()" class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-semibold cursor-pointer">
-                    Logout
-                </button>
-            </div>
+        <!-- TOMBOL KEMBALI -->
+        <div class="mb-4">
+            <a href="{{ url('/admin/karya') }}" class="inline-flex items-center gap-2 text-xs sm:text-sm font-black bg-white px-3 py-1.5 rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] hover:bg-[#ffcc00] transition btn-neubrutal">
+                ← Kembali ke Data Karya
+            </a>
         </div>
 
-        {{-- AREA KONTEN UTAMA --}}
-        <div class="flex-1 flex flex-col h-screen overflow-y-auto">
-            <header class="bg-white shadow-sm z-10 shrink-0 sticky top-0">
-                <div class="px-6 sm:px-8 py-4 flex justify-between items-center">
-                    <h1 class="text-lg sm:text-xl font-bold text-gray-900">Detail Karya</h1>
-                    <div class="flex items-center gap-4">
-                        <div class="text-right">
-                            <p class="font-semibold text-gray-900 text-xs sm:text-sm">{{ Auth::user()->name ?? 'Admin' }}</p>
-                            <p class="text-[10px] sm:text-xs text-gray-500">Login sebagai admin</p>
-                        </div>
-                    </div>
+        <!-- CARD DETAIL -->
+        <div class="neubrutal-card relative overflow-hidden">
+
+            <!-- LOADING CONTENT -->
+            <div id="loading-content" class="absolute inset-0 bg-[#fcfcfc]/90 z-40 flex flex-col items-center justify-center transition-opacity duration-300 ease-out">
+                <div class="flex items-center gap-3 bg-white px-6 py-3 rounded-xl border-3 border-black shadow-[4px_4px_0px_#000]">
+                    <div class="w-5 h-5 border-3 border-black border-t-[#ffcc00] rounded-full animate-spin"></div>
+                    <p class="font-black text-xs sm:text-sm uppercase tracking-wider">Memuat detail karya...</p>
                 </div>
-            </header>
+            </div>
 
-            {{-- MAIN KONTEN (RESPONSIF & PROPORSIONAL) --}}
-            <main class="flex-1 p-4 sm:p-6 md:p-8 flex flex-col justify-center items-center">
-                <div class="w-full max-w-2xl md:max-w-3xl my-auto">
-                    
-                    {{-- TOMBOL KEMBALI --}}
-                    <div class="mb-3 sm:mb-4">
-                        <a href="{{ url('/admin/karya') }}" class="inline-flex items-center gap-2 text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-800 transition"> 
-                            ← Kembali ke Data Karya 
-                        </a>
-                    </div>
+            <!-- HEADER CARD -->
+            <div class="bg-[#ffcc00] text-black p-4 sm:p-6 border-b-3 border-black">
+                <h2 class="text-xl sm:text-2xl font-black uppercase">Detail Karya Siswa</h2>
+                <p class="text-xs sm:text-sm font-bold mt-1">Informasi lengkap project yang diupload siswa.</p>
+            </div>
 
-                    {{-- CARD DETAIL --}}
-                    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden relative">
-                        
-                        {{-- LOADING CONTENT --}}
-                        <div id="loading-content" class="absolute inset-0 bg-white z-40 flex flex-col items-center justify-center transition-opacity duration-300 ease-out">
-                            <div class="flex items-center gap-3 bg-gray-50 px-5 py-2.5 rounded-full border border-gray-200 shadow-xs">
-                                <div class="w-4 h-4 sm:w-5 sm:h-5 border-3 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                                <p class="text-gray-700 font-medium text-xs sm:text-sm tracking-wide">Memuat detail karya...</p>
-                            </div>
-                        </div>
+            <!-- BODY CARD -->
+            <div class="p-4 sm:p-6 space-y-6">
+                <div class="border-2 border-black rounded-lg overflow-x-auto">
+                    <table class="w-full text-xs sm:text-sm text-left font-bold">
+                        <tbody class="divide-y-2 divide-black">
 
-                        {{-- HEADER CARD --}}
-                        <div class="bg-blue-600 text-white px-5 py-4 sm:px-8 sm:py-5">
-                            <h2 class="text-xl sm:text-2xl font-bold">Detail Karya Siswa</h2>
-                            <p class="text-blue-100 text-xs sm:text-sm mt-0.5">Informasi lengkap project yang diupload siswa.</p>
-                        </div>
+                            <tr class="bg-gray-50">
+                                <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50 w-1/3 sm:w-1/4">Nama Siswa</td>
+                                <td class="p-3 sm:p-4">{{ $project->user->name ?? 'Tidak Diketahui' }}</td>
+                            </tr>
 
-                        {{-- BODY CARD --}}
-                        <div class="p-4 sm:p-6 space-y-5 sm:space-y-6">
-                            <div class="overflow-hidden border border-gray-200 rounded-lg">
-                                <table class="w-full text-xs sm:text-sm text-left text-gray-600">
-                                    <tbody class="divide-y divide-gray-200">
-                                        
-                                        <tr class="bg-gray-50/50">
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 font-semibold text-gray-900 w-1/3 sm:w-1/4">Nama Siswa</td>
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 text-gray-800">{{ $project->user->name }}</td>
-                                        </tr>
+                            <tr>
+                                <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50">Judul Project</td>
+                                <td class="p-3 sm:p-4 font-black">{{ $project->title }}</td>
+                            </tr>
 
-                                        <tr>
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 font-semibold text-gray-900">Judul Project</td>
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 text-gray-800 font-medium">{{ $project->title }}</td>
-                                        </tr>
+                            <tr class="bg-gray-50">
+                                <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50">Jurusan</td>
+                                <td class="p-3 sm:p-4">
+                                    <span class="badge-neubrutal bg-blue-100 text-blue-800">{{ $project->jurusan }}</span>
+                                </td>
+                            </tr>
 
-                                        <tr class="bg-gray-50/50">
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4 font-semibold text-gray-900">Jurusan</td>
-                                            <td class="px-3.5 py-3 sm:px-6 sm:py-4">
-                                                <span class="px-2.5 py-1 bg-blue-100 text-blue-700 rounded-full text-[11px] sm:text-xs font-semibold">
-                                                    {{ $project->jurusan }}
-                                                </span>
-                                            </td>
-                                        </tr>
+                            <tr>
+                                <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50">Deskripsi</td>
+                                <td class="p-3 sm:p-4 leading-relaxed">{{ $project->description ?? 'Deskripsi project tidak tersedia.' }}</td>
+                            </tr>
 
+<<<<<<< Updated upstream
                                         <tr>
                                             <td class="px-3.5 py-3 sm:px-6 sm:py-4 font-semibold text-gray-900">Deskripsi</td>
                                             <td class="px-3.5 py-3 sm:px-6 sm:py-4 leading-relaxed text-gray-700">{{ $project->description }}</td>
@@ -248,29 +170,149 @@
                                         <p class="text-green-800 text-xs sm:text-sm italic font-medium leading-relaxed">
                                             <strong>Catatan :</strong> "{{ $project->approval_note ?? 'Tidak ada catatan.' }}"
                                         </p>
+=======
+                            <tr class="bg-gray-50">
+                                <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50">Link Project</td>
+                                <td class="p-3 sm:p-4">
+                                    @if(!empty($project->live_link))
+                                        <a href="{{ $project->live_link }}" target="_blank" class="bg-blue-100 px-2 py-1 rounded border-2 border-black hover:bg-blue-200 font-bold underline inline-flex items-center gap-1 break-all">
+                                            {{ $project->live_link }} ↗
+                                        </a>
+>>>>>>> Stashed changes
                                     @else
-                                        <p class="text-red-800 text-xs sm:text-sm italic font-medium leading-relaxed">
-                                            <strong>Alasan Penolakan :</strong> "{{ $project->rejection_reason }}"
-                                        </p>
+                                        <span>-</span>
                                     @endif
+                                </td>
+                            </tr>
 
-                                    @if($project->reviewer)
-                                        <div class="mt-3 pt-2 border-t border-amber-200/60">
-                                            <span class="inline-block text-[10px] sm:text-[11px] bg-white text-gray-700 px-2.5 py-0.5 rounded border border-gray-200 font-medium"> 
-                                                Direview oleh: <strong class="text-gray-900">{{ $project->reviewer->name }}</strong>
-                                            </span>
-                                        </div>
+                            @if(strtoupper($project->jurusan) === 'PPLG')
+                            <tr>
+                                <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50">Link GitHub</td>
+                                <td class="p-3 sm:p-4">
+                                    @if(!empty($project->github_link))
+                                        <a href="{{ $project->github_link }}" target="_blank" class="bg-blue-100 px-2 py-1 rounded border-2 border-black hover:bg-blue-200 font-bold underline inline-flex items-center gap-1 break-all">
+                                            {{ $project->github_link }} ↗
+                                        </a>
+                                    @else
+                                        <span>-</span>
                                     @endif
-                                </div>
+                                </td>
+                            </tr>
                             @endif
 
-                        </div>
-                    </div>
+                            <tr class="bg-gray-50">
+                                <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50">Dokumentasi Project</td>
+                                <td class="p-3 sm:p-4">
+                                    @if(!empty($project->file_path))
+                                        <div class="relative inline-block">
+                                            <img src="{{ asset('storage/' . $project->file_path) }}"
+                                                 alt="Dokumentasi"
+                                                 class="w-20 h-20 sm:w-28 sm:h-28 object-cover rounded-lg border-2 border-black shadow-[2px_2px_0px_#000] cursor-pointer hover:translate-x-1 hover:translate-y-1 transition"
+                                                 onclick="openModal(this.src)">
+                                        </div>
+
+                                        <!-- MODAL PREVIEW GAMBAR -->
+                                        <div id="imageModal" class="fixed inset-0 z-50 hidden modal-overlay flex items-center justify-center p-4" onclick="closeModal()">
+                                            <div class="relative max-w-2xl max-h-[85vh] modal-card p-3" onclick="event.stopPropagation()">
+                                                <button type="button" onclick="closeModal()" class="absolute -top-4 -right-4 bg-red-500 text-white rounded-full border-2 border-black w-8 h-8 flex items-center justify-center text-sm font-black cursor-pointer shadow-[2px_2px_0px_#000] btn-neubrutal">
+                                                    ✕
+                                                </button>
+                                                <img id="modalImage" src="" alt="Preview" class="max-w-full max-h-[75vh] rounded-lg border-2 border-black bg-white object-contain">
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span>-</span>
+                                    @endif
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50">Status</td>
+                                <td class="p-3 sm:p-4">
+                                    @if($project->status == 'pending')
+                                        <span class="badge-neubrutal bg-yellow-100 text-yellow-800">Menunggu Review</span>
+                                    @elseif($project->status == 'approved')
+                                        <span class="badge-neubrutal bg-green-100 text-green-800">Disetujui</span>
+                                    @else
+                                        <span class="badge-neubrutal bg-red-100 text-red-800">Ditolak</span>
+                                    @endif
+                                </td>
+                            </tr>
+
+                            <tr class="bg-gray-50">
+                                <td class="p-3 sm:p-4 border-r-2 border-black bg-yellow-50">Upload</td>
+                                <td class="p-3 sm:p-4">
+                                    {{ $project->created_at?->format('d F Y H:i') ?? '-' }}
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
                 </div>
-            </main>
+
+                <!-- FORM REVIEW (JIKA PENDING) -->
+                @if($project->status == 'pending')
+                <div class="border-t-2 border-black pt-5">
+                    <h2 class="text-base sm:text-lg font-black uppercase mb-3">Review Project</h2>
+
+                    <form action="{{ url('/admin/karya/'.$project->id.'/update-status') }}" method="POST" class="space-y-4">
+                        @csrf
+                        @method('PUT')
+                        <div>
+                            <label class="block text-xs sm:text-sm font-black mb-2 uppercase">Catatan Admin</label>
+                            <textarea name="catatan" rows="3" class="w-full rounded-lg input-neubrutal p-3 text-xs sm:text-sm font-bold bg-gray-50 focus:bg-white focus:outline-none" placeholder="Tulis catatan persetujuan atau penolakan..."></textarea>
+                        </div>
+
+                        <div class="flex flex-wrap gap-3">
+                            <button type="submit" name="status" value="approved" class="flex-1 sm:flex-none bg-green-400 hover:bg-green-500 text-black px-5 py-2.5 rounded-xl font-black text-xs sm:text-sm btn-neubrutal cursor-pointer">
+                                ✔ APPROVE
+                            </button>
+
+                            <button type="submit" name="status" value="rejected" class="flex-1 sm:flex-none bg-red-400 hover:bg-red-500 text-black px-5 py-2.5 rounded-xl font-black text-xs sm:text-sm btn-neubrutal cursor-pointer">
+                                ✖ REJECT
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                @endif
+
+            </div>
         </div>
     </div>
+@endsection
 
-    <script src="{{ asset('assets/js/admin/detail.js')}}"></script>
-</body>
-</html>
+@push('scripts')
+    <script>
+        // Modal Preview Gambar
+        function openModal(imageSrc) {
+            const modal = document.getElementById("imageModal");
+            const modalImg = document.getElementById("modalImage");
+            if (modal && modalImg) {
+                modalImg.src = imageSrc;
+                modal.classList.remove("hidden");
+                document.body.style.overflow = "hidden";
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("imageModal");
+            if (modal) {
+                modal.classList.add("hidden");
+                document.body.style.overflow = "auto";
+            }
+        }
+
+        // Loading Screen
+        window.addEventListener("load", function () {
+            const loadingContent = document.getElementById("loading-content");
+            if (loadingContent) {
+                setTimeout(() => {
+                    loadingContent.classList.add("opacity-0");
+                    setTimeout(() => {
+                        loadingContent.classList.add("hidden");
+                    }, 300);
+                }, 800);
+            }
+        });
+    </script>
+@endpush
