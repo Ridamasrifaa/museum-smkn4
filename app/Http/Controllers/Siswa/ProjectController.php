@@ -159,8 +159,8 @@ class ProjectController extends Controller
             $width, $height
         );
 
-        // Algoritma Kompresi Target Max 60 KB
-        $maxFileSizeBytes = 60 * 1024;
+        // Algoritma Kompresi Target Max 50 KB
+        $maxFileSizeBytes = 45 * 1024; // 50 KB
         $quality = 85; 
         $compressedContent = '';
 
@@ -169,9 +169,9 @@ class ProjectController extends Controller
             imagejpeg($resized, null, $quality);
             $compressedContent = ob_get_clean();
 
-            // Turunkan kualitas jika masih di atas target ukuran
+            // Turunkan kualitas secara bertahap jika masih di atas 50 KB (batas minimal kualitas 25)
             $quality -= 5; 
-        } while (strlen($compressedContent) > $maxFileSizeBytes && $quality >= 35);
+        } while (strlen($compressedContent) > $maxFileSizeBytes && $quality >= 25);
 
         // Bersihkan memori server
         imagedestroy($source);

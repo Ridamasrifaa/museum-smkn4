@@ -39,7 +39,7 @@ class ArticleController extends Controller
             'is_featured' => 'nullable'
         ]);
 
-        $cover = $request->file('cover')->store('articles', 'public');
+       $cover = $this->compressAndSaveImage($request->file('cover'));
 
         Article::create([
             'author_id' => Auth::id(),
@@ -84,7 +84,7 @@ class ArticleController extends Controller
             if ($article->cover && Storage::disk('public')->exists($article->cover)) {
                 Storage::disk('public')->delete($article->cover);
             }
-            $cover = $request->file('cover')->store('articles', 'public');
+           $cover = $this->compressAndSaveImage($request->file('cover'));
         }
 
         $article->update([
@@ -108,5 +108,67 @@ class ArticleController extends Controller
         $article->delete();
 
         return redirect()->route('articles.index')->with('success', 'Artikel berhasil dihapus');
+    }
+    private function compressAndSaveImage($file)
+    {
+        // Generate nama file acak di dalam folder articles/
+        $filename = 'articles/' . Str::random(20) . '.jpg';
+
+        // Ambil data gambar asli
+        $source = imagecreatefromstring(file_get_contents($file->getRealPath()));
+        $width  = imagesx($source);
+        $height = imagesy($source);
+
+        // Resize max lebar 800px dengan merawat aspect ratio
+        $maxWidth = 800;
+        if ($width > $maxWidth) {
+            $newWidth  = $maxWidth;
+            $newHeight = intval($height * ($maxWidth / $width));
+        } else {
+            $newWidth  = $width;
+            $newHeight = $height;
+        }
+
+        // Buat kanvas baru
+        $resized = imagecreatetruecolor($newWidth, $newHeight);
+
+        // Latar belakang putih
+        $whiteBackground = imagecolorallocate($resized, 255, 255, 255);
+        imagefill($resized, 0, 0, $whiteBackground);
+
+        // Proses resize gambar
+        imagecopyresampled(
+            $resized, $source,
+            0, 0, 0, 0,
+            $newWidth, $newHeight,
+            $width, $height
+        );
+
+        // Algoritma Kompresi Target Max 60 KB
+        $maxFileSizeBytes = 60 * 1024;
+        $quality = 85; 
+        $compressedContent = '';
+
+        do {
+            ob_start();
+            imagejpeg($resized, null, $quality);
+            $compressedContent = ob_get_clean();
+
+            // Turunkan kualitas jika masih di atas target ukuran
+            $quality -= 5; 
+        } while (strlen($compressedContent) > $maxFileSizeBytes && $quality >= 35);
+
+        // Bersihkan memori server
+        imagedestroy($source);
+        imagedestroy($resized);
+
+        // Simpan hasil akhir ke storage Laravel
+        Storage::disk('public')->put($filename, $compressedContent);
+
+        // Kirim data ukuran ke session untuk keperluan tampilan (opsional)
+        session()->flash('foto_original_size', $file->getSize());
+        session()->flash('foto_compressed_size', strlen($compressedContent));
+
+        return $filename;
     }
 }

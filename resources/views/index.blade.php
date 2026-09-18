@@ -103,12 +103,15 @@
             <div id="allKaryaGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 @forelse($projects->take(4) as $project)
                     @php
-                        // ===== Avatar URL (support Google URL & storage lokal) =====
                         $avatarUrl = '';
                         if ($project->user->avatar) {
-                            $avatarUrl = str_starts_with($project->user->avatar, 'http')
-                                ? $project->user->avatar
-                                : asset('storage/' . $project->user->avatar);
+                            if (str_starts_with($project->user->avatar, 'http')) {
+                                $avatarUrl = $project->user->avatar;
+                            } else {
+                                // Bersihkan jika sudah ada teks 'storage/' agar tidak double
+                                $cleanPath = str_replace('/storage/', '', $project->user->avatar);
+                                $avatarUrl = asset('storage/' . $cleanPath);
+                            }
                         }
                     @endphp
 
