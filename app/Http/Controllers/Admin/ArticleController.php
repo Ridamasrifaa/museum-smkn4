@@ -24,7 +24,7 @@ class ArticleController extends Controller
     {
         $categories = Category::orderBy('name')->get();
 
-        return view('admin.upload-artikel', compact('categories'));
+        return view('admin.artikel-form', compact('categories'));
     }
 
     public function store(Request $request)
@@ -62,7 +62,7 @@ class ArticleController extends Controller
         $article = Article::findOrFail($id);
         $categories = Category::orderBy('name')->get();
 
-        return view('admin.edit-artikel', compact('article', 'categories'));
+        return view('admin.artikel-form', compact('article', 'categories'));
     }
 
     public function update(Request $request, $id)

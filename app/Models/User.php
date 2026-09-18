@@ -20,9 +20,8 @@ class User extends Authenticatable
         'avatar',
         'google_id',
         'role',
-        'kelas',
         'jurusan',
-        'angkatan',
+        'bio',
         'status',
         'invitation_code_id',
     ];

@@ -38,8 +38,25 @@
                     class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Artikel</a>
                 <a href="{{ url('/tentang') }}"
                     class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Tentang</a>
-                <a href="{{ route('login') }}"
-                    class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">Login</a>
+                @auth
+                    @php
+                        $dashboardUrl = match((int) auth()->user()->role) {
+                            0 => '/superadmin/dashboard',
+                            1 => '/admin/dashboard',
+                            2 => '/siswa/dashboard',
+                            default => '/'
+                        };
+                    @endphp
+                    <a href="{{ $dashboardUrl }}"
+                        class="text-sm font-semibold px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        Dashboard
+                    </a>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
+                        Login
+                    </a>
+                @endauth
                 <button id="themeToggle" onclick="toggleTheme()" aria-label="Ganti mode terang/gelap"
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-yellow-300">
                     <svg class="icon-sun w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,6 +132,7 @@
                         data-category="{{ $karya->jurusan ?? '-' }}"
                         data-event="Museum Karya"
                         data-siswa="{{ $karya->user->name ?? '-' }}"
+                        data-id="{{ $karya->user->id ?? '' }}"
                         data-guru="{{ $karya->guru_pengampu ?? '-' }}"
                         data-avatar="{{ $karya->user->avatar ?? '' }}"
                         data-avatar-letter="{{ strtoupper(substr($karya->user->name ?? '-', 0, 1)) }}"
@@ -158,7 +176,14 @@
                             </h3>
 
                             <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-1">
-                                Oleh: <span class="font-medium text-gray-700 dark:text-gray-300">{{ $karya->user->name ?? 'Anonim' }}</span>
+                                Oleh: 
+@if($karya->user)
+    <a href="{{ route('profile.show', $karya->user->id) }}" class="font-medium text-blue-600 dark:text-blue-400 hover:underline">
+        {{ $karya->user->name }}
+    </a>
+@else
+    <span class="font-medium text-gray-700 dark:text-gray-300">Anonim</span>
+@endif
                             </p>
 
                             <div class="mt-auto">
@@ -242,7 +267,9 @@
                                 class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-lg overflow-hidden shrink-0">
                             </div>
                             <div class="min-w-0">
-                                <p id="modalSiswa" class="font-semibold text-gray-900 dark:text-white truncate"></p>
+                                <div id="modalSiswaContainer">
+                                    <p id="modalSiswa" class="font-semibold text-gray-900 dark:text-white truncate"></p>
+                                </div>
                                 <p id="modalBiodata" class="text-sm text-gray-600 dark:text-gray-400"></p>
                                 <p id="modalGuru" class="text-sm text-gray-500 dark:text-gray-500 mt-0.5"></p>
                             </div>
@@ -375,7 +402,18 @@
                 }
             }
 
-            if (document.getElementById("modalSiswa")) document.getElementById("modalSiswa").textContent = d.siswa || "-";
+           // Tangkap data-id
+data-id="${d.id || ''}"
+
+// Pada bagian render nama siswa di modal:
+const siswaContainer = document.getElementById("modalSiswaContainer");
+if (siswaContainer) {
+    if (d.id) {
+        siswaContainer.innerHTML = `<a href="/u/${d.id}" class="font-semibold text-blue-600 dark:text-blue-400 hover:underline truncate">${d.siswa || "-"}</a>`;
+    } else {
+        siswaContainer.innerHTML = `<p class="font-semibold text-gray-900 dark:text-white truncate">${d.siswa || "-"}</p>`;
+    }
+}
 
             const modalBiodata = document.getElementById("modalBiodata");
             if (modalBiodata) {
@@ -417,10 +455,7 @@
 
         let activeCategory = "all";
         let currentPage = 1;
-        
-        // ===== DIUBAH KE 16 KARYA PER HALAMAN =====
         const itemsPerPage = 16; 
-        
         let filteredCards = [];
 
         function normalize(text) {
@@ -430,7 +465,6 @@
         function runFilter() {
             const query = normalize(searchInput?.value.trim() || "");
 
-            // Filter elemen
             filteredCards = allCards.filter((card) => {
                 const d = card.dataset;
                 const haystack = normalize(`${d.title} ${d.siswa} ${d.tech} ${d.category} ${d.desc}`);
@@ -439,7 +473,7 @@
                 return matchesQuery && matchesCategory;
             });
 
-            currentPage = 1; // Reset ke halaman 1 tiap kali memfilter
+            currentPage = 1;
             renderPage();
         }
 
@@ -452,26 +486,21 @@
             const startIndex = (currentPage - 1) * itemsPerPage;
             const endIndex = startIndex + itemsPerPage;
 
-            // Sembunyikan semua card
             allCards.forEach(card => card.classList.add("card-filtered-out"));
 
-            // Tampilkan hanya card yang berada di rentang item halaman saat ini
             const currentSlice = filteredCards.slice(startIndex, endIndex);
             currentSlice.forEach(card => card.classList.remove("card-filtered-out"));
 
-            // Update Teks Info Jumlah
             if (resultCounter) {
                 resultCounter.textContent = totalItems === allCards.length
                     ? `Menampilkan ${currentSlice.length} dari ${totalItems} karya`
                     : `Ditemukan ${totalItems} karya (${currentSlice.length} ditampilkan)`;
             }
 
-            // Update Empty State
             if (emptyState) {
                 emptyState.classList.toggle("hidden", totalItems > 0);
             }
 
-            // Render Navigasi Pagination
             renderPagination(totalPages);
         }
 
@@ -479,9 +508,8 @@
             if (!paginationContainer) return;
             paginationContainer.innerHTML = "";
 
-            if (totalPages <= 1) return; // Sembunyikan jika hanya 1 halaman
+            if (totalPages <= 1) return;
 
-            // Tombol Prev
             const prevBtn = document.createElement("button");
             prevBtn.textContent = "«";
             prevBtn.className = `px-3.5 py-2 rounded-lg text-sm font-semibold border transition ${currentPage === 1 ? 'opacity-40 cursor-not-allowed border-gray-300' : 'hover:bg-blue-600 hover:text-white border-gray-300 dark:border-gray-700'}`;
@@ -489,7 +517,6 @@
             prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderPage(); window.scrollTo({top: 400, behavior: 'smooth'}); } };
             paginationContainer.appendChild(prevBtn);
 
-            // Tombol Halaman Angka
             for (let i = 1; i <= totalPages; i++) {
                 const pageBtn = document.createElement("button");
                 pageBtn.textContent = i;
@@ -499,7 +526,6 @@
                 paginationContainer.appendChild(pageBtn);
             }
 
-            // Tombol Next
             const nextBtn = document.createElement("button");
             nextBtn.textContent = "»";
             nextBtn.className = `px-3.5 py-2 rounded-lg text-sm font-semibold border transition ${currentPage === totalPages ? 'opacity-40 cursor-not-allowed border-gray-300' : 'hover:bg-blue-600 hover:text-white border-gray-300 dark:border-gray-700'}`;
@@ -519,7 +545,6 @@
             });
         });
 
-        // Inisialisasi awal
         runFilter();
     </script>
 </body>

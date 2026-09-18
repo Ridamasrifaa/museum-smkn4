@@ -13,12 +13,7 @@ class AdminInvitationCodeController extends Controller
     public function index()
     {
         $codes = InvitationCode::latest()->get();
-        return view('admin.kode-undangan.index', compact('codes'));
-    }
-
-    public function create()
-    {
-        return view('admin.kode-undangan.create');
+        return view('admin.kode-undangan', compact('codes'));
     }
 
     public function store(Request $request)
@@ -30,22 +25,17 @@ class AdminInvitationCodeController extends Controller
             'description' => 'nullable|string|max:255',
             'max_uses'    => 'required|integer|min:1',
             'is_active'   => 'nullable|boolean',
-            'expires_at'  => 'nullable|date|after:today',
+            'expires_at'  => 'nullable|date|after_or_equal:today',
         ]);
 
-        $validated['is_active']   = $request->boolean('is_active', true);
-        $validated['used_count']  = 0;
-        $validated['created_by']  = Auth::id();
+        $validated['is_active']  = $request->boolean('is_active', true);
+        $validated['used_count'] = 0;
+        $validated['created_by'] = Auth::id();
 
         InvitationCode::create($validated);
 
         return redirect()->route('admin.kode-undangan.index')
             ->with('success', 'Kode undangan berhasil ditambahkan.');
-    }
-
-    public function edit(InvitationCode $kodeUndangan)
-    {
-        return view('admin.kode-undangan.edit', compact('kodeUndangan'));
     }
 
     public function update(Request $request, InvitationCode $kodeUndangan)

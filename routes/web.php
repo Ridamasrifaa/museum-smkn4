@@ -27,6 +27,9 @@ use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\AdminManagementController as SuperAdminManagementController;
 
+use App\Http\Controllers\PublicProfileController;
+use App\Http\Controllers\InteractionController;
+
 Route::get('/', [PublicController::class, 'index']);
 
 // Auth Login & Register
@@ -44,17 +47,19 @@ Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallb
 Route::get('/auth/kode-undangan', [AuthController::class, 'showKodeUndangan'])->name('auth.kode-undangan');
 Route::post('/auth/kode-undangan', [AuthController::class, 'submitKodeUndangan'])->name('auth.kode-undangan.submit');
 
-// Public Karya & Artikel
+// Public Karya, Artikel & Detail Project Publik (Untuk Komentar / Interaksi Museum)
 Route::get('/karya', [KaryaController::class, 'index']);
+Route::get('/project/{project}', [KaryaController::class, 'show'])->name('project.detail'); 
 Route::post('/karya/{project}/like', [KaryaController::class, 'like']);
 Route::get('/artikel', [ArticlePageController::class, 'index'])->name('artikel.index');
 Route::get('/artikel/{slug}', [ArticlePageController::class, 'show'])->name('artikel.show');
 
-// tentang / about developer
+// Tentang / About Developer
 Route::get('/tentang', function() {
     return view('tentang');
 });
 
+Route::get('/u/{id}', [PublicProfileController::class, 'show'])->name('profile.show');
 
 /*
 |--------------------------------------------------------------------------
@@ -66,7 +71,7 @@ Route::middleware('auth')->group(function () {
     // ==================== ROUTE SISWA ====================
     Route::get('/siswa/dashboard', [DashboardController::class, 'index']);
     Route::get('/siswa/karya', [ProjectController::class, 'index']);
-    Route::get('/siswa/karya/detail/{project}', [ProjectController::class, 'show']);
+    Route::get('/siswa/karya/detail/{project}', [ProjectController::class, 'show'])->name('siswa.detail-karya');
     Route::delete('/siswa/karya/{project}', [ProjectController::class, 'destroy']);
     Route::get('/siswa/upload', [ProjectController::class, 'upload']);
     Route::post('/siswa/upload', [ProjectController::class, 'store']);
@@ -75,7 +80,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/siswa/profil', [ProfilController::class, 'update'])->name('siswa.profil.update');
 
     // ==================== ROUTE ADMIN JURUSAN ====================
-    // Dashboard Admin
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index']);
     
     // Kode Undangan
@@ -107,13 +111,18 @@ Route::middleware('auth')->group(function () {
     // Profil Admin (Pengaturan Akun Mandiri)
     Route::get('/admin/profile', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::put('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
+
+    // ==================== INTERAKSI & KOMENTAR ====================
+    Route::post('/project/{project}/like', [InteractionController::class, 'toggleLike']);
+    Route::post('/project/{project}/comment', [InteractionController::class, 'storeComment']);
+    Route::post('/artikel/{article}/comment', [ArticlePageController::class, 'storeComment'])->name('artikel.comment');
 });
 
-// khusus superadmin
+// ==================== SUPER ADMIN ONLY ====================
 Route::middleware(['auth', 'superadmin'])->prefix('superadmin')->group(function () {
     Route::get('/dashboard', [SuperAdminDashboardController::class, 'index']);
 
-    // Manajemen Akun Admin (Hanya Super Admin yang bisa akses)
+    // Manajemen Akun Admin
     Route::get('/manajemen-admin', [SuperAdminManagementController::class, 'index']);
     Route::post('/manajemen-admin', [SuperAdminManagementController::class, 'store']);
     Route::put('/manajemen-admin/{user}', [SuperAdminManagementController::class, 'update']);

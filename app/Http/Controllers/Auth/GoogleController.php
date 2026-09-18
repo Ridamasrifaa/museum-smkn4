@@ -30,9 +30,9 @@ class GoogleController extends Controller
             $user = User::where('email', $googleUser->getEmail())->first();
 
             if ($user) {
-                // User sudah ada → langsung login
+                // User sudah ada → langsung login dan arahkan kembali ke halaman tujuan (intended)
                 Auth::login($user);
-                return redirect('/siswa/dashboard');
+                return redirect()->intended('/siswa/dashboard');
             }
 
             // User belum ada → simpan data Google ke session, lalu minta kode undangan
