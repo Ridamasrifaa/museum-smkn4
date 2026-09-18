@@ -6,126 +6,173 @@
 @section('content')
 
     {{-- ================= WELCOME BANNER ================= --}}
-    <div class="bg-white rounded-lg shadow p-6 mb-6">
-        <h2 class="text-xl font-bold">Selamat datang, Super Admin!</h2>
-        <p class="text-gray-600 mt-2">Ini adalah dashboard khusus Super Admin.</p>
+    <div class="bg-white rounded-2xl border-3 border-black shadow-[4px_4px_0px_#000] p-5 sm:p-6 mb-6">
+        <h2 class="text-lg sm:text-xl font-black text-gray-900">Selamat datang, Super Admin!</h2>
+        <p class="text-gray-700 font-bold mt-1 text-xs sm:text-sm">Ini adalah dashboard khusus pengawasan Super Admin.</p>
     </div>
 
     {{-- ================= RINGKASAN / STAT CARDS ================= --}}
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-
-        <div class="bg-white rounded-lg shadow p-5 flex items-center justify-between">
+        <div class="bg-white rounded-2xl border-3 border-black shadow-[4px_4px_0px_#000] p-5 flex items-center justify-between">
             <div>
-                <p class="text-sm text-gray-500">Total Karya</p>
-                <p class="text-2xl font-bold text-gray-900">{{ $totalKarya }}</p>
+                <p class="text-xs font-black text-gray-600 uppercase tracking-wide">Total Karya</p>
+                <p class="text-2xl font-black text-gray-900 mt-1">{{ $totalKarya }}</p>
             </div>
-            <div class="w-11 h-11 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">K</div>
+            <div class="w-12 h-12 rounded-xl bg-purple-200 border-2 border-black shadow-[2px_2px_0px_#000] flex items-center justify-center text-black font-black">K</div>
         </div>
 
-        <div class="bg-white rounded-lg shadow p-5 flex items-center justify-between">
+        <div class="bg-white rounded-2xl border-3 border-black shadow-[4px_4px_0px_#000] p-5 flex items-center justify-between">
             <div>
-                <p class="text-sm text-gray-500">Total Siswa</p>
-                <p class="text-2xl font-bold text-gray-900">{{ $totalSiswa }}</p>
+                <p class="text-xs font-black text-gray-600 uppercase tracking-wide">Total Siswa</p>
+                <p class="text-2xl font-black text-gray-900 mt-1">{{ $totalSiswa }}</p>
             </div>
-            <div class="w-11 h-11 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">S</div>
+            <div class="w-12 h-12 rounded-xl bg-blue-200 border-2 border-black shadow-[2px_2px_0px_#000] flex items-center justify-center text-black font-black">S</div>
         </div>
 
-        <div class="bg-white rounded-lg shadow p-5 flex items-center justify-between">
+        <div class="bg-white rounded-2xl border-3 border-black shadow-[4px_4px_0px_#000] p-5 flex items-center justify-between">
             <div>
-                <p class="text-sm text-gray-500">Kode Unik</p>
-                <p class="text-2xl font-bold text-gray-900">{{ $totalKodeUnik }}</p>
+                <p class="text-xs font-black text-gray-600 uppercase tracking-wide">Kode Unik</p>
+                <p class="text-2xl font-black text-gray-900 mt-1">{{ $totalKodeUnik }}</p>
             </div>
-            <div class="w-11 h-11 rounded-full bg-red-100 flex items-center justify-center text-red-600 font-bold">U</div>
+            <div class="w-12 h-12 rounded-xl bg-red-200 border-2 border-black shadow-[2px_2px_0px_#000] flex items-center justify-center text-black font-black">U</div>
         </div>
-
     </div>
 
-    {{-- ================= 2 TABEL BERDAMPINGAN (KIRI - KANAN) ================= --}}
+    {{-- ================= 2 BAGIAN BERDAMPINGAN ================= --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {{-- ===== KIRI: KARYA TERBARU DARI SISWA ===== --}}
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-gray-900">Karya Terbaru Siswa</h3>
-                <a href="{{ url('/admin/karya') }}" class="text-sm text-purple-600 font-medium hover:underline">Lihat semua</a>
+        <div class="bg-white rounded-2xl border-3 border-black shadow-[4px_4px_0px_#000] p-4 sm:p-6">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b-2 border-black">
+                <h3 class="text-sm sm:text-base font-black text-gray-900">Karya Terbaru Siswa</h3>
+                <a href="{{ url('/admin/karya') }}" class="px-3 py-1 bg-[#ffcc00] text-black border-2 border-black rounded-lg font-black text-xs shadow-[2px_2px_0px_#000] hover:translate-y-[-1px] transition">Lihat semua</a>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left">
+            {{-- Tampilan Desktop: Tabel Biasa --}}
+            <div class="hidden md:block overflow-x-auto">
+                <table class="w-full text-sm text-left border-collapse">
                     <thead>
-                        <tr class="text-gray-500 border-b">
-                            <th class="py-2 pr-3 font-medium">Judul Karya</th>
-                            <th class="py-2 pr-3 font-medium">Siswa</th>
-                            <th class="py-2 pr-3 font-medium">Jurusan</th>
-                            <th class="py-2 pr-3 font-medium">Status</th>
-                            <th class="py-2 pr-3 font-medium">Direview Oleh</th>
+                        <tr class="bg-gray-100 border-b-2 border-black text-gray-900 font-black uppercase text-xs">
+                            <th class="py-2.5 px-3">Judul Karya</th>
+                            <th class="py-2.5 px-3">Siswa</th>
+                            <th class="py-2.5 px-3">Jurusan</th>
+                            <th class="py-2.5 px-3">Status</th>
+                            <th class="py-2.5 px-3">Reviewer</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y-2 divide-gray-200">
                         @forelse($karyaTerbaru as $karya)
                             @php
                                 $badgeClass = match($karya->status) {
-                                    'approved' => 'bg-green-50 text-green-600',
-                                    'rejected' => 'bg-red-50 text-red-600',
-                                    'pending'  => 'bg-yellow-50 text-yellow-600',
-                                    default    => 'bg-gray-100 text-gray-500',
+                                    'approved' => 'bg-green-200 text-green-900',
+                                    'rejected' => 'bg-red-200 text-red-900',
+                                    'pending'  => 'bg-amber-200 text-amber-900',
+                                    default    => 'bg-gray-200 text-gray-800',
                                 };
                             @endphp
-                            <tr class="border-b last:border-0 hover:bg-gray-50">
-                                <td class="py-3 pr-3 font-medium text-gray-800">{{ $karya->title }}</td>
-                                <td class="py-3 pr-3 text-gray-600">{{ $karya->user->name ?? '-' }}</td>
-                                <td class="py-3 pr-3 text-gray-600">{{ $karya->jurusan }}</td>
-                                <td class="py-3 pr-3">
-                                    <span class="px-2 py-1 text-xs rounded-full font-medium {{ $badgeClass }}">
+                            <tr class="hover:bg-yellow-50/50">
+                                <td class="py-3 px-3 font-bold text-gray-900 max-w-[120px] truncate">{{ $karya->title }}</td>
+                                <td class="py-3 px-3 text-gray-700 font-medium">{{ $karya->user->name ?? '-' }}</td>
+                                <td class="py-3 px-3 text-gray-700 font-medium">{{ $karya->jurusan }}</td>
+                                <td class="py-3 px-3">
+                                    <span class="px-2 py-0.5 text-[10px] rounded-lg font-black border-2 border-black shadow-[2px_2px_0px_#000] inline-block {{ $badgeClass }}">
                                         {{ $karya->getStatusLabel() }}
                                     </span>
                                 </td>
-                                <td class="py-3 pr-3 text-gray-600">{{ $karya->reviewer->name ?? 'Belum direview' }}</td>
+                                <td class="py-3 px-3 text-gray-700 font-medium">{{ $karya->reviewer->name ?? 'Belum' }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="py-6 text-center text-gray-400">Belum ada karya yang diupload.</td>
+                                <td colspan="5" class="py-6 text-center text-gray-500 font-bold">Belum ada karya.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
+
+            {{-- Tampilan Mobile: Card Vertikal (Tanpa Scroll Samping) --}}
+            <div class="md:hidden space-y-3">
+                @forelse($karyaTerbaru as $karya)
+                    @php
+                        $badgeClass = match($karya->status) {
+                            'approved' => 'bg-green-200 text-green-900',
+                            'rejected' => 'bg-red-200 text-red-900',
+                            'pending'  => 'bg-amber-200 text-amber-900',
+                            default    => 'bg-gray-200 text-gray-800',
+                        };
+                    @endphp
+                    <div class="p-3 bg-gray-50 border-2 border-black rounded-xl shadow-[2px_2px_0px_#000]">
+                        <div class="flex justify-between items-start gap-2 mb-1">
+                            <h4 class="font-black text-sm text-gray-900">{{ $karya->title }}</h4>
+                            <span class="px-2 py-0.5 text-[10px] rounded-md font-black border border-black {{ $badgeClass }}">
+                                {{ $karya->getStatusLabel() }}
+                            </span>
+                        </div>
+                        <div class="text-xs text-gray-700 space-y-0.5 font-medium">
+                            <p>Siswa: <span class="font-bold text-gray-900">{{ $karya->user->name ?? '-' }}</span> ({{ $karya->jurusan }})</p>
+                            <p>Reviewer: <span class="font-bold text-gray-900">{{ $karya->reviewer->name ?? 'Belum' }}</span></p>
+                        </div>
+                    </div>
+                @empty
+                    <p class="py-4 text-center text-gray-500 font-bold text-sm">Belum ada karya yang diupload.</p>
+                @endforelse
+            </div>
         </div>
 
         {{-- ===== KANAN: DAFTAR ADMIN & AKTIVITASNYA ===== --}}
-        <div class="bg-white rounded-lg shadow p-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-gray-900">Admin & Aktivitasnya</h3>
-                <a href="{{ url('/superadmin/manajemen-admin') }}" class="text-sm text-purple-600 font-medium hover:underline">Kelola admin</a>
+        <div class="bg-white rounded-2xl border-3 border-black shadow-[4px_4px_0px_#000] p-4 sm:p-6">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b-2 border-black">
+                <h3 class="text-sm sm:text-base font-black text-gray-900">Admin & Aktivitasnya</h3>
+                <a href="{{ url('/superadmin/manajemen-admin') }}" class="px-3 py-1 bg-[#ffcc00] text-black border-2 border-black rounded-lg font-black text-xs shadow-[2px_2px_0px_#000] hover:translate-y-[-1px] transition">Kelola admin</a>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-sm text-left">
+            {{-- Tampilan Desktop: Tabel Biasa --}}
+            <div class="hidden md:block overflow-x-auto">
+                <table class="w-full text-sm text-left border-collapse">
                     <thead>
-                        <tr class="text-gray-500 border-b">
-                            <th class="py-2 pr-3 font-medium">Nama Admin</th>
-                            <th class="py-2 pr-3 font-medium">Email</th>
-                            <th class="py-2 pr-3 font-medium">Karya Direview</th>
+                        <tr class="bg-gray-100 border-b-2 border-black text-gray-900 font-black uppercase text-xs">
+                            <th class="py-2.5 px-3">Nama Admin</th>
+                            <th class="py-2.5 px-3">Email</th>
+                            <th class="py-2.5 px-3 text-center">Review</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="divide-y-2 divide-gray-200">
                         @forelse($daftarAdmin as $admin)
-                            <tr class="border-b last:border-0 hover:bg-gray-50">
-                                <td class="py-3 pr-3 font-medium text-gray-800">{{ $admin->name }}</td>
-                                <td class="py-3 pr-3 text-gray-600">{{ $admin->email }}</td>
-                                <td class="py-3 pr-3">
-                                    <span class="px-2 py-1 text-xs rounded-full bg-purple-50 text-purple-600 font-medium">
+                            <tr class="hover:bg-yellow-50/50">
+                                <td class="py-3 px-3 font-bold text-gray-900">{{ $admin->name }}</td>
+                                <td class="py-3 px-3 text-gray-700 font-medium">{{ $admin->email }}</td>
+                                <td class="py-3 px-3 text-center">
+                                    <span class="px-2.5 py-0.5 text-xs rounded-lg bg-purple-200 text-purple-900 border-2 border-black font-black shadow-[2px_2px_0px_#000] inline-block">
                                         {{ $admin->reviewed_projects_count }}
                                     </span>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="py-6 text-center text-gray-400">Belum ada data admin.</td>
+                                <td colspan="3" class="py-6 text-center text-gray-500 font-bold">Belum ada data admin.</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
+            </div>
+
+            {{-- Tampilan Mobile: Card Vertikal --}}
+            <div class="md:hidden space-y-3">
+                @forelse($daftarAdmin as $admin)
+                    <div class="p-3 bg-gray-50 border-2 border-black rounded-xl shadow-[2px_2px_0px_#000] flex justify-between items-center">
+                        <div>
+                            <h4 class="font-black text-sm text-gray-900">{{ $admin->name }}</h4>
+                            <p class="text-xs text-gray-600 font-medium">{{ $admin->email }}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="px-2 py-0.5 text-xs rounded-lg bg-purple-200 text-purple-900 border-2 border-black font-black shadow-[2px_2px_0px_#000] inline-block">
+                                {{ $admin->reviewed_projects_count }} Review
+                            </span>
+                        </div>
+                    </div>
+                @empty
+                    <p class="py-4 text-center text-gray-500 font-bold text-sm">Belum ada data admin.</p>
+                @endforelse
             </div>
         </div>
 

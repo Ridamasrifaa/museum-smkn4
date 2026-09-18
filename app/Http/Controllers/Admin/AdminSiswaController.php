@@ -13,13 +13,13 @@ class AdminSiswaController extends Controller
         $search = $request->search;
 
         $query = User::where('role', 2)
-            ->with('invitationCode') // ← tambahkan ini
+            ->with('invitationCode') 
             ->when($search, function ($query) use ($search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%$search%")
                     ->orWhere('email', 'like', "%$search%")
                     ->orWhere('kelas', 'like', "%$search%")
-                    ->orWhere('angkatan', 'like', "%$search%");
+                    ->orWhere('bio', 'like', "%$search%");
                 });
             });
 
@@ -35,24 +35,24 @@ class AdminSiswaController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required',
-            'kelas' => 'required',
-            'email' => 'required|email',
+            'name'  => 'required|string|max:255',
+            'kelas' => 'nullable|string|max:255', // Menyesuaikan dengan input teks bebas siswa
+            'email' => 'required|email|max:255',
         ]);
 
         $user->update([
-            'name' => $request->name,
+            'name'  => $request->name,
             'kelas' => $request->kelas,
             'email' => $request->email,
         ]);
 
-        return back()->with('success','Data siswa berhasil diubah.');
+        return back()->with('success', 'Data siswa berhasil diubah.');
     }
 
     public function destroy(User $user)
     {
         $user->delete();
 
-        return back()->with('success','Data siswa berhasil dihapus.');
+        return back()->with('success', 'Data siswa berhasil dihapus.');
     }
 }

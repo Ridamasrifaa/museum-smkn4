@@ -31,14 +31,32 @@
                     <a href="{{ url('/karya') }}" class="text-sm font-medium text-slate-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition">Karya</a>
                     <a href="{{ url('/artikel') }}" class="text-sm font-medium text-slate-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition">Artikel</a>
                     <a href="{{ url('/tentang') }}" class="text-sm font-semibold text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 pb-0.5">Tentang</a>
-                    <a href="{{ route('login') }}" class="text-sm font-medium text-slate-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white transition">Login</a>
+                    @auth
+                        @php
+                            $dashboardUrl = match((int) auth()->user()->role) {
+                                0 => '/superadmin/dashboard',
+                                1 => '/admin/dashboard',
+                                2 => '/siswa/dashboard',
+                                default => '/'
+                            };
+                        @endphp
+                        <a href="{{ $dashboardUrl }}"
+                            class="text-sm font-semibold px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                            Dashboard
+                        </a>
+                    @else
+                        <a href="{{ route('login') }}"
+                            class="text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition">
+                            Login
+                        </a>
+                    @endauth
                     <button id="themeToggle" onclick="toggleTheme()" aria-label="Ganti mode terang/gelap"
                         class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 dark:bg-gray-800 text-slate-600 dark:text-yellow-400 hover:bg-slate-200 dark:hover:bg-gray-700 transition cursor-pointer">
                         <svg class="icon-sun w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                         <svg class="icon-moon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                         </svg>
                     </button>
                 </div>
@@ -102,7 +120,12 @@
                         </div>
                         <div class="col-span-2 sm:col-span-1">
                             <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 font-semibold">Versi Sistem</p>
-                            <p class="text-sm sm:text-base font-bold text-blue-600 dark:text-blue-400 mt-0.5">v1.0.0</p>
+                            <div class="flex items-center justify-center sm:justify-start gap-2 mt-0.5">
+                                <span id="app-version" class="text-sm sm:text-base font-bold text-blue-600 dark:text-blue-400">v1.0.0</span>
+                                <button onclick="openChangelogModal()" class="text-[11px] px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 border border-blue-200 dark:border-blue-800 hover:bg-blue-100 transition cursor-pointer font-medium">
+                                    Riwayat Update
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -123,169 +146,9 @@
                     </p>
                 </div>
 
-                <!-- CARD GRID -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
-
-                    <!-- DEV CARD 1 -->
-                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-slate-200/80 dark:border-gray-800/80 shadow-xs hover:shadow-lg hover:shadow-blue-500/5 hover:-translate-y-1 transition-all duration-300 text-center">
-                        <div class="w-20 h-20 mx-auto mb-4 rounded-full p-[3px] bg-gradient-to-br from-blue-500 to-indigo-500 cursor-pointer"
-                             onclick="openAvatarModal('https://ui-avatars.com/api/?name=Rida+Masrifa&background=2563EB&color=FFFFFF&size=500', 'Rida Masrifa Hasbian')">
-                            <img src="https://ui-avatars.com/api/?name=Rida+Masrifa&background=2563EB&color=FFFFFF&size=300"
-                                alt="Foto Rida Masrifa"
-                                class="w-full h-full rounded-full object-cover ring-2 ring-white dark:ring-gray-900" />
-                        </div>
-                        <h3 class="font-bold text-base text-slate-900 dark:text-white">Rida Masrifa Hasbian</h3>
-                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5 mb-3">XII PPLG 1</p>
-                        
-                        <!-- Badge Role -->
-                        <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
-                            Backend Developer
-                        </span>
-
-                        <div class="grid grid-cols-2 gap-2 mt-5 pt-5 border-t border-slate-100 dark:border-gray-800/80">
-                            <a href="https://github.com/Ridamasrifaa" target="_blank"
-                                class="inline-flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-800 transition">
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                                </svg>
-                                GitHub
-                            </a>
-                            <a href="#" target="_blank"
-                                class="py-2 rounded-lg text-xs font-semibold border border-blue-300 dark:border-blue-800 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/40 transition">
-                                Portofolio
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- DEV CARD 2 -->
-                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-slate-200/80 dark:border-gray-800/80 shadow-xs hover:shadow-lg hover:shadow-sky-500/5 hover:-translate-y-1 transition-all duration-300 text-center">
-                        <div class="w-20 h-20 mx-auto mb-4 rounded-full p-[3px] bg-gradient-to-br from-sky-500 to-cyan-400 cursor-pointer"
-                             onclick="openAvatarModal('https://ui-avatars.com/api/?name=Nama+Anggota3&background=7C3AED&color=FFFFFF&size=300', 'Zaki Nur Faizi')">
-                            <img src="https://ui-avatars.com/api/?name=Zaki+Nur3&background=7C3AED&color=FFFFFF&size=300"
-                                alt="Foto Zaki Nur Faizi"
-                                class="w-full h-full rounded-full object-cover ring-2 ring-white dark:ring-gray-900" />
-                        </div>
-                        <h3 class="font-bold text-base text-slate-900 dark:text-white">Zaki Nur Faizi</h3>
-                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5 mb-3">XII PPLG 2</p>
-
-                        <!-- Badge Role -->
-                        <div class="flex items-center justify-center gap-1.5 flex-wrap">
-                            <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300 border border-sky-200 dark:border-sky-800">
-                                Frontend
-                            </span>
-                            <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900/50 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
-                                Backend
-                            </span>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2 mt-5 pt-5 border-t border-slate-100 dark:border-gray-800/80">
-                            <a href="https://github.com/faizinurzaki12" target="_blank"
-                                class="inline-flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-800 transition">
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                                </svg>
-                                GitHub
-                            </a>
-                            <a href="https://zackynurfazz.netlify.app" target="_blank"
-                                class="py-2 rounded-lg text-xs font-semibold border border-sky-300 dark:border-sky-800 text-sky-600 dark:text-sky-400 hover:bg-sky-50 dark:hover:bg-sky-950/40 transition">
-                                Portofolio
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- DEV CARD 3 -->
-                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-slate-200/80 dark:border-gray-800/80 shadow-xs hover:shadow-lg hover:shadow-purple-500/5 hover:-translate-y-1 transition-all duration-300 text-center">
-                        <div class="w-20 h-20 mx-auto mb-4 rounded-full p-[3px] bg-gradient-to-br from-purple-500 to-fuchsia-400 cursor-pointer"
-                             onclick="openAvatarModal('https://ui-avatars.com/api/?name=Nama+Anggota3&background=7C3AED&color=FFFFFF&size=500', 'Nama Anggota 3')">
-                            <img src="https://ui-avatars.com/api/?name=Salsa+Cantika&background=7C3AED&color=FFFFFF&size=300"
-                                alt="Foto Anggota 3"
-                                class="w-full h-full rounded-full object-cover ring-2 ring-white dark:ring-gray-900" />
-                        </div>
-                        <h3 class="font-bold text-base text-slate-900 dark:text-white">Salsa Cantika</h3>
-                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5 mb-3">XII PPLG 1</p>
-
-                        <!-- Badge Role -->
-                        <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300 border border-purple-200 dark:border-purple-800">
-                            Frontend Developer
-                        </span>
-
-                        <div class="grid grid-cols-2 gap-2 mt-5 pt-5 border-t border-slate-100 dark:border-gray-800/80">
-                            <a href="#" target="_blank"
-                                class="inline-flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-800 transition">
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                                </svg>
-                                GitHub
-                            </a>
-                            <a href="#" target="_blank"
-                                class="py-2 rounded-lg text-xs font-semibold border border-purple-300 dark:border-purple-800 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/40 transition">
-                                Portofolio
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- DEV CARD 4 -->
-                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-slate-200/80 dark:border-gray-800/80 shadow-xs hover:shadow-lg hover:shadow-pink-500/5 hover:-translate-y-1 transition-all duration-300 text-center lg:col-start-1 lg:translate-x-1/2">
-                        <div class="w-20 h-20 mx-auto mb-4 rounded-full p-[3px] bg-gradient-to-br from-pink-500 to-rose-400 cursor-pointer"
-                             onclick="openAvatarModal('https://ui-avatars.com/api/?name=Nama+Anggota4&background=DB2777&color=FFFFFF&size=500', 'Nama Anggota 4')">
-                            <img src="https://ui-avatars.com/api/?name=Zahra+Afifah4&background=DB2777&color=FFFFFF&size=300"
-                                alt="Foto Anggota 4"
-                                class="w-full h-full rounded-full object-cover ring-2 ring-white dark:ring-gray-900" />
-                        </div>
-                        <h3 class="font-bold text-base text-slate-900 dark:text-white">Zahra Afifah Hifdillah</h3>
-                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5 mb-3">XII PPLG 2</p>
-
-                        <!-- Badge Role -->
-                        <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900/50 dark:text-pink-300 border border-pink-200 dark:border-pink-800">
-                            Frontend Developer
-                        </span>
-
-                        <div class="grid grid-cols-2 gap-2 mt-5 pt-5 border-t border-slate-100 dark:border-gray-800/80">
-                            <a href="#" target="_blank"
-                                class="inline-flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-800 transition">
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                                </svg>
-                                GitHub
-                            </a>
-                            <a href="#" target="_blank"
-                                class="py-2 rounded-lg text-xs font-semibold border border-pink-300 dark:border-pink-800 text-pink-600 dark:text-pink-400 hover:bg-pink-50 dark:hover:bg-pink-950/40 transition">
-                                Portofolio
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- DEV CARD 5 -->
-                    <div class="bg-white dark:bg-gray-900 rounded-2xl p-6 border border-slate-200/80 dark:border-gray-800/80 shadow-xs hover:shadow-lg hover:shadow-orange-500/5 hover:-translate-y-1 transition-all duration-300 text-center lg:col-start-2 lg:translate-x-1/2">
-                        <div class="w-20 h-20 mx-auto mb-4 rounded-full p-[3px] bg-gradient-to-br from-orange-500 to-amber-400 cursor-pointer"
-                             onclick="openAvatarModal('https://ui-avatars.com/api/?name=Nama+Anggota5&background=EA580C&color=FFFFFF&size=500', 'Nama Anggota 5')">
-                            <img src="https://ui-avatars.com/api/?name=Nama+Anggota5&background=EA580C&color=FFFFFF&size=300"
-                                alt="Foto Anggota 5"
-                                class="w-full h-full rounded-full object-cover ring-2 ring-white dark:ring-gray-900" />
-                        </div>
-                        <h3 class="font-bold text-base text-slate-900 dark:text-white">All Raffi Ghani Iskandar</h3>
-                        <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5 mb-3">XII PPLG 2</p>
-
-                        <!-- Badge Role -->
-                        <span class="inline-block px-2.5 py-0.5 text-xs font-semibold rounded-full bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300 border border-orange-200 dark:border-orange-800">
-                            Backend Developer
-                        </span>
-
-                        <div class="grid grid-cols-2 gap-2 mt-5 pt-5 border-t border-slate-100 dark:border-gray-800/80">
-                            <a href="#" target="_blank"
-                                class="inline-flex items-center justify-center gap-1.5 py-2 rounded-lg text-xs font-semibold border border-slate-300 dark:border-gray-700 text-slate-700 dark:text-gray-300 hover:bg-slate-50 dark:hover:bg-gray-800 transition">
-                                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
-                                </svg>
-                                GitHub
-                            </a>
-                            <a href="#" target="_blank"
-                                class="py-2 rounded-lg text-xs font-semibold border border-orange-300 dark:border-orange-800 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-950/40 transition">
-                                Portofolio
-                            </a>
-                        </div>
-                    </div>
-
+                <!-- CARD GRID (Rendered via dev.js / Static markup) -->
+                <div id="team-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-center">
+                    <!-- Placeholder untuk dynamic dev grid atau komponen statis -->
                 </div>
             </section>
 
@@ -303,14 +166,12 @@
     <div id="avatarModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
         <div id="modalContent" class="relative max-w-md w-full mx-4 bg-white dark:bg-gray-900 rounded-3xl p-8 border border-slate-200 dark:border-gray-800 shadow-2xl transform scale-95 transition-all duration-300 text-center">
             
-            <!-- Tombol Close -->
             <button onclick="closeAvatarModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-full bg-slate-100 dark:bg-gray-800 transition cursor-pointer">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                 </svg>
             </button>
 
-            <!-- Container Pratinjau Foto -->
             <div class="w-64 h-64 sm:w-72 sm:h-72 mx-auto mb-4 rounded-full overflow-hidden ring-4 ring-blue-500/30 shadow-lg">
                 <img id="modalImage" src="" alt="" class="w-full h-full object-cover object-top" />
             </div>
@@ -320,7 +181,29 @@
         </div>
     </div>
 
-    <!-- ===== JAVASCRIPT LOGIC ===== -->
+    <!-- ===== CHANGELOG / RIWAYAT UPDATE MODAL ===== -->
+    <div id="changelogModal" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300">
+        <div id="changelogContent" class="relative max-w-lg w-full mx-4 bg-white dark:bg-gray-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-gray-800 shadow-2xl transform scale-95 transition-all duration-300 max-h-[80vh] flex flex-col">
+            <button onclick="closeChangelogModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-white rounded-full bg-slate-100 dark:bg-gray-800 transition cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1">Riwayat Pembaruan</h3>
+            <p class="text-xs text-slate-500 dark:text-gray-400 mb-4 pb-3 border-b border-slate-100 dark:border-gray-800">Catatan versi dan log perubahan aplikasi Museum Karya.</p>
+            
+            <div id="changelogList" class="overflow-y-auto space-y-6 pr-1">
+                <!-- Rendered dynamically by app.js -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Pemanggilan File JS -->
+    <script src="{{ asset('assets/js/app.js') }}"></script>
+    <script src="{{ asset('assets/js/dev.js') }}"></script>
+
+    <!-- ===== JAVASCRIPT LOCAL LOGIC ===== -->
     <script>
         // Toggle Dark/Light Mode
         function toggleTheme() {
@@ -341,7 +224,7 @@
             document.documentElement.classList.remove('dark');
         }
 
-        // Modal Handlers
+        // Avatar Modal Handlers
         function openAvatarModal(imgSrc, devName) {
             const modal = document.getElementById('avatarModal');
             const modalImg = document.getElementById('modalImage');
@@ -365,17 +248,38 @@
             modal.classList.add('opacity-0', 'pointer-events-none');
         }
 
-        // Close Modal via Backdrop Click
+        // Changelog Modal Handlers
+        function openChangelogModal() {
+            const modal = document.getElementById('changelogModal');
+            const modalContent = document.getElementById('changelogContent');
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-95');
+            modalContent.classList.add('scale-100');
+        }
+
+        function closeChangelogModal() {
+            const modal = document.getElementById('changelogModal');
+            const modalContent = document.getElementById('changelogContent');
+
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        // Close Modals via Backdrop Click
         document.getElementById('avatarModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeAvatarModal();
-            }
+            if (e.target === this) closeAvatarModal();
+        });
+        document.getElementById('changelogModal').addEventListener('click', function(e) {
+            if (e.target === this) closeChangelogModal();
         });
 
-        // Close Modal via Escape Key
+        // Close Modals via Escape Key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeAvatarModal();
+                closeChangelogModal();
             }
         });
     </script>

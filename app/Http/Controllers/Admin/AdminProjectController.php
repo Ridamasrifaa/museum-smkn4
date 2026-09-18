@@ -15,7 +15,7 @@ class AdminProjectController extends Controller
         $search = $request->search;
         $user = Auth::user();
 
-        $projects = Project::with('user')
+        $projects = Project::with(['user','reviewer'])
             // Filter Jurusan: Jika BUKAN Super Admin, filter berdasarkan jurusan Admin
             ->when(!$user->isSuperAdmin() && $user->jurusan, function ($query) use ($user) {
                 $query->where('jurusan', $user->jurusan);
