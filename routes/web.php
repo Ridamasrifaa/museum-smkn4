@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Controller Auth & Public
@@ -47,10 +48,22 @@ Route::get('/auth/google/callback', [GoogleController::class, 'handleGoogleCallb
 Route::get('/auth/kode-undangan', [AuthController::class, 'showKodeUndangan'])->name('auth.kode-undangan');
 Route::post('/auth/kode-undangan', [AuthController::class, 'submitKodeUndangan'])->name('auth.kode-undangan.submit');
 
-// Public Karya, Artikel & Detail Project Publik (Untuk Komentar / Interaksi Museum)
+// Jembatan untuk tamu: simpan halaman asal, lalu arahkan ke login.
+// Setelah login, AuthController/GoogleController harus memakai redirect()->intended(...)
+Route::get('/login-dulu', function (Request $request) {
+    $next = $request->query('next');
+
+    // Hanya terima path internal (cegah open redirect)
+    if (is_string($next) && preg_match('#^/(?![/\\\\])#', $next)) {
+        session()->put('url.intended', url($next));
+    }
+
+    return redirect()->route('login');
+})->name('login.required');
+
+// Public Karya, Artikel & Detail Project Publik (dibaca siapa saja)
 Route::get('/karya', [KaryaController::class, 'index']);
-Route::get('/project/{project}', [KaryaController::class, 'show'])->name('project.detail'); 
-Route::post('/karya/{project}/like', [KaryaController::class, 'like']);
+Route::get('/project/{project}', [KaryaController::class, 'show'])->name('project.detail');
 Route::get('/artikel', [ArticlePageController::class, 'index'])->name('artikel.index');
 Route::get('/artikel/{slug}', [ArticlePageController::class, 'show'])->name('artikel.show');
 
@@ -112,9 +125,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/profile', [AdminProfileController::class, 'edit'])->name('admin.profile.edit');
     Route::put('/admin/profile', [AdminProfileController::class, 'update'])->name('admin.profile.update');
 
-    // ==================== INTERAKSI & KOMENTAR ====================
+    // ==================== INTERAKSI & KOMENTAR (WAJIB LOGIN) ====================
     Route::post('/project/{project}/like', [InteractionController::class, 'toggleLike']);
-    Route::post('/project/{project}/comment', [InteractionController::class, 'storeComment']);
+    Route::post('/project/{project}/comment', [KaryaController::class, 'comment']);
     Route::post('/artikel/{article}/comment', [ArticlePageController::class, 'storeComment'])->name('artikel.comment');
 });
 

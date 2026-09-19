@@ -24,6 +24,7 @@ class Project extends Model
         'file_type',
         'file_size',
         'guru_pengampu',
+        'phone_number',
         'live_link',
         'github_link',
         'technology_stack',
@@ -195,13 +196,14 @@ class Project extends Model
             $this->increment('likes_count');
         }
     }
-    public function comments()
-{
-    return $this->hasMany(Comment::class);
-}
 
-public function likes()
-{
-    return $this->hasMany(ProjectLike::class);
-}
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(ProjectLike::class);
+    }
 }

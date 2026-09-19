@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <img src="${dev.avatar}" alt="Foto ${dev.name}" class="w-full h-full rounded-full object-cover ring-2 ring-white dark:ring-gray-900" />
                 </div>
                 <h3 class="font-bold text-base text-slate-900 dark:text-white">${dev.name}</h3>
-                <p class="text-[11px] uppercase tracking-wider text-slate-400 dark:text-gray-500 mt-0.5 mb-3">${dev.class}</p>
+                <p class="text-[11px] font-bold uppercase tracking-wider text-cyan-400 mt-0.5 mb-3">${dev.class}</p>
 
                 <div class="flex items-center justify-center gap-1.5 flex-wrap">
                     ${rolesHTML}

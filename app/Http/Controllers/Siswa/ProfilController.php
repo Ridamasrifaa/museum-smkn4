@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Siswa;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -25,7 +26,15 @@ class ProfilController extends Controller
             ->latest()
             ->get();
 
-        return view('siswa.profil-siswa', compact('user', 'projects'));
+        // 20 komentar/balasan terbaru dari orang lain di semua karya siswa ini
+        $comments = Comment::whereIn('project_id', $projects->pluck('id'))
+            ->where('user_id', '!=', $user->id)
+            ->with(['user', 'project:id,title'])
+            ->latest()
+            ->limit(20)
+            ->get();
+
+        return view('siswa.profil-siswa', compact('user', 'projects', 'comments'));
     }
 
     public function edit()

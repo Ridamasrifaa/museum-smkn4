@@ -47,11 +47,13 @@
                 </thead>
                 <tbody>
                     @forelse($siswas as $siswa)
+                        {{-- Kelas: kode undangan -> kolom kelas -> jurusan (halaman siswa menampilkan kelas dari kolom jurusan) --}}
+                        @php $kelas = $siswa->invitationCode?->kelas ?: ($siswa->kelas ?: $siswa->jurusan); @endphp
                         <tr>
                             <td class="px-6 py-4 text-sm font-bold text-gray-900">{{ $siswa->name }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600 font-semibold">{{ $siswa->email }}</td>
                             <td class="px-6 py-4 text-sm text-gray-600 font-semibold">
-                                {{ $siswa->invitationCode->kelas ?? $siswa->kelas ?? '-' }}
+                                {{ $kelas ?: '-' }}
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-600 font-semibold">
                                 {{ $siswa->bio ?? '-' }}
@@ -61,7 +63,7 @@
                                         onclick="openSiswaModal(this)"
                                         data-id="{{ $siswa->id }}"
                                         data-nama="{{ $siswa->name }}"
-                                        data-kelas="{{ $siswa->invitationCode->kelas ?? $siswa->kelas }}"
+                                        data-kelas="{{ $kelas }}"
                                         data-email="{{ $siswa->email }}"
                                         data-bio="{{ $siswa->bio }}"
                                         class="px-3 py-1.5 bg-blue-400 text-black border-2 border-black rounded-lg font-black text-xs shadow-[2px_2px_0px_#000] btn-neubrutal cursor-pointer">
@@ -96,6 +98,7 @@
         <!-- TAMPILAN KARTU / CARD (Khusus Mobile / di bawah lg) -->
         <div class="lg:hidden divide-y-2 divide-gray-200">
             @forelse($siswas as $siswa)
+                @php $kelas = $siswa->invitationCode?->kelas ?: ($siswa->kelas ?: $siswa->jurusan); @endphp
                 <div class="p-4 space-y-3 relative">
                     <div class="flex justify-between items-start">
                         <div>
@@ -103,7 +106,7 @@
                             <h3 class="font-black text-gray-900 text-base leading-snug">{{ $siswa->name }}</h3>
                         </div>
                         <span class="badge-neubrutal bg-[#ffcc00] text-black text-[11px] px-2.5 py-1">
-                            {{ $siswa->invitationCode->kelas ?? $siswa->kelas ?? '-' }}
+                            {{ $kelas ?: '-' }}
                         </span>
                     </div>
 
@@ -123,7 +126,7 @@
                                 onclick="openSiswaModal(this)"
                                 data-id="{{ $siswa->id }}"
                                 data-nama="{{ $siswa->name }}"
-                                data-kelas="{{ $siswa->invitationCode->kelas ?? $siswa->kelas }}"
+                                data-kelas="{{ $kelas }}"
                                 data-email="{{ $siswa->email }}"
                                 data-bio="{{ $siswa->bio }}"
                                 class="flex-1 text-center px-3 py-2 bg-blue-400 text-black border-2 border-black rounded-lg font-black text-xs shadow-[2px_2px_0px_#000] btn-neubrutal cursor-pointer">
