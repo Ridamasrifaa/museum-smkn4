@@ -20,7 +20,6 @@
 </head>
 <body class="scroll-smooth bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
 
-    {{-- ===== HEADER ===== --}}
     <header class="navbar shadow-sm sticky top-0 z-50 bg-white dark:bg-gray-900 transition-colors duration-300">
         <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8">
             <div class="flex lg:flex-1 items-center gap-2">
@@ -55,18 +54,15 @@
         </nav>
     </header>
 
-    {{-- ===== HERO ===== --}}
     <section class="my-bg text-white py-20">
         <div class="mx-auto max-w-7xl px-6 lg:px-8 text-center">
             <h1 class="text-3xl lg:text-5xl font-bold mb-4">Semua Karya</h1>
         </div>
     </section>
 
-    {{-- ===== KARYA ===== --}}
     <section id="karya" class="py-16 bg-gray-50 dark:bg-gray-900">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
 
-            {{-- Search & Filter --}}
             <div class="mb-10">
                 <div class="relative max-w-xl mx-auto mb-6">
                     <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none"
@@ -106,7 +102,6 @@
                 <p id="resultCounter" class="text-center text-sm text-gray-500 dark:text-gray-400"></p>
             </div>
 
-            {{-- Grid Karya --}}
             <div id="allKaryaGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 @forelse($karyas as $karya)
                     <div class="karya-card bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col group"
@@ -130,7 +125,6 @@
                         data-views="{{ $karya->views_count ?? 0 }}"
                         data-likes="{{ $karya->likes_count ?? 0 }}">
 
-                        {{-- Preview Media --}}
                         <div class="relative h-48 w-full overflow-hidden bg-gray-100 dark:bg-gray-700 cursor-pointer" onclick="openModal(this.closest('.karya-card'))">
                             @if ($karya->file_path)
                                 <img src="{{ asset('storage/' . $karya->file_path) }}" alt="{{ $karya->title }}"
@@ -145,7 +139,6 @@
                             <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         </div>
 
-                        {{-- Konten Card --}}
                         <div class="p-5 flex flex-col flex-grow">
                             <div class="flex items-center justify-between mb-3">
                                 <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 text-xs font-semibold rounded-full uppercase tracking-wider">
@@ -176,20 +169,16 @@
                 @endforelse
             </div>
 
-            {{-- Empty State (filter) --}}
             <div id="emptyState" class="hidden text-center py-16">
                 <div class="text-6xl mb-4">📭</div>
                 <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Tidak ada karya ditemukan</h3>
                 <p class="text-gray-600 dark:text-gray-400">Coba ubah kata kunci atau filter kategori Anda</p>
             </div>
-
-            {{-- ===== PAGINATION ===== --}}
             <div id="paginationContainer" class="mt-12 flex justify-center items-center gap-2"></div>
 
         </div>
     </section>
 
-    {{-- ===== FOOTER ===== --}}
     <footer class="bg-gray-900 dark:bg-black text-white text-center py-12">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
             <div class="border-t border-gray-800 pt-8">
